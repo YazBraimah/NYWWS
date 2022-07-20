@@ -1,7 +1,7 @@
 """
 Author: Y. Ahmed-Braimah
---- Map RNA-seq reads with Hisat2 and annotate genome
---- with Trinotate.
+--- NY Waste Water Surveillance pipeline
+--- adapted from https://github.com/CFSAN-Biostatistics/C-WAP
 """
 
 #########
@@ -86,7 +86,7 @@ rule all:
     input:
         join(OUT_DIR, 'MultiQC', 'multiqc_report.html'),
         expand(join(OUT_DIR, 'Variants', 'iVar', '{sample}.rawVarCalls.tsv'), sample = SAMPLES),
-        # expand(join(OUT_DIR, 'Kraken', '{sample}', '{sample}.majCovid.bracken'), sample = SAMPLES),
+        expand(join(OUT_DIR, 'Kraken', '{sample}', '{sample}.k2_allCovid.out'), sample = SAMPLES),
         expand(join(OUT_DIR, 'iVar', '{sample}', 'consensus', 'consensus.fa'), sample = SAMPLES),
         expand(join(OUT_DIR, 'iVar', '{sample}', 'freyja', 'freyja_bootstrap.png'), sample = SAMPLES),
         expand(join(OUT_DIR, 'QC', '{sample}', 'pos-coverage-quality.tsv'), sample = SAMPLES)
@@ -115,7 +115,7 @@ rule fastqcSE:
     message:
         """--- Checking read quality of SE sample "{wildcards.sample}" with FastQC """
     run:
-        shell('/home/yahmed/software/FastQC/fastqc'
+        shell('/home/yahmed/software/FastQC/fastqc' ### must edit fo each user for now.
                 ' -o ' + join(OUT_DIR, 'fastQC') +
                 ' {input.r1}'
                 ' > {log} 2>&1')
@@ -318,16 +318,9 @@ rule kraken:
     message:
         """--- Kraken2 search for sample "{wildcards.sample}"."""
     conda:
-        "kraken2"
+        "envs/kraken_env.yml"
     shell:
         'kraken2 --db {params.k2db} --threads 8 --report {output} {input.r1}> /dev/null'
-    # run:
-    #     shell('/home/yahmed/GitHub_Repositories/kraken2/kraken2'
-    #             ' {input.r1}'
-    #             ' --db {params.k2db}'
-    #             ' --threads 8'
-    #             ' --report {output}'
-    #             ' > /dev/null')
 
 
 ##--------------------------------------------------------------------------------------##
@@ -371,10 +364,10 @@ rule krakenVariantCaller:
         allCOVdb = allCOVdb,
         majCOVdb = majCOVdb
     output:
-        allCov = join(OUT_DIR, 'Kraken', '{sample}', '{sample}.k2_allCovid.out'),
-        allCovid_bracken = join(OUT_DIR, 'Kraken', '{sample}', '{sample}.allCovid.bracken'),
-        majCov = join(OUT_DIR, 'Kraken', '{sample}', '{sample}.k2_majCovid.out'),
-        majCovid_bracken = join(OUT_DIR, 'Kraken', '{sample}', '{sample}.majCovid.bracken')
+        allCov = join(OUT_DIR, 'Kraken', '{sample}', '{sample}.k2_allCovid.out')
+        # allCovid_bracken = join(OUT_DIR, 'Kraken', '{sample}', '{sample}.allCovid.bracken'),
+        # majCov = join(OUT_DIR, 'Kraken', '{sample}', '{sample}.k2_majCovid.out'),
+        # majCovid_bracken = join(OUT_DIR, 'Kraken', '{sample}', '{sample}.majCovid.bracken')
     log:
         all_brak = join(OUT_DIR, 'Kraken', '{sample}', 'k2_std.log'),
         maj_brak = join(OUT_DIR, 'Kraken', '{sample}', 'k2_std.log')
@@ -384,33 +377,30 @@ rule krakenVariantCaller:
         8
     resources:
         mem_mb=32000
+    conda:
+        "envs/kraken_env.yml"
     message:
         """--- Kraken2 search for sample "{wildcards.sample}"."""
-    run:
-        shell('/home/yahmed/GitHub_Repositories/kraken2/kraken2'
-                ' {input.fastq}'
-                ' --db {params.allCOVdb}'
-                ' --threads 4'
-                ' --report {output.allCov}'
-                ' > /dev/null')
-        shell('/home/yahmed/GitHub_Repositories/Bracken/bracken'
-                ' -d {params.allCOVdb}'
-                ' -i {output.allCov}'
-                ' -o {output.allCovid_bracken}'
-                ' -l P'
-                ' > {log.all_brak} 2>&1')
-        shell('/home/yahmed/GitHub_Repositories/kraken2/kraken2'
-                ' {input.fastq}'
-                ' --db {params.majCOVdb}'
-                ' --threads 4'
-                ' --report {output.majCov}'
-                ' > /dev/null')
-        shell('/home/yahmed/GitHub_Repositories/Bracken/bracken'
-                ' -d {params.majCOVdb}'
-                ' -i {output.majCov}'
-                ' -o {output.majCovid_bracken}'
-                ' -l C'
-                ' > {log.maj_brak} 2>&1')
+    shell:
+        'kraken2 {input.fastq} --db {params.allCOVdb} --threads 4 --report {output.allCov} > /dev/null'
+        # shell('/home/yahmed/GitHub_Repositories/Bracken/bracken'
+        #         ' -d {params.allCOVdb}'
+        #         ' -i {output.allCov}'
+        #         ' -o {output.allCovid_bracken}'
+        #         ' -l P'
+        #         ' > {log.all_brak} 2>&1')
+        # shell('/home/yahmed/GitHub_Repositories/kraken2/kraken2'
+        #         ' {input.fastq}'
+        #         ' --db {params.majCOVdb}'
+        #         ' --threads 4'
+        #         ' --report {output.majCov}'
+        #         ' > /dev/null')
+        # shell('/home/yahmed/GitHub_Repositories/Bracken/bracken'
+        #         ' -d {params.majCOVdb}'
+        #         ' -i {output.majCov}'
+        #         ' -o {output.majCovid_bracken}'
+        #         ' -l C'
+        #         ' > {log.maj_brak} 2>&1')
 
 
 ##--------------------------------------------------------------------------------------##

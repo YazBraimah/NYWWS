@@ -1,11 +1,11 @@
 # Path to PacBio assemblies and their HISAT indices.
-DNA: '/home/yahmed/NYWWSP/reference/nCov_Wuhan.fasta'
-INDEX: '/home/yahmed/NYWWSP/reference/bwa_ref/nCov_Wuhan.fasta'
+DNA: '/home/yahmed/NYWWSP/pipeline/reference/nCov_Wuhan.fasta'
+INDEX: '/home/yahmed/NYWWSP/pipeline/reference/bwa_ref/nCov_Wuhan.fasta'
 
 # Path to a folder where final files will be written.
 OUT_DIR: '/home/yahmed/NYWWSP/pipeline/OUTPUT'
 
-covidRefSequences: '/home/yahmed/NYWWSP/reference/GCF_009858895.2_ASM985889v3_genomic.gff'
+covidRefSequences: '/home/yahmed/NYWWSP/pipeline/reference/GCF_009858895.2_ASM985889v3_genomic.gff'
 K2_STD_DB_PATH: '/home/yahmed/kraken_database/'
 PRIMER_BED: '/home/yahmed/GitHub_Repositories/primer-schemes/nCoV-2019/V4/SARS-CoV-2.primer.bed'
 SCRIPT_DIR: '/home/yahmed/GitHub_Repositories/C-WAP/'
