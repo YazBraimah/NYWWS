@@ -4,14 +4,6 @@ Author: Y. Ahmed-Braimah
 --- adapted from https://github.com/CFSAN-Biostatistics/C-WAP
 """
 
-#########
-############
-## fix the kraken2/perl incompatibility problem (use conda directive for all rules except kraken2.
-## REMAINING RULES
-#1. LCSvariantCaller
-#2. kallistonVariantCaller
-
-
 import json
 import os
 import re
@@ -41,7 +33,6 @@ def rstrip(text, suffix):
 
 configfile: 'config.yml'
 
-# Full path to an uncompressed FASTA file with all chromosome sequences.
 DNA = config['DNA']
 GENEXUS_DNA = config['GENEXUS_DNA']
 INDEX = config['INDEX']
@@ -53,10 +44,11 @@ allCOVdb = config['ALL_COVID']
 majCOVdb = config['MAJOR_COVID']
 VAR_DEF = config['VAR_DEF']
 BAMS_DIR = config['BAMS_DIR']
+KalIdx = config['KalIdx']
+LCS_DIR = config['LCS_DIR']
 
 # Full path to a folder where final output files will be deposited.
 OUT_DIR = config['OUT_DIR']
-# HOME_DIR = config['HOME_DIR']  # the "launch_snakemake.sh" and "config.yml" files should be here
 
 # Samples and their corresponding filenames.
 # single-end
@@ -74,27 +66,21 @@ if not os.path.exists(OUT_DIR):
             os.makedirs(OUT_DIR)
 
 ##--------------------------------------------------------------------------------------##
-#
-# _____ _             _               _               _
-#|  ___(_)_ __   __ _| |   ___  _   _| |_ _ __  _   _| |_ ___
-#| |_  | | '_ \ / _` | |  / _ \| | | | __| '_ \| | | | __/ __|
-#|  _| | | | | | (_| | | | (_) | |_| | |_| |_) | |_| | |_\__ \
-#|_|   |_|_| |_|\__,_|_|  \___/ \__,_|\__| .__/ \__,_|\__|___/
-#                                        |_|
 ##--------------------------------------------------------------------------------------##
 
 ## Final expected output(s)
 rule all:
     input:
         join(OUT_DIR, 'MultiQC', 'multiqc_report.html'),
-        expand(join(OUT_DIR, 'Kraken', '{sample}', '{sample}.k2_allCovid.out'), sample = SAMPLES),
-        join(OUT_DIR, 'Freyja', 'Aggregate', 'BWA', 'freyja_stacked_barplots.png'),
+        join(OUT_DIR, 'Freyja', 'Aggregate', 'BOWTIE2', 'freyja_stacked_barplots.png'),
+        expand(join(OUT_DIR, 'Freyja', 'Boot', 'Results', 'BOWTIE2', '{sample}_freyja_bootstrap.png'), sample = SAMPLES),
+        expand(join(OUT_DIR, 'SummaryPie', '{sample}', 'pieChart_lcs.png'), sample = SAMPLES),
+        expand(join(OUT_DIR, 'QC', '{sample}', 'pos-coverage-quality.tsv'), sample = SAMPLES),
         join(OUT_DIR, 'Freyja', 'Aggregate', 'Genexus', 'freyja_stacked_barplots.png')
 
 ##--------------------------------------------------------------------------------------##
 ##--------------------------------------------------------------------------------------##
 
-# Rule to check raw SE read quality
 rule FastQC:
     input:
         r1 = lambda wildcards: seFILES[wildcards.sample]['R1']
@@ -114,46 +100,49 @@ rule FastQC:
 ##--------------------------------------------------------------------------------------##
 ##--------------------------------------------------------------------------------------##
 
-rule BWA_MEM:
+rule BOWTIE2:
     input:
         r1 = lambda wildcards: seFILES[wildcards.sample]['R1']
     params:
         index = INDEX
     output:
-        bam = join(OUT_DIR, 'BWA', '{sample}', '{sample}.csorted.bwa.bam')
+        bam = join(OUT_DIR, 'BOWTIE2', '{sample}', '{sample}.csorted.bt2.bam')
     log:
-        join(OUT_DIR, 'BWA', 'bwa_{sample}.log')
+        join(OUT_DIR, 'BOWTIE2', 'bt2_{sample}.log')
     benchmark:
-        join(OUT_DIR, 'BWA', '{sample}', 'bwa_map_se.benchmark.tsv')
+        join(OUT_DIR, 'BOWTIE2', '{sample}', 'bt2_map_se.benchmark.tsv')
     threads:
         8
     resources:
         mem_mb=8000
     message:
-        """--- Mapping reads for sample {wildcards.sample} with BWA MEM """
-    run:
-        shell('(bwa mem'
-                ' -t 4'
-                ' {params.index}'
-                ' {input.r1}) 2>{log}'
-                ' | samtools sort -@ 8 -o {output.bam} -')
+        """--- Mapping reads for sample {wildcards.sample} with BOWTIE2 """
+    conda:
+        "envs/bowtie2_env.yml"
+    shell:
+        '(bowtie2'
+                ' --no-unal'
+                ' --threads 4'
+                ' -x {params.index}'
+                ' -U {input.r1}) 2>{log}'
+                ' | samtools sort -@ 8 -o {output.bam} -'
 
 ##--------------------------------------------------------------------------------------##
 ##--------------------------------------------------------------------------------------##
 
 rule iVar_trimming:
     input:
-        bam = join(OUT_DIR, 'BWA', '{sample}', '{sample}.csorted.bwa.bam')
+        bam = join(OUT_DIR, 'BOWTIE2', '{sample}', '{sample}.csorted.bt2.bam')
     params:
         pri_bed = pri_bed
     output:
-        bam = join(OUT_DIR, 'BWA', '{sample}', '{sample}.resorted.bwa.bam'),
-        stats_cs = join(OUT_DIR, 'BWA', '{sample}', '{sample}.cssorted.stats'),
-        stats_re = join(OUT_DIR, 'BWA', '{sample}', '{sample}.resorted.stats')
+        bam = join(OUT_DIR, 'BOWTIE2', '{sample}', '{sample}.resorted.bt2.bam'),
+        stats_cs = join(OUT_DIR, 'BOWTIE2', '{sample}', '{sample}.cssorted.stats'),
+        stats_re = join(OUT_DIR, 'BOWTIE2', '{sample}', '{sample}.resorted.stats')
     log:
-        join(OUT_DIR, 'BWA', 'iVar_trimming_{sample}.log')
+        join(OUT_DIR, 'BOWTIE2', 'iVar_trimming_{sample}.log')
     benchmark:
-        join(OUT_DIR, 'BWA', '{sample}', 'iVar_trimming.benchmark.tsv')
+        join(OUT_DIR, 'BOWTIE2', '{sample}', 'iVar_trimming.benchmark.tsv')
     threads:
         8
     resources:
@@ -191,7 +180,7 @@ rule iVar_trimming:
 
 rule BAM_to_FastQ:
     input:
-        bam = join(OUT_DIR, 'BWA', '{sample}', '{sample}.resorted.bwa.bam')
+        bam = join(OUT_DIR, 'BOWTIE2', '{sample}', '{sample}.resorted.bt2.bam')
     output:
         fastq = join(OUT_DIR, 'FastQs', '{sample}', '{sample}.resorted.fq.gz')
     log:
@@ -209,20 +198,20 @@ rule BAM_to_FastQ:
                 ' view'
                 ' --threads 2'
                 ' {input.bam}'
-                ' -o {wildcards.sample}.resorted.bwa.sam')
+                ' -o {wildcards.sample}.resorted.bt2.sam')
         shell(script_dir + '/sam2fastq.py'
-                ' {wildcards.sample}.resorted.bwa.sam'
+                ' {wildcards.sample}.resorted.bt2.sam'
                 ' {wildcards.sample}.resorted.fq')
         shell('gzip {wildcards.sample}.resorted.fq')
         shell('mv {wildcards.sample}.resorted.fq.gz ' + join(OUT_DIR, 'FastQs', '{wildcards.sample}'))
-        shell('rm {wildcards.sample}.resorted.bwa.sam')
+        shell('rm {wildcards.sample}.resorted.bt2.sam')
 
 ##--------------------------------------------------------------------------------------##
 ##--------------------------------------------------------------------------------------##
 
 rule Samtools_pielup:
     input:
-        bam = join(OUT_DIR, 'BWA', '{sample}', '{sample}.resorted.bwa.bam')
+        bam = join(OUT_DIR, 'BOWTIE2', '{sample}', '{sample}.resorted.bt2.bam')
     params:
         dna = DNA
     output:
@@ -306,7 +295,7 @@ rule Kraken:
     conda:
         "envs/kraken_env.yml"
     shell:
-        'kraken2 --db {params.k2db} --threads 8 --report {output} {input.r1} > /dev/null'
+        'kraken2 --db {params.k2db} --threads 8 --report {output} {input.r1} > {log} 2>&1'
 
 
 ##--------------------------------------------------------------------------------------##
@@ -348,9 +337,9 @@ rule Kraken_variants:
         majCOVdb = majCOVdb
     output:
         allCov = join(OUT_DIR, 'Kraken', '{sample}', '{sample}.k2_allCovid.out'),
-        allCovid_bracken = join(OUT_DIR, 'Kraken', '{sample}', '{sample}.allCovid.bracken'),
+        allCovid_bracken = join(OUT_DIR, 'Kraken', '{sample}', '{sample}.k2_allCovid_bracken_phylums.out'),
         majCov = join(OUT_DIR, 'Kraken', '{sample}', '{sample}.k2_majCovid.out'),
-        majCovid_bracken = join(OUT_DIR, 'Kraken', '{sample}', '{sample}.majCovid.bracken')
+        majCovid_bracken = join(OUT_DIR, 'Kraken', '{sample}', '{sample}.k2_majCovid_bracken_classes.out')
     log:
         all_brak = join(OUT_DIR, 'Kraken', '{sample}', 'k2_std.log'),
         maj_brak = join(OUT_DIR, 'Kraken', '{sample}', 'k2_std.log')
@@ -392,7 +381,7 @@ rule Kraken_variants:
 
 rule Consensus_sequence:
     input:
-        bam = join(OUT_DIR, 'BWA', '{sample}', '{sample}.resorted.bwa.bam')
+        bam = join(OUT_DIR, 'BOWTIE2', '{sample}', '{sample}.resorted.bt2.bam')
     params:
         dna = DNA
     output:
@@ -451,7 +440,7 @@ rule LDVC_variants:
     params:
         var_def = VAR_DEF
     output:
-        join(OUT_DIR, 'LDVC', '{sample}', 'ldvc_report.csv')
+        join(OUT_DIR, 'LDVC', '{sample}', 'linearDeconvolution_abundance.csv')
     log:
         join(OUT_DIR, 'LDVC', '{sample}', 'ldvc.log')
     benchmark:
@@ -468,35 +457,92 @@ rule LDVC_variants:
 ##--------------------------------------------------------------------------------------##
 ##--------------------------------------------------------------------------------------##
 
-rule Freyja_variants_BWA:
+rule Kallisto_variants:
     input:
-        bwa_bam = join(OUT_DIR, 'BWA', '{sample}', '{sample}.resorted.bwa.bam')
+        fastq = join(OUT_DIR, 'FastQs', '{sample}', '{sample}.resorted.fq.gz')
+    params:
+        kalidx = KalIdx
+    output:
+        join(OUT_DIR, 'Kallisto', '{sample}', 'abundance.tsv')
+    log:
+        join(OUT_DIR, 'Kallisto', '{sample}', 'kallisto.log')
+    benchmark:
+        join(OUT_DIR, 'Kallisto', '{sample}', 'kallisto_benchmark.tsv')
+    message:
+        """--- Running Kallisto for sample "{wildcards.sample}".  """
+    conda:
+        "envs/kallisto_env.yml"
+    shell:
+        'kallisto quant'
+        ' --index {params.kalidx}'
+        ' --output-dir ' + join(OUT_DIR, 'Kallisto', '{wildcards.sample}') +
+        ' --plaintext -t 2'
+        ' --single'
+        ' -l 300'
+        ' -s 50'
+        ' {input.fastq}'
+
+##--------------------------------------------------------------------------------------##
+##--------------------------------------------------------------------------------------##
+
+rule LCS_variants:
+    input:
+        fastq = join(OUT_DIR, 'FastQs', '{sample}', '{sample}.resorted.fq.gz')
+    params:
+        lcs_dir = LCS_DIR
+    output:
+        join(OUT_DIR, 'LCS', '{sample}', 'outputs', 'decompose', 'lcs.out')
+    log:
+        join(OUT_DIR, 'LCS', '{sample}', 'lcs.log')
+    benchmark:
+        join(OUT_DIR, 'LCS', '{sample}', 'lcs_benchmark.tsv')
+    message:
+        """--- Running LCS for sample "{wildcards.sample}". """
+    conda:
+        "envs/lcs_env.yml"
+    shell:
+        'cp -r {params.lcs_dir} {wildcards.sample}_LCS &&'
+        ' cd {wildcards.sample}_LCS &&'
+        ' mkdir -p outputs/variants_table &&'
+        ' zcat data/pre-generated-marker-tables/pango-designation-markers-v1.2.124.tsv.gz > outputs/variants_table/pango-markers-table.tsv &&'
+        ' mkdir data/fastq &&'
+        ' cp {input.fastq} data/fastq/resorted.fastq.gz &&'
+        ' echo "resorted" > data/tags_pool_lcs &&'
+        ' snakemake --config markers=pango dataset=lcs --cores 2 &&'
+        ' cp -r outputs ' + join(OUT_DIR, 'LCS', '{wildcards.sample}') + '/'
+
+##--------------------------------------------------------------------------------------##
+##--------------------------------------------------------------------------------------##
+
+rule Freyja_variants_BOWTIE2:
+    input:
+        bt2_bam = join(OUT_DIR, 'BOWTIE2', '{sample}', '{sample}.resorted.bt2.bam')
     params:
         dna = DNA
     output:
-        bwa_variants = join(OUT_DIR, 'Freyja', 'Variants', 'Results', 'BWA', '{sample}.freyja.variants.tsv'),
-        bwa_depths = join(OUT_DIR, 'Freyja', 'Variants', 'Results', 'BWA', '{sample}.freyja.depths.tsv')
+        bt2_variants = join(OUT_DIR, 'Freyja', 'Variants', 'Results', 'BOWTIE2', '{sample}.freyja.variants.tsv'),
+        bt2_depths = join(OUT_DIR, 'Freyja', 'Variants', 'Results', 'BOWTIE2', '{sample}.freyja.depths.tsv')
     log:
-        join(OUT_DIR, 'Freyja', 'Variants', '{sample}_freyja_bwa_var-dep.log')
+        join(OUT_DIR, 'Freyja', 'Variants', '{sample}_freyja_bt2_var-dep.log')
     benchmark:
-        join(OUT_DIR, 'Freyja', 'Variants', '{sample}_freyja_bwa_var-dep_benchmark.tsv')
+        join(OUT_DIR, 'Freyja', 'Variants', '{sample}_freyja_bt2_var-dep_benchmark.tsv')
     threads:
         8
     resources:
         mem_mb=32000
     message:
-        """--- Running Freyja variants from BWA run for sample "{wildcards.sample}". """
+        """--- Running Freyja variants from BOWTIE2 run for sample "{wildcards.sample}". """
     run:
         shell('freyja variants'
-                ' {input.bwa_bam}'
-                ' --variants {output.bwa_variants}'
-                ' --depths {output.bwa_depths}'
+                ' {input.bt2_bam}'
+                ' --variants {output.bt2_variants}'
+                ' --depths {output.bt2_depths}'
                 ' --ref {params.dna}')
 
 ##--------------------------------------------------------------------------------------##
 ##--------------------------------------------------------------------------------------##
 
-rule Freyja_variants_Geexus:
+rule Freyja_variants_Genexus:
     input:
         gen_bam = join(BAMS_DIR, '{sample}.ptrim.bam')
     params:
@@ -524,27 +570,27 @@ rule Freyja_variants_Geexus:
 ##--------------------------------------------------------------------------------------##
 ##--------------------------------------------------------------------------------------##
 
-rule Freyja_demix_BWA:
+rule Freyja_demix_BOWTIE2:
     input:
-        bwa_variants = join(OUT_DIR, 'Freyja', 'Variants', 'Results', 'BWA', '{sample}.freyja.variants.tsv'),
-        bwa_depths = join(OUT_DIR, 'Freyja', 'Variants', 'Results', 'BWA', '{sample}.freyja.depths.tsv')
+        bt2_variants = join(OUT_DIR, 'Freyja', 'Variants', 'Results', 'BOWTIE2', '{sample}.freyja.variants.tsv'),
+        bt2_depths = join(OUT_DIR, 'Freyja', 'Variants', 'Results', 'BOWTIE2', '{sample}.freyja.depths.tsv')
     output:
-        bwa_demix = join(OUT_DIR, 'Freyja', 'Demix', 'Results', 'BWA', '{sample}_freyja.demix')
+        bt2_demix = join(OUT_DIR, 'Freyja', 'Demix', 'Results', 'BOWTIE2', '{sample}_freyja.demix')
     log:
-        join(OUT_DIR, 'Freyja', 'Demix', '{sample}_freyja_bwa_demix.log')
+        join(OUT_DIR, 'Freyja', 'Demix', '{sample}_freyja_bt2_demix.log')
     benchmark:
-        join(OUT_DIR, 'Freyja', 'Demix', '{sample}_freyja_bwa_demix_benchmark.tsv')
+        join(OUT_DIR, 'Freyja', 'Demix', '{sample}_freyja_bt2_demix_benchmark.tsv')
     threads:
         8
     resources:
         mem_mb=32000
     message:
-        """--- Running Freyja demix from BWA run for sample "{wildcards.sample}". """
+        """--- Running Freyja demix from BOWTIE2 run for sample "{wildcards.sample}". """
     run:
         shell('freyja demix'
-                ' {input.bwa_variants}'
-                ' {input.bwa_depths}'
-                ' --output {output.bwa_demix}'
+                ' {input.bt2_variants}'
+                ' {input.bt2_depths}'
+                ' --output {output.bt2_demix}'
                 ' --confirmedonly')
 
 ##--------------------------------------------------------------------------------------##
@@ -576,34 +622,34 @@ rule Freyja_demix_Genexus:
 ##--------------------------------------------------------------------------------------##
 ##--------------------------------------------------------------------------------------##
 
-rule Freyja_boot_BWA:
+rule Freyja_boot_BOWTIE2:
     input:
-        bwa_variants = join(OUT_DIR, 'Freyja', 'Variants', 'Results', 'BWA', '{sample}.freyja.variants.tsv'),
-        bwa_depths = join(OUT_DIR, 'Freyja', 'Variants', 'Results', 'BWA', '{sample}.freyja.depths.tsv'),
-        bwa_demix = join(OUT_DIR, 'Freyja', 'Demix', 'Results', 'BWA', '{sample}_freyja.demix')
+        bt2_variants = join(OUT_DIR, 'Freyja', 'Variants', 'Results', 'BOWTIE2', '{sample}.freyja.variants.tsv'),
+        bt2_depths = join(OUT_DIR, 'Freyja', 'Variants', 'Results', 'BOWTIE2', '{sample}.freyja.depths.tsv'),
+        bt2_demix = join(OUT_DIR, 'Freyja', 'Demix', 'Results', 'BOWTIE2', '{sample}_freyja.demix')
     output:
-        bwa_boot = join(OUT_DIR, 'Freyja', 'Boot', 'Results', 'BWA', '{sample}_freyja_boot_lineages.csv'),
-        bwa_png =  join(OUT_DIR, 'Freyja', 'Boot', 'Results', 'BWA', '{sample}_freyja_bootstrap.png')
+        bt2_boot = join(OUT_DIR, 'Freyja', 'Boot', 'Results', 'BOWTIE2', '{sample}_freyja_boot_lineages.csv'),
+        bt2_png =  join(OUT_DIR, 'Freyja', 'Boot', 'Results', 'BOWTIE2', '{sample}_freyja_bootstrap.png')
     log:
-        join(OUT_DIR, 'Freyja', 'Boot', '{sample}_freyja_bwa_boot.log')
+        join(OUT_DIR, 'Freyja', 'Boot', '{sample}_freyja_bt2_boot.log')
     benchmark:
-        join(OUT_DIR, 'Freyja', 'Boot', '{sample}_freyja_bwa_boot_benchmark.tsv')
+        join(OUT_DIR, 'Freyja', 'Boot', '{sample}_freyja_bt2_boot_benchmark.tsv')
     threads:
         8
     resources:
         mem_mb=32000
     message:
-        """--- Running Freyja boot from BWA run for sample "{wildcards.sample}". """
+        """--- Running Freyja boot from BOWTIE2 run for sample "{wildcards.sample}". """
     run:
         shell('freyja boot'
-                ' {input.bwa_variants}'
-                ' {input.bwa_depths}'
+                ' {input.bt2_variants}'
+                ' {input.bt2_depths}'
                 ' --nt 4'
                 ' --nb 10'
-                ' --output_base {wildcards.sample}_bwa_freyja_boot'
+                ' --output_base {wildcards.sample}_freyja_boot'
                 ' &&'
-                ' mv {wildcards.sample}_bwa_freyja_boot*csv ' + join(OUT_DIR, 'Freyja', 'Boot', 'Results', 'BWA'))
-        shell(script_dir + 'parseFreyjaBootstraps.py {input.bwa_demix} {output.bwa_boot} {output.bwa_png}')
+                ' mv {wildcards.sample}_freyja_boot*csv ' + join(OUT_DIR, 'Freyja', 'Boot', 'Results', 'BOWTIE2'))
+        shell(script_dir + 'parseFreyjaBootstraps.py {input.bt2_demix} {output.bt2_boot} {output.bt2_png}')
 
 
 ##--------------------------------------------------------------------------------------##
@@ -633,37 +679,37 @@ rule Freyja_boot_Genexus:
                 ' {input.gen_depths}'
                 ' --nt 4'
                 ' --nb 10'
-                ' --output_base {wildcards.sample}_gen_freyja_boot'
+                ' --output_base {wildcards.sample}_freyja_boot'
                 ' &&'
-                ' mv {wildcards.sample}_gen_freyja_boot*csv ' + join(OUT_DIR, 'Freyja', 'Boot', 'Results', 'Genexus'))
+                ' mv {wildcards.sample}_freyja_boot*csv ' + join(OUT_DIR, 'Freyja', 'Boot', 'Results', 'Genexus'))
         shell(script_dir + 'parseFreyjaBootstraps.py {input.gen_demix} {output.gen_boot} {output.gen_png}')
 
 ##--------------------------------------------------------------------------------------##
 ##--------------------------------------------------------------------------------------##
 
-rule Freyja_aggregate_BWA:
+rule Freyja_aggregate_BOWTIE2:
     input:
-        expand(join(OUT_DIR, 'Freyja', 'Demix', 'Results', 'BWA', '{sample}_freyja.demix'), sample = SAMPLES)
+        expand(join(OUT_DIR, 'Freyja', 'Demix', 'Results', 'BOWTIE2', '{sample}_freyja.demix'), sample = SAMPLES)
     output:
-        bwa_agg = join(OUT_DIR, 'Freyja', 'Aggregate', 'BWA', 'aggregated_results.tsv'),
-        bwa_png = join(OUT_DIR, 'Freyja', 'Aggregate', 'BWA', 'freyja_stacked_barplots.png')
+        bt2_agg = join(OUT_DIR, 'Freyja', 'Aggregate', 'BOWTIE2', 'aggregated_results.tsv'),
+        bt2_png = join(OUT_DIR, 'Freyja', 'Aggregate', 'BOWTIE2', 'freyja_stacked_barplots.png')
     log:
-        join(OUT_DIR, 'Freyja', 'Aggregate', 'BWA','freyja_agg.log')
+        join(OUT_DIR, 'Freyja', 'Aggregate', 'BOWTIE2','freyja_agg.log')
     benchmark:
-        join(OUT_DIR, 'Freyja', 'Aggregate', 'BWA','freyja_agg_benchmark.tsv')
+        join(OUT_DIR, 'Freyja', 'Aggregate', 'BOWTIE2','freyja_agg_benchmark.tsv')
     threads:
         8
     resources:
         mem_mb=32000
     message:
-        """--- Running Freyja aggregate and outputting barplots from BWA run. """
+        """--- Running Freyja aggregate and outputting barplots from BOWTIE2 run. """
     run:
         shell('freyja aggregate'
-                ' --output {output.bwa_agg}'
-                ' ' + join(OUT_DIR, 'Freyja', 'Demix', 'Results', 'BWA') + '/')
+                ' --output {output.bt2_agg}'
+                ' ' + join(OUT_DIR, 'Freyja', 'Demix', 'Results', 'BOWTIE2') + '/')
         shell('freyja plot'
-                ' {output.bwa_agg}'
-                ' --output {output.bwa_png}')
+                ' {output.bt2_agg}'
+                ' --output {output.bt2_png}')
 
 ##--------------------------------------------------------------------------------------##
 ##--------------------------------------------------------------------------------------##
@@ -697,28 +743,96 @@ rule Freyja_aggregate_Genexus:
 ##--------------------------------------------------------------------------------------##
 
 
-rule QualiMap:
+rule QualiMap_BOWTIE2:
     input:
-        bam = join(OUT_DIR, 'BWA', '{sample}', '{sample}.resorted.bwa.bam'),
+        bam = join(OUT_DIR, 'BOWTIE2', '{sample}', '{sample}.resorted.bt2.bam'),
         gtf = covidRefSequences
     output:
-        join(OUT_DIR, 'BWA', '{sample}', '{sample}.qualimap', 'qualimapReport.html')
+        join(OUT_DIR, 'BOWTIE2', '{sample}', '{sample}.qualimap', 'qualimapReport.html')
     log:
-        join(OUT_DIR, 'BWA', '{sample}', 'qualmap.log')
+        join(OUT_DIR, 'BOWTIE2', '{sample}', 'qualmap.log')
     benchmark:
-        join(OUT_DIR, 'BWA', '{sample}', 'qualmap_benchmark.tsv')
+        join(OUT_DIR, 'BOWTIE2', '{sample}', 'qualmap_benchmark.tsv')
     threads:
         8
     resources:
         mem_mb=32000
     message:
-        """--- Evaluating mapping quality with QualiMap for sample "{wildcards.sample}"."""
+        """--- Evaluating BOWTIE2 mapping quality with QualiMap for sample "{wildcards.sample}"."""
     run:
         shell('qualimap bamqc'
                 ' -bam {input.bam}'
                 ' --java-mem-size=32G'
                 # ' -gff {input.gtf}'
-                ' -outdir ' + join(OUT_DIR, 'BWA', '{wildcards.sample}', '{wildcards.sample}.qualimap') +
+                ' -outdir ' + join(OUT_DIR, 'BOWTIE2', '{wildcards.sample}', '{wildcards.sample}.qualimap') +
+                ' > {log} 2>&1')
+
+##--------------------------------------------------------------------------------------##
+##--------------------------------------------------------------------------------------##
+
+rule QualiMap_Genexus:
+    input:
+        gen_bam = join(BAMS_DIR, '{sample}.ptrim.bam')
+    output:
+        join(OUT_DIR, 'Genexus_BAM', '{sample}', '{sample}.qualimap', 'qualimapReport.html')
+    log:
+        join(OUT_DIR, 'Genexus_BAM', '{sample}', 'qualmap.log')
+    benchmark:
+        join(OUT_DIR, 'Genexus_BAM', '{sample}', 'qualmap_benchmark.tsv')
+    threads:
+        8
+    resources:
+        mem_mb=32000
+    message:
+        """--- Evaluating Genexus BAM with QualiMap for sample "{wildcards.sample}"."""
+    run:
+        shell('qualimap bamqc'
+                ' -bam {input.bam}'
+                ' -nt 12'
+                ' --java-mem-size=32G'
+                ' -outdir ' + join(OUT_DIR, 'Genexus_BAM', '{wildcards.sample}', '{wildcards.sample}.qualimap') +
+                ' > {log} 2>&1')
+
+##--------------------------------------------------------------------------------------##
+##--------------------------------------------------------------------------------------##
+
+rule PieChart_summaries:
+    input:
+        ldvc = join(OUT_DIR, 'LDVC', '{sample}', 'linearDeconvolution_abundance.csv'),
+        kallisto = join(OUT_DIR, 'Kallisto', '{sample}', 'abundance.tsv'),
+        allCovid_bracken = join(OUT_DIR, 'Kraken', '{sample}', '{sample}.k2_allCovid_bracken_phylums.out'),
+        majCovid_bracken = join(OUT_DIR, 'Kraken', '{sample}', '{sample}.k2_majCovid_bracken_classes.out'),
+        bt2_demix = join(OUT_DIR, 'Freyja', 'Demix', 'Results', 'BOWTIE2', '{sample}_freyja.demix'),
+        lcs = join(OUT_DIR, 'LCS', '{sample}', 'outputs', 'decompose', 'lcs.out')
+    params:
+        var_def = VAR_DEF
+    output:
+        join(OUT_DIR, 'SummaryPie', '{sample}', 'kallisto.out'),
+        join(OUT_DIR, 'SummaryPie', '{sample}', 'pieChart_deconvolution.png'),
+        join(OUT_DIR, 'SummaryPie', '{sample}', 'pieChart_freyja.png'),
+        join(OUT_DIR, 'SummaryPie', '{sample}', 'pieChart_k2_allCovid.png'),
+        join(OUT_DIR, 'SummaryPie', '{sample}', 'pieChart_k2_majorCovid.png'),
+        join(OUT_DIR, 'SummaryPie', '{sample}', 'pieChart_kallisto.png'),
+        join(OUT_DIR, 'SummaryPie', '{sample}', 'pieChart_lcs.png')
+    log:
+        join(OUT_DIR, 'SummaryPie', '{sample}', 'qualmap.log')
+    benchmark:
+        join(OUT_DIR, 'SummaryPie', '{sample}', 'qualmap_benchmark.tsv')
+    threads:
+        8
+    resources:
+        mem_mb=32000
+    message:
+        """--- Outputting sumamry variant pie charts from all methods for sample "{wildcards.sample}"."""
+    run:
+        shell(script_dir + '/plotPieChartsforAbundance.py ' + join(OUT_DIR, 'SummaryPie', '{wildcards.sample}') +
+                ' {params.var_def}'
+                ' {input.ldvc}'
+                ' {input.kallisto}'
+                ' {input.allCovid_bracken}'
+                ' {input.majCovid_bracken}'
+                ' {input.bt2_demix}'
+                ' {input.lcs}'
                 ' > {log} 2>&1')
 
 ##--------------------------------------------------------------------------------------##
@@ -729,11 +843,11 @@ rule multiQC:
     input:
         expand(join(OUT_DIR, 'fastQC', '{sample}' + '.R1_fastqc.html'), sample = SAMPLES),
         expand(join(OUT_DIR, 'Kraken', '{sample}', '{sample}.k2_std.out'), sample = SAMPLES),
-        expand(join(OUT_DIR, 'BWA', '{sample}', '{sample}.resorted.stats'), sample = SAMPLES),
+        expand(join(OUT_DIR, 'BOWTIE2', '{sample}', '{sample}.resorted.stats'), sample = SAMPLES),
         expand(join(OUT_DIR, 'Pangolin', '{sample}', 'lineage_report.csv'), sample = SAMPLES),
         expand(join(OUT_DIR, 'LDVC', '{sample}', 'ldvc_report.csv'), sample = SAMPLES),
-        expand(join(OUT_DIR, 'BWA', '{sample}', '{sample}.csorted.bwa.bam'), sample = SAMPLES),
-        expand(join(OUT_DIR, 'BWA', '{sample}', '{sample}.qualimap', 'qualimapReport.html'), sample = SAMPLES)
+        expand(join(OUT_DIR, 'BOWTIE2', '{sample}', '{sample}.csorted.bt2.bam'), sample = SAMPLES),
+        expand(join(OUT_DIR, 'BOWTIE2', '{sample}', '{sample}.qualimap', 'qualimapReport.html'), sample = SAMPLES)
     output:
         join(OUT_DIR, 'MultiQC', 'multiqc_report.html')
     log:
@@ -744,8 +858,8 @@ rule multiQC:
         """--- Running MultiQC """
     run:
         shell('ls -1 ' + join(OUT_DIR) + '/fastQC/*fastqc.zip >> ' + join(OUT_DIR, 'MultiQC', 'summary_files.txt'))
-        # shell('ls -1 ' + join(OUT_DIR) + '/BWA/*log > ' + join(OUT_DIR, 'MultiQC', 'summary_files.txt'))
-        shell('ls -1 ' + join(OUT_DIR) + '/BWA/*/*.qualimap | grep ":" | sed "s/://g" >> ' + join(OUT_DIR, 'MultiQC', 'summary_files.txt'))
+        # shell('ls -1 ' + join(OUT_DIR) + '/BOWTIE2/*log > ' + join(OUT_DIR, 'MultiQC', 'summary_files.txt'))
+        shell('ls -1 ' + join(OUT_DIR) + '/BOWTIE2/*/ | grep "qualimap" >> ' + join(OUT_DIR, 'MultiQC', 'summary_files.txt'))
         shell('multiqc'
                 ' -f'
                 ' -o ' + join(OUT_DIR, 'MultiQC') + ' -l -dd 2 ' + join(OUT_DIR, 'MultiQC', 'summary_files.txt') +

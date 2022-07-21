@@ -1,6 +1,6 @@
 # Path to reference genome and indices.
 DNA: '/home/yahmed/NYWWS/reference/nCov_Wuhan.fasta'
-INDEX: '/home/yahmed/NYWWS/reference/bwa_ref/nCov_Wuhan.fasta'
+INDEX: '/home/yahmed/NYWWS/reference/bowtie2_ref/nCov_Wuhan'
 
 GENEXUS_DNA: '/home/yahmed/NYWWS/reference/ion_ampliseq_sars-cov-2-insight.fasta'
 
@@ -12,6 +12,8 @@ K2_STD_DB_PATH: '/home/kraken_database'
 PRIMER_BED: '/home/primer-schemes/nCoV-2019/V4/SARS-CoV-2.primer.bed'
 SCRIPT_DIR: '/home/C-WAP/'
 VAR_DEF: '/home/C-WAP/covidRefSequences/varDefinitions.pkl'
+KalIdx: '/home/C-WAP/customDBs/variants.kalIdx'
+LCS_DIR: '/home/LCS/'
 
 ## Covid databases
 ALL_COVID: '/home/C-WAP/customDBs/allCovidDB/'
