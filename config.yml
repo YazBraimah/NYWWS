@@ -1,20 +1,20 @@
-# Path to PacBio assemblies and their HISAT indices.
-DNA: '/home/yahmed/NYWWSP/pipeline/reference/nCov_Wuhan.fasta'
-INDEX: '/home/yahmed/NYWWSP/pipeline/reference/bwa_ref/nCov_Wuhan.fasta'
+# Path to reference genome and indices.
+DNA: '/home/yahmed/NYWWS/reference/nCov_Wuhan.fasta'
+INDEX: '/home/yahmed/NYWWS/reference/bwa_ref/nCov_Wuhan.fasta'
 
 # Path to a folder where final files will be written.
-OUT_DIR: '/home/yahmed/NYWWSP/pipeline/OUTPUT'
+OUT_DIR: '/home/yahmed/NYWWS/OUTPUT'
 
-covidRefSequences: '/home/yahmed/NYWWSP/pipeline/reference/GCF_009858895.2_ASM985889v3_genomic.gff'
-K2_STD_DB_PATH: '/home/yahmed/kraken_database/'
-PRIMER_BED: '/home/yahmed/GitHub_Repositories/primer-schemes/nCoV-2019/V4/SARS-CoV-2.primer.bed'
-SCRIPT_DIR: '/home/yahmed/GitHub_Repositories/C-WAP/'
-VAR_DEF: '/home/yahmed/GitHub_Repositories/C-WAP/covidRefSequences/varDefinitions.pkl'
+covidRefSequences: '/home/yahmed/NYWWS/reference/GCF_009858895.2_ASM985889v3_genomic.gff'
+K2_STD_DB_PATH: '/home/kraken_database'
+PRIMER_BED: '/home/primer-schemes/nCoV-2019/V4/SARS-CoV-2.primer.bed'
+SCRIPT_DIR: '/home/C-WAP/'
+VAR_DEF: '/home/C-WAP/covidRefSequences/varDefinitions.pkl'
 
 ## Covid databases
-ALL_COVID: '/home/yahmed/GitHub_Repositories/C-WAP/customDBs/allCovidDB/'
-MAJOR_COVID: '/home/yahmed/GitHub_Repositories/C-WAP/customDBs/majorCovidDB/'
+ALL_COVID: '/home/C-WAP/customDBs/allCovidDB/'
+MAJOR_COVID: '/home/C-WAP/customDBs/majorCovidDB/'
 
 # Path to a JSON file with samples and their corresponding FASTQ files.
-SE_SAMPLES_JSON: '/home/yahmed/NYWWSP/pipeline/samples_se.json'
-PE_SAMPLES_JSON: '/home/yahmed/NYWWSP/pipeline/samples_pe.json'
+SE_SAMPLES_JSON: '/home/yahmed/NYWWS/samples_se.json'
+PE_SAMPLES_JSON: '/home/yahmed/NYWWS/samples_pe.json'

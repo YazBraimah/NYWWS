@@ -85,25 +85,17 @@ if not os.path.exists(OUT_DIR):
 rule all:
     input:
         join(OUT_DIR, 'MultiQC', 'multiqc_report.html'),
-        expand(join(OUT_DIR, 'Variants', 'iVar', '{sample}.rawVarCalls.tsv'), sample = SAMPLES),
+        expand(join(OUT_DIR, 'iVar', '{sample}.rawVarCalls.tsv'), sample = SAMPLES),
         expand(join(OUT_DIR, 'Kraken', '{sample}', '{sample}.k2_allCovid.out'), sample = SAMPLES),
-        expand(join(OUT_DIR, 'iVar', '{sample}', 'consensus', 'consensus.fa'), sample = SAMPLES),
-        expand(join(OUT_DIR, 'iVar', '{sample}', 'freyja', 'freyja_bootstrap.png'), sample = SAMPLES),
-        expand(join(OUT_DIR, 'QC', '{sample}', 'pos-coverage-quality.tsv'), sample = SAMPLES)
+        expand(join(OUT_DIR, 'Sequences', '{sample}', 'consensus', 'consensus.fa'), sample = SAMPLES),
+        expand(join(OUT_DIR, 'Freyja', '{sample}', 'freyja_bootstrap.png'), sample = SAMPLES)
+        # expand(join(OUT_DIR, 'QC', '{sample}', 'pos-coverage-quality.tsv'), sample = SAMPLES)
 
-##--------------------------------------------------------------------------------------##
-##--------------------------------------------------------------------------------------##
-#  ___   ____
-# / _ \ / ___|
-#| | | | |
-#| |_| | |___
-# \__\_\\____|
-#
 ##--------------------------------------------------------------------------------------##
 ##--------------------------------------------------------------------------------------##
 
 # Rule to check raw SE read quality
-rule fastqcSE:
+rule FastQC:
     input:
         r1 = lambda wildcards: seFILES[wildcards.sample]['R1']
     output:
@@ -113,18 +105,16 @@ rule fastqcSE:
     benchmark:
         join(OUT_DIR, 'fastQC', '{sample}' + '.fastQC_se.benchmark.tsv')
     message:
-        """--- Checking read quality of SE sample "{wildcards.sample}" with FastQC """
-    run:
-        shell('/home/yahmed/software/FastQC/fastqc' ### must edit fo each user for now.
-                ' -o ' + join(OUT_DIR, 'fastQC') +
-                ' {input.r1}'
-                ' > {log} 2>&1')
+        """--- Checking read quality of sample "{wildcards.sample}" with FastQC """
+    conda:
+        'envs/fastqc_env.yml'
+    shell:
+        'fastqc -o ' + join(OUT_DIR, 'fastQC') + ' {input.r1} > {log} 2>&1'
 
 ##--------------------------------------------------------------------------------------##
 ##--------------------------------------------------------------------------------------##
 
-## Rule to map reads with BWA
-rule bwa_mem:
+rule BWA_MEM:
     input:
         r1 = lambda wildcards: seFILES[wildcards.sample]['R1']
     params:
@@ -140,7 +130,7 @@ rule bwa_mem:
     resources:
         mem_mb=8000
     message:
-        """--- Mapping SE reads for sample {wildcards.sample} to genome with Bowtie2 """
+        """--- Mapping reads for sample {wildcards.sample} with BWA MEM """
     run:
         shell('(bwa mem'
                 ' -t 4'
@@ -151,26 +141,25 @@ rule bwa_mem:
 ##--------------------------------------------------------------------------------------##
 ##--------------------------------------------------------------------------------------##
 
-## Rule to map PE reads with HISAT2
-rule iVar_trimming: ## Need to include the primer bed files later
+rule iVar_trimming:
     input:
         bam = join(OUT_DIR, 'BWA', '{sample}', '{sample}.csorted.bwa.bam')
     params:
         pri_bed = pri_bed
     output:
-        bam = join(OUT_DIR, 'iVar', '{sample}', '{sample}.resorted.bwa.bam'),
-        stats_cs = join(OUT_DIR, 'iVar', '{sample}', '{sample}.cssorted.stats'),
-        stats_re = join(OUT_DIR, 'iVar', '{sample}', '{sample}.resorted.stats')
+        bam = join(OUT_DIR, 'BWA', '{sample}', '{sample}.resorted.bwa.bam'),
+        stats_cs = join(OUT_DIR, 'BWA', '{sample}', '{sample}.cssorted.stats'),
+        stats_re = join(OUT_DIR, 'BWA', '{sample}', '{sample}.resorted.stats')
     log:
-        join(OUT_DIR, 'iVar', 'bwa_{sample}.log')
+        join(OUT_DIR, 'BWA', 'iVar_trimming_{sample}.log')
     benchmark:
-        join(OUT_DIR, 'iVar', '{sample}', 'iVar.benchmark.tsv')
+        join(OUT_DIR, 'BWA', '{sample}', 'iVar_trimming.benchmark.tsv')
     threads:
         8
     resources:
         mem_mb=8000
     message:
-        """--- Trimming round of inital BAM files for sample {wildcards.sample} """
+        """--- Trimming inital BAM files for sample {wildcards.sample} """
     run:
         shell('ivar'
                 ' trim'
@@ -200,9 +189,9 @@ rule iVar_trimming: ## Need to include the primer bed files later
 ##--------------------------------------------------------------------------------------##
 ##--------------------------------------------------------------------------------------##
 
-rule BAM_to_FastQ: ## May need to incorporate a subsampling step if the read numbers are high
+rule BAM_to_FastQ:
     input:
-        bam = join(OUT_DIR, 'iVar', '{sample}', '{sample}.resorted.bwa.bam')
+        bam = join(OUT_DIR, 'BWA', '{sample}', '{sample}.resorted.bwa.bam')
     output:
         fastq = join(OUT_DIR, 'FastQs', '{sample}', '{sample}.resorted.fq.gz')
     log:
@@ -214,14 +203,14 @@ rule BAM_to_FastQ: ## May need to incorporate a subsampling step if the read num
     resources:
         mem_mb=8000
     message:
-        """--- Converting BAM file to FastQ for sample {wildcards.sample} """
+        """--- Converting trimmed BAM to FastQ for sample {wildcards.sample} """
     run:
         shell('samtools'
                 ' view'
                 ' --threads 2'
                 ' {input.bam}'
                 ' -o {wildcards.sample}.resorted.bwa.sam')
-        shell('sam2fastq.py'
+        shell(script_dir + '/sam2fastq.py'
                 ' {wildcards.sample}.resorted.bwa.sam'
                 ' {wildcards.sample}.resorted.fq')
         shell('gzip {wildcards.sample}.resorted.fq')
@@ -231,9 +220,9 @@ rule BAM_to_FastQ: ## May need to incorporate a subsampling step if the read num
 ##--------------------------------------------------------------------------------------##
 ##--------------------------------------------------------------------------------------##
 
-rule generate_pielup:
+rule Samtools_pielup:
     input:
-        bam = join(OUT_DIR, 'iVar', '{sample}', '{sample}.resorted.bwa.bam')
+        bam = join(OUT_DIR, 'BWA', '{sample}', '{sample}.resorted.bwa.bam')
     params:
         dna = DNA
     output:
@@ -264,25 +253,24 @@ rule generate_pielup:
 ##--------------------------------------------------------------------------------------##
 ##--------------------------------------------------------------------------------------##
 
-## measure transcript abundances with Stringtie
-rule call_variants:
+rule iVar_variants:
     input:
         pileup = join(OUT_DIR, 'Pileups', '{sample}.up')
     params:
         crs = covidRefSequences,
         dna = DNA
     output:
-        countsSt = join(OUT_DIR, 'Variants', 'iVar', '{sample}.rawVarCalls.tsv')
+        countsSt = join(OUT_DIR, 'iVar', '{sample}.rawVarCalls.tsv')
     log:
-        join(OUT_DIR, 'Variants', 'iVar', '{sample}.log')
+        join(OUT_DIR, 'iVar', '{sample}.log')
     benchmark:
-        join(OUT_DIR, 'Variants', 'iVar', '{sample}.benchmark.tsv')
+        join(OUT_DIR, 'iVar', '{sample}.benchmark.tsv')
     threads:
         8
     resources:
         mem_mb=16000
     message:
-        """--- Calling variants for sample {wildcards.sample}. """
+        """--- Calling variants for sample {wildcards.sample} with iVar. """
     run:
         shell('cat {input.pileup} |'
                 ' ivar variants'
@@ -298,9 +286,7 @@ rule call_variants:
 ##--------------------------------------------------------------------------------------##
 ##--------------------------------------------------------------------------------------##
 
-
-## Rule for mapping PE reads to the genome with Bowtie2
-rule kraken:
+rule Kraken:
     input:
         r1 = lambda wildcards: seFILES[wildcards.sample]['R1']
     params:
@@ -320,14 +306,12 @@ rule kraken:
     conda:
         "envs/kraken_env.yml"
     shell:
-        'kraken2 --db {params.k2db} --threads 8 --report {output} {input.r1}> /dev/null'
+        'kraken2 --db {params.k2db} --threads 8 --report {output} {input.r1} > /dev/null'
 
 
 ##--------------------------------------------------------------------------------------##
 ##--------------------------------------------------------------------------------------##
 
-
-## Rule for mapping PE reads to the genome with Bowtie2
 rule QCplots:
     input:
         pileup = join(OUT_DIR, 'Pileups', '{sample}.up')
@@ -344,7 +328,7 @@ rule QCplots:
     resources:
         mem_mb=8000
     message:
-        """--- QC for variant calls "{wildcards.sample}"."""
+        """--- QC for iVar variant calls of sample "{wildcards.sample}"."""
     run:
         shell('python3 ' + script_dir + '/plotQC.py'
                 ' {input.pileup}'
@@ -356,18 +340,17 @@ rule QCplots:
 ##--------------------------------------------------------------------------------------##
 ##--------------------------------------------------------------------------------------##
 
-
-rule krakenVariantCaller:
+rule Kraken_variants:
     input:
         fastq = join(OUT_DIR, 'FastQs', '{sample}', '{sample}.resorted.fq.gz')
     params:
         allCOVdb = allCOVdb,
         majCOVdb = majCOVdb
     output:
-        allCov = join(OUT_DIR, 'Kraken', '{sample}', '{sample}.k2_allCovid.out')
-        # allCovid_bracken = join(OUT_DIR, 'Kraken', '{sample}', '{sample}.allCovid.bracken'),
-        # majCov = join(OUT_DIR, 'Kraken', '{sample}', '{sample}.k2_majCovid.out'),
-        # majCovid_bracken = join(OUT_DIR, 'Kraken', '{sample}', '{sample}.majCovid.bracken')
+        allCov = join(OUT_DIR, 'Kraken', '{sample}', '{sample}.k2_allCovid.out'),
+        allCovid_bracken = join(OUT_DIR, 'Kraken', '{sample}', '{sample}.allCovid.bracken'),
+        majCov = join(OUT_DIR, 'Kraken', '{sample}', '{sample}.k2_majCovid.out'),
+        majCovid_bracken = join(OUT_DIR, 'Kraken', '{sample}', '{sample}.majCovid.bracken')
     log:
         all_brak = join(OUT_DIR, 'Kraken', '{sample}', 'k2_std.log'),
         maj_brak = join(OUT_DIR, 'Kraken', '{sample}', 'k2_std.log')
@@ -380,49 +363,51 @@ rule krakenVariantCaller:
     conda:
         "envs/kraken_env.yml"
     message:
-        """--- Kraken2 search for sample "{wildcards.sample}"."""
+        """--- Discovering variants with Kraken for "{wildcards.sample}"."""
     shell:
-        'kraken2 {input.fastq} --db {params.allCOVdb} --threads 4 --report {output.allCov} > /dev/null'
-        # shell('/home/yahmed/GitHub_Repositories/Bracken/bracken'
-        #         ' -d {params.allCOVdb}'
-        #         ' -i {output.allCov}'
-        #         ' -o {output.allCovid_bracken}'
-        #         ' -l P'
-        #         ' > {log.all_brak} 2>&1')
-        # shell('/home/yahmed/GitHub_Repositories/kraken2/kraken2'
-        #         ' {input.fastq}'
-        #         ' --db {params.majCOVdb}'
-        #         ' --threads 4'
-        #         ' --report {output.majCov}'
-        #         ' > /dev/null')
-        # shell('/home/yahmed/GitHub_Repositories/Bracken/bracken'
-        #         ' -d {params.majCOVdb}'
-        #         ' -i {output.majCov}'
-        #         ' -o {output.majCovid_bracken}'
-        #         ' -l C'
-        #         ' > {log.maj_brak} 2>&1')
+        'kraken2 {input.fastq} --db {params.allCOVdb} --threads 4 --report {output.allCov} > /dev/null && '
+
+        '/home/software/Bracken/bracken'
+                ' -d {params.allCOVdb}'
+                ' -i {output.allCov}'
+                ' -o {output.allCovid_bracken}'
+                ' -l P'
+                ' > {log.all_brak} 2>&1 && '
+        'kraken2'
+                ' {input.fastq}'
+                ' --db {params.majCOVdb}'
+                ' --threads 4'
+                ' --report {output.majCov}'
+                ' > /dev/null && '
+        '/home/software/Bracken/bracken'
+                ' -d {params.majCOVdb}'
+                ' -i {output.majCov}'
+                ' -o {output.majCovid_bracken}'
+                ' -l C'
+                ' > {log.maj_brak} 2>&1'
 
 
 ##--------------------------------------------------------------------------------------##
 ##--------------------------------------------------------------------------------------##
 
-## Rule to collate fastQC and HISAT2 outputs with multiQC
-rule consensusSequence:
+rule Consensus_sequence:
     input:
-        bam = join(OUT_DIR, 'iVar', '{sample}', '{sample}.resorted.bwa.bam')
+        bam = join(OUT_DIR, 'BWA', '{sample}', '{sample}.resorted.bwa.bam')
     params:
         dna = DNA
     output:
-        vcf = join(OUT_DIR, 'iVar', '{sample}', 'consensus', 'calls.vcf.gz'),
-        consensus = join(OUT_DIR, 'iVar', '{sample}', 'consensus', 'consensus.fa')
+        vcf = join(OUT_DIR, 'Sequences', '{sample}', 'consensus', 'calls.vcf.gz'),
+        consensus = join(OUT_DIR, 'Sequences', '{sample}', 'consensus', 'consensus.fa')
     log:
-        join(OUT_DIR, 'iVar', '{sample}', 'consensus', 'calls.log')
+        join(OUT_DIR, 'Sequences', '{sample}', 'consensus', 'calls.log')
     benchmark:
-        join(OUT_DIR, 'iVar', '{sample}', 'consensus', 'consensus_benchmark.tsv')
+        join(OUT_DIR, 'Sequences', '{sample}', 'consensus', 'consensus_benchmark.tsv')
     message:
-        """--- Running MultiQC """
-    run:
-        shell('bcftools mpileup'
+        """--- Outputting consensus sequence for sample "{wildcards.sample}" """
+    conda:
+        "envs/bcftools_env.yml"
+    shell:
+        'bcftools mpileup'
                 ' -d 10000'
                 ' -Ou'
                 ' -f {params.dna}'
@@ -432,17 +417,16 @@ rule consensusSequence:
                 ' -mv'
                 ' -Oz'
                 ' -o {output.vcf}'
-                ' > {log} 2>&1')
-        shell('bcftools index {output.vcf}')
-        shell('cat {params.dna} | bcftools consensus {output.vcf} > {output.consensus}')
+                ' > {log} 2>&1 && '
+        'bcftools index {output.vcf} && '
+        'cat {params.dna} | bcftools consensus {output.vcf} > {output.consensus}'
 
 ##--------------------------------------------------------------------------------------##
 ##--------------------------------------------------------------------------------------##
 
-## Rule to collate fastQC and HISAT2 outputs with multiQC
-rule pangolinVariantCaller:
+rule Panglin_variants:
     input:
-        consensus = join(OUT_DIR, 'iVar', '{sample}', 'consensus', 'consensus.fa')
+        consensus = join(OUT_DIR, 'Sequences', '{sample}', 'consensus', 'consensus.fa')
     output:
         join(OUT_DIR, 'Pangolin', '{sample}', 'lineage_report.csv')
     log:
@@ -450,7 +434,7 @@ rule pangolinVariantCaller:
     benchmark:
         join(OUT_DIR, 'Pangolin', '{sample}', 'pangolin_benchmark.tsv')
     message:
-        """--- Running Pangolin """
+        """--- Running Pangolin on sample "{wildcards.sample}" """
     run:
         shell('pangolin'
                 ' {input.consensus}'
@@ -461,10 +445,9 @@ rule pangolinVariantCaller:
 ##--------------------------------------------------------------------------------------##
 ##--------------------------------------------------------------------------------------##
 
-## Rule to collate fastQC and HISAT2 outputs with multiQC
-rule linearDeconVariantCaller:
+rule LDVC_variants:
     input:
-        countsSt = join(OUT_DIR, 'Variants', 'iVar', '{sample}.rawVarCalls.tsv')
+        countsSt = join(OUT_DIR, 'iVar', '{sample}.rawVarCalls.tsv')
     params:
         var_def = VAR_DEF
     output:
@@ -474,9 +457,9 @@ rule linearDeconVariantCaller:
     benchmark:
         join(OUT_DIR, 'LDVC', '{sample}', 'ldvc_benchmark.tsv')
     message:
-        """--- Running LDVC """
+        """--- Running LDVC for sample "{wildcards.sample}".  """
     run:
-        shell('deconvolveVariants.py'
+        shell(script_dir + '/deconvolveVariants.py'
                 ' {input.countsSt}'
                 ' ' + join(OUT_DIR, 'LDVC', '{wildcards.sample}') +
                 ' {params.var_def}'
@@ -485,28 +468,27 @@ rule linearDeconVariantCaller:
 ##--------------------------------------------------------------------------------------##
 ##--------------------------------------------------------------------------------------##
 
-## Rule to collate fastQC and HISAT2 outputs with multiQC
-rule freyjaVariantCaller:
+rule Freyja_variants:
     input:
-        bam = join(OUT_DIR, 'iVar', '{sample}', '{sample}.resorted.bwa.bam')
+        bam = join(OUT_DIR, 'BWA', '{sample}', '{sample}.resorted.bwa.bam')
     params:
         dna = DNA
     output:
-        variants = join(OUT_DIR, 'iVar', '{sample}', 'freyja', 'freyja.variants.tsv'),
-        depths = join(OUT_DIR, 'iVar', '{sample}', 'freyja', 'freyja.depths.tsv')
+        variants = join(OUT_DIR, 'Freyja', '{sample}', 'freyja.variants.tsv'),
+        depths = join(OUT_DIR, 'Freyja', '{sample}', 'freyja.depths.tsv')
     log:
-        join(OUT_DIR, 'iVar', '{sample}', 'freyja', 'freyja_variant.log')
+        join(OUT_DIR, 'Freyja', '{sample}', 'freyja_var-dep.log')
     benchmark:
-        join(OUT_DIR, 'iVar', '{sample}', 'freyja', 'freyja_variant_benchmark.tsv')
+        join(OUT_DIR, 'Freyja', '{sample}', 'freyja_var-dep_benchmark.tsv')
     threads:
         8
     resources:
         mem_mb=32000
     message:
-        """--- Running Freyja variants"""
+        """--- Running Freyja variants for sample "{wildcards.sample}". """
     run:
         shell('freyja variants'
-                ' {input.bam} '
+                ' {input.bam}'
                 ' --variants {output.variants}'
                 ' --depths {output.depths}'
                 ' --ref {params.dna}')
@@ -514,23 +496,22 @@ rule freyjaVariantCaller:
 ##--------------------------------------------------------------------------------------##
 ##--------------------------------------------------------------------------------------##
 
-## Rule to collate fastQC and HISAT2 outputs with multiQC
-rule freyjaDemix:
+rule Freyja_demix:
     input:
-        variants = join(OUT_DIR, 'iVar', '{sample}', 'freyja', 'freyja.variants.tsv'),
-        depths = join(OUT_DIR, 'iVar', '{sample}', 'freyja', 'freyja.depths.tsv')
+        variants = join(OUT_DIR, 'Freyja', '{sample}', 'freyja.variants.tsv'),
+        depths = join(OUT_DIR, 'Freyja', '{sample}', 'freyja.depths.tsv')
     output:
-        demix = join(OUT_DIR, 'iVar', '{sample}', 'freyja', 'freyja.demix')
+        demix = join(OUT_DIR, 'Freyja', '{sample}', 'freyja.demix')
     log:
-        join(OUT_DIR, 'iVar', '{sample}', 'freyja', 'freyja_demix.log')
+        join(OUT_DIR, 'Freyja', '{sample}', 'freyja_demix.log')
     benchmark:
-        join(OUT_DIR, 'iVar', '{sample}', 'freyja', 'freyja_demi_benchmark.tsv')
+        join(OUT_DIR, 'Freyja', '{sample}', 'freyja_demix_benchmark.tsv')
     threads:
         8
     resources:
         mem_mb=32000
     message:
-        """--- Running Freyja """
+        """--- Running Freyja demix for sample "{wildcards.sample}". """
     run:
         shell('freyja demix'
                 ' {input.variants}'
@@ -541,25 +522,24 @@ rule freyjaDemix:
 ##--------------------------------------------------------------------------------------##
 ##--------------------------------------------------------------------------------------##
 
-## Rule to collate fastQC and HISAT2 outputs with multiQC
-rule freyjaBoot:
+rule Freyja_boot:
     input:
-        variants = join(OUT_DIR, 'iVar', '{sample}', 'freyja', 'freyja.variants.tsv'),
-        depths = join(OUT_DIR, 'iVar', '{sample}', 'freyja', 'freyja.depths.tsv'),
-        demix = join(OUT_DIR, 'iVar', '{sample}', 'freyja', 'freyja.demix')
+        variants = join(OUT_DIR, 'Freyja', '{sample}', 'freyja.variants.tsv'),
+        depths = join(OUT_DIR, 'Freyja', '{sample}', 'freyja.depths.tsv'),
+        demix = join(OUT_DIR, 'Freyja', '{sample}', 'freyja.demix')
     output:
-        boot = join(OUT_DIR, 'iVar', '{sample}', 'freyja', '{sample}_freyja_boot_lineages.csv'),
-        png =  join(OUT_DIR, 'iVar', '{sample}', 'freyja', 'freyja_bootstrap.png')
+        boot = join(OUT_DIR, 'Freyja', '{sample}', '{sample}_freyja_boot_lineages.csv'),
+        png =  join(OUT_DIR, 'Freyja', '{sample}', 'freyja_bootstrap.png')
     log:
-        join(OUT_DIR, 'iVar', '{sample}', 'freyja', 'freyja_boot.log')
+        join(OUT_DIR, 'Freyja', '{sample}', 'freyja_boot.log')
     benchmark:
-        join(OUT_DIR, 'iVar', '{sample}', 'freyja', 'freyja_boot_benchmark.tsv')
+        join(OUT_DIR, 'Freyja', '{sample}', 'freyja_boot_benchmark.tsv')
     threads:
         8
     resources:
         mem_mb=32000
     message:
-        """--- Running Freyja boot"""
+        """--- Running Freyja boot for sample "{wildcards.sample}". """
     run:
         shell('freyja boot'
                 ' {input.variants}'
@@ -568,24 +548,23 @@ rule freyjaBoot:
                 ' --nb 10'
                 ' --output_base {wildcards.sample}_freyja_boot'
                 ' &&'
-                ' mv {wildcards.sample}_freyja_boot*csv ' + join(OUT_DIR, 'iVar', '{wildcards.sample}', 'freyja'))
-        shell('parseFreyjaBootstraps.py {input.demix} {output.boot} {output.png}')
+                ' mv {wildcards.sample}_freyja_boot*csv ' + join(OUT_DIR, 'Freyja', '{wildcards.sample}'))
+        shell(script_dir + 'parseFreyjaBootstraps.py {input.demix} {output.boot} {output.png}')
 
 ##--------------------------------------------------------------------------------------##
 ##--------------------------------------------------------------------------------------##
 
 
-## Rule for mapping PE reads to the genome with Bowtie2
-rule qualiMap:
+rule QualiMap:
     input:
-        bam = join(OUT_DIR, 'iVar', '{sample}', '{sample}.resorted.bwa.bam'),
+        bam = join(OUT_DIR, 'BWA', '{sample}', '{sample}.resorted.bwa.bam'),
         gtf = covidRefSequences
     output:
-        join(OUT_DIR, 'iVar', '{sample}', '{sample}.qualimap', 'qualimapReport.html')
+        join(OUT_DIR, 'BWA', '{sample}', '{sample}.qualimap', 'qualimapReport.html')
     log:
-        join(OUT_DIR, 'iVar', '{sample}', 'qualmap.log')
+        join(OUT_DIR, 'BWA', '{sample}', 'qualmap.log')
     benchmark:
-        join(OUT_DIR, 'iVar', '{sample}', 'qualmap_benchmark.tsv')
+        join(OUT_DIR, 'BWA', '{sample}', 'qualmap_benchmark.tsv')
     threads:
         8
     resources:
@@ -597,7 +576,7 @@ rule qualiMap:
                 ' -bam {input.bam}'
                 ' --java-mem-size=32G'
                 # ' -gff {input.gtf}'
-                ' -outdir ' + join(OUT_DIR, 'iVar', '{wildcards.sample}', '{wildcards.sample}.qualimap') +
+                ' -outdir ' + join(OUT_DIR, 'BWA', '{wildcards.sample}', '{wildcards.sample}.qualimap') +
                 ' > {log} 2>&1')
 
 ##--------------------------------------------------------------------------------------##
@@ -608,10 +587,11 @@ rule multiQC:
     input:
         expand(join(OUT_DIR, 'fastQC', '{sample}' + '.R1_fastqc.html'), sample = SAMPLES),
         expand(join(OUT_DIR, 'Kraken', '{sample}', '{sample}.k2_std.out'), sample = SAMPLES),
+        expand(join(OUT_DIR, 'BWA', '{sample}', '{sample}.resorted.stats'), sample = SAMPLES),
         expand(join(OUT_DIR, 'Pangolin', '{sample}', 'lineage_report.csv'), sample = SAMPLES),
         expand(join(OUT_DIR, 'LDVC', '{sample}', 'ldvc_report.csv'), sample = SAMPLES),
         expand(join(OUT_DIR, 'BWA', '{sample}', '{sample}.csorted.bwa.bam'), sample = SAMPLES),
-        expand(join(OUT_DIR, 'iVar', '{sample}', '{sample}.qualimap', 'qualimapReport.html'), sample = SAMPLES)
+        expand(join(OUT_DIR, 'BWA', '{sample}', '{sample}.qualimap', 'qualimapReport.html'), sample = SAMPLES)
     output:
         join(OUT_DIR, 'MultiQC', 'multiqc_report.html')
     log:
@@ -622,8 +602,8 @@ rule multiQC:
         """--- Running MultiQC """
     run:
         shell('ls -1 ' + join(OUT_DIR) + '/fastQC/*fastqc.zip >> ' + join(OUT_DIR, 'MultiQC', 'summary_files.txt'))
-        shell('ls -1 ' + join(OUT_DIR) + '/BWA/*log > ' + join(OUT_DIR, 'MultiQC', 'summary_files.txt'))
-        shell('ls -1 ' + join(OUT_DIR) + '/iVar/*/*.qualimap | grep ":" | sed "s/://g" >> ' + join(OUT_DIR, 'MultiQC', 'summary_files.txt'))
+        # shell('ls -1 ' + join(OUT_DIR) + '/BWA/*log > ' + join(OUT_DIR, 'MultiQC', 'summary_files.txt'))
+        shell('ls -1 ' + join(OUT_DIR) + '/BWA/*/*.qualimap | grep ":" | sed "s/://g" >> ' + join(OUT_DIR, 'MultiQC', 'summary_files.txt'))
         shell('multiqc'
                 ' -f'
                 ' -o ' + join(OUT_DIR, 'MultiQC') + ' -l -dd 2 ' + join(OUT_DIR, 'MultiQC', 'summary_files.txt') +
