@@ -4,3 +4,5 @@
 
 #### DAG of pipeline:
 ![alt text](https://github.com/YazBraimah/NYWWS/blob/main/workflow.png?raw=true)
+
+Refer to the config file for main inputs.
