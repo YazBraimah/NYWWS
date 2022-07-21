@@ -2,6 +2,8 @@
 DNA: '/home/yahmed/NYWWS/reference/nCov_Wuhan.fasta'
 INDEX: '/home/yahmed/NYWWS/reference/bwa_ref/nCov_Wuhan.fasta'
 
+GENEXUS_DNA: '/home/yahmed/NYWWS/reference/ion_ampliseq_sars-cov-2-insight.fasta'
+
 # Path to a folder where final files will be written.
 OUT_DIR: '/home/yahmed/NYWWS/OUTPUT'
 
@@ -18,3 +20,5 @@ MAJOR_COVID: '/home/C-WAP/customDBs/majorCovidDB/'
 # Path to a JSON file with samples and their corresponding FASTQ files.
 SE_SAMPLES_JSON: '/home/yahmed/NYWWS/samples_se.json'
 PE_SAMPLES_JSON: '/home/yahmed/NYWWS/samples_pe.json'
+
+BAMS_DIR: '/home/yahmed/NYWWS/BAM_files/'

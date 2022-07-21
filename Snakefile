@@ -43,6 +43,7 @@ configfile: 'config.yml'
 
 # Full path to an uncompressed FASTA file with all chromosome sequences.
 DNA = config['DNA']
+GENEXUS_DNA = config['GENEXUS_DNA']
 INDEX = config['INDEX']
 script_dir = config['SCRIPT_DIR']
 covidRefSequences = config['covidRefSequences']
@@ -51,6 +52,7 @@ pri_bed = config['PRIMER_BED']
 allCOVdb = config['ALL_COVID']
 majCOVdb = config['MAJOR_COVID']
 VAR_DEF = config['VAR_DEF']
+BAMS_DIR = config['BAMS_DIR']
 
 # Full path to a folder where final output files will be deposited.
 OUT_DIR = config['OUT_DIR']
@@ -85,10 +87,10 @@ if not os.path.exists(OUT_DIR):
 rule all:
     input:
         join(OUT_DIR, 'MultiQC', 'multiqc_report.html'),
-        expand(join(OUT_DIR, 'iVar', '{sample}.rawVarCalls.tsv'), sample = SAMPLES),
+        # expand(join(OUT_DIR, 'iVar', '{sample}.rawVarCalls.tsv'), sample = SAMPLES),
         expand(join(OUT_DIR, 'Kraken', '{sample}', '{sample}.k2_allCovid.out'), sample = SAMPLES),
-        expand(join(OUT_DIR, 'Sequences', '{sample}', 'consensus', 'consensus.fa'), sample = SAMPLES),
-        expand(join(OUT_DIR, 'Freyja', '{sample}', 'freyja_bootstrap.png'), sample = SAMPLES)
+        # expand(join(OUT_DIR, 'Sequences', '{sample}', 'consensus', 'consensus.fa'), sample = SAMPLES),
+        join(OUT_DIR, 'Freyja', 'Aggregate', 'Genexus', 'freyja_stacked_barplots.png')
         # expand(join(OUT_DIR, 'QC', '{sample}', 'pos-coverage-quality.tsv'), sample = SAMPLES)
 
 ##--------------------------------------------------------------------------------------##
@@ -470,16 +472,20 @@ rule LDVC_variants:
 
 rule Freyja_variants:
     input:
-        bam = join(OUT_DIR, 'BWA', '{sample}', '{sample}.resorted.bwa.bam')
+        bwa_bam = join(OUT_DIR, 'BWA', '{sample}', '{sample}.resorted.bwa.bam'),
+        gen_bam = join(BAMS_DIR, '{sample}.ptrim.bam')
     params:
-        dna = DNA
+        dna = DNA,
+        gdna = GENEXUS_DNA
     output:
-        variants = join(OUT_DIR, 'Freyja', '{sample}', 'freyja.variants.tsv'),
-        depths = join(OUT_DIR, 'Freyja', '{sample}', 'freyja.depths.tsv')
+        bwa_variants = join(OUT_DIR, 'Freyja', 'Variants', 'Results', 'BWA', '{sample}.freyja.variants.tsv'),
+        bwa_depths = join(OUT_DIR, 'Freyja', 'Variants', 'Results', 'BWA', '{sample}.freyja.depths.tsv'),
+        gen_variants = join(OUT_DIR, 'Freyja', 'Variants', 'Results', 'Genexus', '{sample}.freyja.variants.tsv'),
+        gen_depths = join(OUT_DIR, 'Freyja', 'Variants', 'Results', 'Genexus', '{sample}.freyja.depths.tsv')
     log:
-        join(OUT_DIR, 'Freyja', '{sample}', 'freyja_var-dep.log')
+        join(OUT_DIR, 'Freyja', 'Variants', '{sample}_freyja_var-dep.log')
     benchmark:
-        join(OUT_DIR, 'Freyja', '{sample}', 'freyja_var-dep_benchmark.tsv')
+        join(OUT_DIR, 'Freyja', 'Variants', '{sample}_freyja_var-dep_benchmark.tsv')
     threads:
         8
     resources:
@@ -488,24 +494,32 @@ rule Freyja_variants:
         """--- Running Freyja variants for sample "{wildcards.sample}". """
     run:
         shell('freyja variants'
-                ' {input.bam}'
-                ' --variants {output.variants}'
-                ' --depths {output.depths}'
+                ' {input.bwa_bam}'
+                ' --variants {output.bwa_variants}'
+                ' --depths {output.bwa_depths}'
                 ' --ref {params.dna}')
+        shell('freyja variants'
+                ' {input.gen_bam}'
+                ' --variants {output.gen_variants}'
+                ' --depths {output.gen_depths}'
+                ' --ref {params.gdna}')
 
 ##--------------------------------------------------------------------------------------##
 ##--------------------------------------------------------------------------------------##
 
 rule Freyja_demix:
     input:
-        variants = join(OUT_DIR, 'Freyja', '{sample}', 'freyja.variants.tsv'),
-        depths = join(OUT_DIR, 'Freyja', '{sample}', 'freyja.depths.tsv')
+        bwa_variants = join(OUT_DIR, 'Freyja', 'Variants', 'Results', 'BWA', '{sample}.freyja.variants.tsv'),
+        bwa_depths = join(OUT_DIR, 'Freyja', 'Variants', 'Results', 'BWA', '{sample}.freyja.depths.tsv'),
+        gen_variants = join(OUT_DIR, 'Freyja', 'Variants', 'Results', 'Genexus', '{sample}.freyja.variants.tsv'),
+        gen_depths = join(OUT_DIR, 'Freyja', 'Variants', 'Results', 'Genexus', '{sample}.freyja.depths.tsv')
     output:
-        demix = join(OUT_DIR, 'Freyja', '{sample}', 'freyja.demix')
+        bwa_demix = join(OUT_DIR, 'Freyja', 'Demix', 'Results', 'BWA', '{sample}_freyja.demix'),
+        gen_demix = join(OUT_DIR, 'Freyja', 'Demix', 'Results', 'Genexus', '{sample}_freyja.demix')
     log:
-        join(OUT_DIR, 'Freyja', '{sample}', 'freyja_demix.log')
+        join(OUT_DIR, 'Freyja', 'Demix', '{sample}_freyja_demix.log')
     benchmark:
-        join(OUT_DIR, 'Freyja', '{sample}', 'freyja_demix_benchmark.tsv')
+        join(OUT_DIR, 'Freyja', 'Demix', '{sample}_freyja_demix_benchmark.tsv')
     threads:
         8
     resources:
@@ -514,9 +528,14 @@ rule Freyja_demix:
         """--- Running Freyja demix for sample "{wildcards.sample}". """
     run:
         shell('freyja demix'
-                ' {input.variants}'
-                ' {input.depths}'
-                ' --output {output.demix}'
+                ' {input.bwa_variants}'
+                ' {input.bwa_depths}'
+                ' --output {output.bwa_demix}'
+                ' --confirmedonly')
+        shell('freyja demix'
+                ' {input.gen_variants}'
+                ' {input.gen_depths}'
+                ' --output {output.gen_demix}'
                 ' --confirmedonly')
 
 ##--------------------------------------------------------------------------------------##
@@ -524,16 +543,21 @@ rule Freyja_demix:
 
 rule Freyja_boot:
     input:
-        variants = join(OUT_DIR, 'Freyja', '{sample}', 'freyja.variants.tsv'),
-        depths = join(OUT_DIR, 'Freyja', '{sample}', 'freyja.depths.tsv'),
-        demix = join(OUT_DIR, 'Freyja', '{sample}', 'freyja.demix')
+        bwa_variants = join(OUT_DIR, 'Freyja', 'Variants', 'Results', 'BWA', '{sample}.freyja.variants.tsv'),
+        bwa_depths = join(OUT_DIR, 'Freyja', 'Variants', 'Results', 'BWA', '{sample}.freyja.depths.tsv'),
+        gen_variants = join(OUT_DIR, 'Freyja', 'Variants', 'Results', 'Genexus', '{sample}.freyja.variants.tsv'),
+        gen_depths = join(OUT_DIR, 'Freyja', 'Variants', 'Results', 'Genexus', '{sample}.freyja.depths.tsv'),
+        bwa_demix = join(OUT_DIR, 'Freyja', 'Demix', 'Results', 'BWA', '{sample}_freyja.demix'),
+        gen_demix = join(OUT_DIR, 'Freyja', 'Demix', 'Results', 'Genexus', '{sample}_freyja.demix')
     output:
-        boot = join(OUT_DIR, 'Freyja', '{sample}', '{sample}_freyja_boot_lineages.csv'),
-        png =  join(OUT_DIR, 'Freyja', '{sample}', 'freyja_bootstrap.png')
+        bwa_boot = join(OUT_DIR, 'Freyja', 'Boot', 'Results', 'BWA', '{sample}_freyja_boot_lineages.csv'),
+        bwa_png =  join(OUT_DIR, 'Freyja', 'Boot', 'Results', 'BWA', '{sample}_freyja_bootstrap.png'),
+        gen_boot = join(OUT_DIR, 'Freyja', 'Boot', 'Results', 'Genexus', '{sample}_freyja_boot_lineages.csv'),
+        gen_png =  join(OUT_DIR, 'Freyja', 'Boot', 'Results', 'Genexus', '{sample}_freyja_bootstrap.png')
     log:
-        join(OUT_DIR, 'Freyja', '{sample}', 'freyja_boot.log')
+        join(OUT_DIR, 'Freyja', 'Boot', '{sample}_freyja_boot.log')
     benchmark:
-        join(OUT_DIR, 'Freyja', '{sample}', 'freyja_boot_benchmark.tsv')
+        join(OUT_DIR, 'Freyja', 'Boot', '{sample}_freyja_boot_benchmark.tsv')
     threads:
         8
     resources:
@@ -542,14 +566,60 @@ rule Freyja_boot:
         """--- Running Freyja boot for sample "{wildcards.sample}". """
     run:
         shell('freyja boot'
-                ' {input.variants}'
-                ' {input.depths}'
+                ' {input.bwa_variants}'
+                ' {input.bwa_depths}'
                 ' --nt 4'
                 ' --nb 10'
-                ' --output_base {wildcards.sample}_freyja_boot'
+                ' --output_base {wildcards.sample}_bwa_freyja_boot'
                 ' &&'
-                ' mv {wildcards.sample}_freyja_boot*csv ' + join(OUT_DIR, 'Freyja', '{wildcards.sample}'))
-        shell(script_dir + 'parseFreyjaBootstraps.py {input.demix} {output.boot} {output.png}')
+                ' mv {wildcards.sample}_bwa_freyja_boot*csv ' + join(OUT_DIR, 'Freyja', 'Boot', 'Results', 'BWA'))
+        shell(script_dir + 'parseFreyjaBootstraps.py {input.bwa_demix} {output.bwa_boot} {output.bwa_png}')
+
+        shell('freyja boot'
+                ' {input.gen_variants}'
+                ' {input.gen_depths}'
+                ' --nt 4'
+                ' --nb 10'
+                ' --output_base {wildcards.sample}_gen_freyja_boot'
+                ' &&'
+                ' mv {wildcards.sample}_gen_freyja_boot*csv ' + join(OUT_DIR, 'Freyja', 'Boot', 'Results', 'Genexus'))
+        shell(script_dir + 'parseFreyjaBootstraps.py {input.gen_demix} {output.gen_boot} {output.gen_png}')
+
+##--------------------------------------------------------------------------------------##
+##--------------------------------------------------------------------------------------##
+
+rule Freyja_aggregate:
+    input:
+        expand(join(OUT_DIR, 'Freyja', 'Demix', 'Results', 'BWA', '{sample}_freyja.demix'), sample = SAMPLES),
+        expand(join(OUT_DIR, 'Freyja', 'Demix', 'Results', 'Genexus', '{sample}_freyja.demix'), sample = SAMPLES)
+    output:
+        bwa_agg = join(OUT_DIR, 'Freyja', 'Aggregate', 'BWA', 'aggregated_results.tsv'),
+        bwa_png = join(OUT_DIR, 'Freyja', 'Aggregate', 'BWA', 'freyja_stacked_barplots.png'),
+        gen_agg = join(OUT_DIR, 'Freyja', 'Aggregate', 'Genexus', 'aggregated_results.tsv'),
+        gen_png = join(OUT_DIR, 'Freyja', 'Aggregate', 'Genexus', 'freyja_stacked_barplots.png')
+    log:
+        join(OUT_DIR, 'Freyja', 'Aggregate', 'freyja_agg.log')
+    benchmark:
+        join(OUT_DIR, 'Freyja', 'Aggregate', 'freyja_agg_benchmark.tsv')
+    threads:
+        8
+    resources:
+        mem_mb=32000
+    message:
+        """--- Running Freyja aggregate and outputting barplots. """
+    run:
+        shell('freyja aggregate'
+                ' --output {output.bwa_agg}'
+                ' ' + join(OUT_DIR, 'Freyja', 'Demix', 'Results', 'BWA') + '/')
+        shell('freyja plot'
+                ' {output.bwa_agg}'
+                ' --output {output.bwa_png}')
+        shell('freyja aggregate'
+                ' --output {output.gen_agg}'
+                ' ' + join(OUT_DIR, 'Freyja', 'Demix', 'Results', 'Genexus') + '/')
+        shell('freyja plot'
+                ' {output.gen_agg}'
+                ' --output {output.gen_png}')
 
 ##--------------------------------------------------------------------------------------##
 ##--------------------------------------------------------------------------------------##
