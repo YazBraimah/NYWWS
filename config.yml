@@ -6,6 +6,7 @@ GENEXUS_DNA: '/home/yahmed/NYWWS/reference/ion_ampliseq_sars-cov-2-insight.fasta
 
 # Path to a folder where final files will be written.
 OUT_DIR: '/home/yahmed/NYWWS/OUTPUT'
+HOME_DIR: '/home/yahmed/NYWWS/'
 
 covidRefSequences: '/home/yahmed/NYWWS/reference/GCF_009858895.2_ASM985889v3_genomic.gff'
 K2_STD_DB_PATH: '/home/kraken_database'
@@ -14,6 +15,7 @@ SCRIPT_DIR: '/home/C-WAP/'
 VAR_DEF: '/home/C-WAP/covidRefSequences/varDefinitions.pkl'
 KalIdx: '/home/C-WAP/customDBs/variants.kalIdx'
 LCS_DIR: '/home/LCS/'
+SAM_HEADER: '/home/yahmed/NYWWS/bam_process/new_header.sam'
 
 ## Covid databases
 ALL_COVID: '/home/C-WAP/customDBs/allCovidDB/'
