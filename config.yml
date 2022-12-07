@@ -5,7 +5,7 @@ INDEX: '/home/yahmed/NYWWS/reference/bowtie2_ref/nCov_Wuhan'
 GENEXUS_DNA: '/home/yahmed/NYWWS/reference/ion_ampliseq_sars-cov-2-insight.fasta'
 
 # Path to a folder where final files will be written.
-OUT_DIR: '/home/yahmed/NYWWS/RESULTS/Auto_R_2022_09_21_13_18_36_ionuser_GNXS-0656-SMITH-5-SARSCOV2LTWW_09212022_SMITH_5/'
+OUT_DIR: '/home/yahmed/NYWWS/RESULTS/03DEC2022/'
 HOME_DIR: '/home/yahmed/NYWWS/'
 
 covidRefSequences: '/home/yahmed/NYWWS/reference/GCF_009858895.2_ASM985889v3_genomic.gff'
@@ -24,4 +24,4 @@ MAJOR_COVID: '/home/C-WAP/customDBs/majorCovidDB/'
 # Path to a JSON file with samples and their corresponding BAM files.
 BAM_SAMPLES_JSON: '/home/yahmed/NYWWS/samples_bam.json'
 
-BAMS_DIR: '/home/yahmed/NYWWS/BAM_DATA/Auto_R_2022_09_21_13_18_36_ionuser_GNXS-0656-SMITH-5-SARSCOV2LTWW_09212022_SMITH_5/'
+BAMS_DIR: '/home/yahmed/NYWWS/BAM_DATA/03DEC2022/'

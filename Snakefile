@@ -79,7 +79,7 @@ rule all:
         join(OUT_DIR, 'MultiQC', 'multiqc_report.html'),
         join(OUT_DIR, 'Freyja', 'Aggregate', 'freyja_stacked_barplots.png'),
         expand(join(OUT_DIR, 'Freyja', 'Boot', 'Results', '{sample}_freyja_bootstrap.png'), sample = SAMPLES),
-        expand(join(OUT_DIR, 'SummaryPie', '{sample}', 'pieChart_lcs.png'), sample = SAMPLES),
+        # expand(join(OUT_DIR, 'SummaryPie', '{sample}', 'pieChart_lcs.png'), sample = SAMPLES),
         expand(join(OUT_DIR, 'QC', '{sample}', 'pos-coverage-quality.tsv'), sample = SAMPLES)
         # join(OUT_DIR, 'Freyja', 'Aggregate', 'Genexus', 'freyja_stacked_barplots.png')
 
