@@ -81,7 +81,6 @@ rule all:
         expand(join(OUT_DIR, 'Freyja', 'Boot', 'Results', '{sample}_freyja_bootstrap.png'), sample = SAMPLES),
         # expand(join(OUT_DIR, 'SummaryPie', '{sample}', 'pieChart_lcs.png'), sample = SAMPLES),
         expand(join(OUT_DIR, 'QC', '{sample}', 'pos-coverage-quality.tsv'), sample = SAMPLES)
-        # join(OUT_DIR, 'Freyja', 'Aggregate', 'Genexus', 'freyja_stacked_barplots.png')
 
 ##--------------------------------------------------------------------------------------##
 ##--------------------------------------------------------------------------------------##
@@ -234,27 +233,27 @@ rule iVar_variants:
 ##--------------------------------------------------------------------------------------##
 ##--------------------------------------------------------------------------------------##
 
-rule Kraken:
-    input:
-        r1 = join(OUT_DIR, 'FastQs', '{sample}', '{sample}.fq.gz')
-    params:
-        k2db = k2db
-    output:
-        join(OUT_DIR, 'Kraken', '{sample}', '{sample}.k2_std.out')
-    log:
-        join(OUT_DIR, 'Kraken', '{sample}', 'k2_std.log')
-    benchmark:
-        join(OUT_DIR, 'Kraken', '{sample}', 'k2_std_benchmark.tsv')
-    threads:
-        4
-    resources:
-        mem_mb=32000
-    message:
-        """--- Kraken2 search for sample "{wildcards.sample}"."""
-    conda:
-        "envs/kraken_env.yml"
-    shell:
-        'kraken2 --db {params.k2db} --threads 8 --report {output} {input.r1} > {log} 2>&1'
+# rule Kraken:
+#     input:
+#         r1 = join(OUT_DIR, 'FastQs', '{sample}', '{sample}.fq.gz')
+#     params:
+#         k2db = k2db
+#     output:
+#         join(OUT_DIR, 'Kraken', '{sample}', '{sample}.k2_std.out')
+#     log:
+#         join(OUT_DIR, 'Kraken', '{sample}', 'k2_std.log')
+#     benchmark:
+#         join(OUT_DIR, 'Kraken', '{sample}', 'k2_std_benchmark.tsv')
+#     threads:
+#         4
+#     resources:
+#         mem_mb=32000
+#     message:
+#         """--- Kraken2 search for sample "{wildcards.sample}"."""
+#     conda:
+#         "envs/kraken_env.yml"
+#     shell:
+#         'kraken2 --db {params.k2db} --threads 8 --report {output} {input.r1} > {log} 2>&1'
 
 ##--------------------------------------------------------------------------------------##
 ##--------------------------------------------------------------------------------------##
@@ -286,51 +285,62 @@ rule QCplots:
 ##--------------------------------------------------------------------------------------##
 ##--------------------------------------------------------------------------------------##
 
-rule Kraken_variants:
-    input:
-        fastq = join(OUT_DIR, 'FastQs', '{sample}', '{sample}.fq.gz')
-    params:
-        allCOVdb = allCOVdb,
-        majCOVdb = majCOVdb
-    output:
-        allCov = join(OUT_DIR, 'Kraken', '{sample}', '{sample}.k2_allCovid.out'),
-        allCovid_bracken = join(OUT_DIR, 'Kraken', '{sample}', '{sample}.k2_allCovid_bracken_phylums.out'),
-        majCov = join(OUT_DIR, 'Kraken', '{sample}', '{sample}.k2_majCovid.out'),
-        majCovid_bracken = join(OUT_DIR, 'Kraken', '{sample}', '{sample}.k2_majCovid_bracken_classes.out')
-    log:
-        all_brak = join(OUT_DIR, 'Kraken', '{sample}', 'k2_std_all.log'),
-        maj_brak = join(OUT_DIR, 'Kraken', '{sample}', 'k2_std_maj.log')
-    benchmark:
-        join(OUT_DIR, 'Kraken', '{sample}', 'k2_std_benchmark.tsv')
-    threads:
-        8
-    resources:
-        mem_mb=32000
-    conda:
-        "envs/kraken_env.yml"
-    message:
-        """--- Discovering variants with Kraken for "{wildcards.sample}"."""
-    shell:
-        'kraken2 {input.fastq} --db {params.allCOVdb} --threads 4 --report {output.allCov} > /dev/null && '
-
-        '/home/software/Bracken/bracken'
-                ' -d {params.allCOVdb}'
-                ' -i {output.allCov}'
-                ' -o {output.allCovid_bracken}'
-                ' -l P'
-                ' > {log.all_brak} 2>&1 && '
-        'kraken2'
-                ' {input.fastq}'
-                ' --db {params.majCOVdb}'
-                ' --threads 4'
-                ' --report {output.majCov}'
-                ' > /dev/null && '
-        '/home/software/Bracken/bracken'
-                ' -d {params.majCOVdb}'
-                ' -i {output.majCov}'
-                ' -o {output.majCovid_bracken}'
-                ' -l C'
-                ' > {log.maj_brak} 2>&1'
+# rule Kraken_variants:
+#     input:
+#         fastq = join(OUT_DIR, 'FastQs', '{sample}', '{sample}.fq.gz')
+#     params:
+#         allCOVdb = allCOVdb,
+#         majCOVdb = majCOVdb
+#     output:
+#         allCov = join(OUT_DIR, 'Kraken', '{sample}', '{sample}.k2_allCovid.out'),
+#         allCovid_bracken = join(OUT_DIR, 'Kraken', '{sample}', '{sample}.k2_allCovid_bracken_phylums.out'),
+#         majCov = join(OUT_DIR, 'Kraken', '{sample}', '{sample}.k2_majCovid.out'),
+#         majCovid_bracken = join(OUT_DIR, 'Kraken', '{sample}', '{sample}.k2_majCovid_bracken_classes.out')
+#     log:
+#         all_brak = join(OUT_DIR, 'Kraken', '{sample}', 'k2_std_all.log'),
+#         maj_brak = join(OUT_DIR, 'Kraken', '{sample}', 'k2_std_maj.log')
+#     benchmark:
+#         join(OUT_DIR, 'Kraken', '{sample}', 'k2_std_benchmark.tsv')
+#     threads:
+#         8
+#     resources:
+#         mem_mb=32000
+#     conda:
+#         "envs/kraken_env.yml"
+#     message:
+#         """--- Discovering variants with Kraken for "{wildcards.sample}"."""
+#     shell:
+#         '''
+#             readNum=$(zcat {input.fastq} | grep read | wc -l);
+#             if [[ $readNum -gt 5000 ]]
+#             then
+#             kraken2 {input.fastq} --db {params.allCOVdb} --threads 4 --report {output.allCov} > /dev/null &&
+#             /home/software/Bracken/bracken \
+#                      -d {params.allCOVdb} \
+#                      -i {output.allCov} \
+#                      -o {output.allCovid_bracken} \
+#                      -l P \
+#                      > {log.all_brak} 2>&1 &&
+#             kraken2 \
+#                      {input.fastq} \
+#                      --db {params.majCOVdb} \
+#                      --threads 4 \
+#                      --report {output.majCov} \
+#                      > /dev/null &&
+#             /home/software/Bracken/bracken \
+#                      -d {params.majCOVdb} \
+#                      -i {output.majCov} \
+#                      -o {output.majCovid_bracken} \
+#                      -l C \
+#                      > {log.maj_brak} 2>&1
+#             else
+#             echo -e "100.00\t0\t0\tR\t1\troot" > {output.allCovid_bracken}
+#             echo -e "100.00\t0\t0\tR\t1\tError" >> {output.allCovid_bracken}
+#             cp {output.allCovid_bracken} {output.majCovid_bracken}
+#             cp {output.allCovid_bracken} {output.allCov}
+#             cp {output.allCovid_bracken} {output.majCov}
+#             fi
+#             '''
 
 ##--------------------------------------------------------------------------------------##
 ##--------------------------------------------------------------------------------------##
@@ -390,90 +400,122 @@ rule Panglin_variants:
 ##--------------------------------------------------------------------------------------##
 ##--------------------------------------------------------------------------------------##
 
-rule LDVC_variants:
-    input:
-        countsSt = join(OUT_DIR, 'iVar', '{sample}.rawVarCalls.tsv')
-    params:
-        var_def = VAR_DEF
+# rule LDVC_variants:
+#     input:
+#         countsSt = join(OUT_DIR, 'iVar', '{sample}.rawVarCalls.tsv')
+#     params:
+#         var_def = VAR_DEF
+#     output:
+#         join(OUT_DIR, 'LDVC', '{sample}', 'linearDeconvolution_abundance.csv')
+#     log:
+#         join(OUT_DIR, 'LDVC', '{sample}', 'ldvc.log')
+#     benchmark:
+#         join(OUT_DIR, 'LDVC', '{sample}', 'ldvc_benchmark.tsv')
+#     message:
+#         """--- Running LDVC for sample "{wildcards.sample}".  """
+#     run:
+#         shell(script_dir + '/deconvolveVariants.py'
+#                 ' {input.countsSt}'
+#                 ' ' + join(OUT_DIR, 'LDVC', '{wildcards.sample}') +
+#                 ' {params.var_def}'
+#                 ' > {log} 2>&1')
+
+##--------------------------------------------------------------------------------------##
+##--------------------------------------------------------------------------------------##
+
+# rule Kallisto_variants:
+#     input:
+#         fastq = join(OUT_DIR, 'FastQs', '{sample}', '{sample}.fq.gz')
+#     params:
+#         kalidx = KalIdx
+#     output:
+#         join(OUT_DIR, 'Kallisto', '{sample}', 'abundance.tsv')
+#     log:
+#         join(OUT_DIR, 'Kallisto', '{sample}', 'kallisto.log')
+#     benchmark:
+#         join(OUT_DIR, 'Kallisto', '{sample}', 'kallisto_benchmark.tsv')
+#     message:
+#         """--- Running Kallisto for sample "{wildcards.sample}".  """
+#     conda:
+#         "envs/kallisto_env.yml"
+#     shell:
+#         '''
+#             readNum=$(zcat {input.fastq} | grep read | wc -l);
+#             if [[ $readNum -gt 5000 ]]
+#             then
+#             kallisto quant \
+#             --index {params.kalidx} \
+#             --output-dir + join(OUT_DIR, 'Kallisto', '{wildcards.sample}')  \
+#             --plaintext -t 2 \
+#             --single \
+#             -l 300 \
+#             -s 50 \
+#             {input.fastq} \
+#             > {log} 2>&1
+#             else
+#             echo -e "target_id\tlength\teff_length\test_counts\ttpm" > {output}
+#             echo -e "Error\t29903\t29903\t100\t100" >> {output}
+#             fi
+#             '''
+
+
+##--------------------------------------------------------------------------------------##
+##--------------------------------------------------------------------------------------##
+
+# rule LCS_variants:
+#     input:
+#         fastq = join(OUT_DIR, 'FastQs', '{sample}', '{sample}.fq.gz')
+#     params:
+#         lcs_dir = LCS_DIR
+#     output:
+#         join(OUT_DIR, 'LCS', '{sample}', 'outputs', 'decompose', 'lcs.out')
+#     log:
+#         join(OUT_DIR, 'LCS', '{sample}', 'lcs.log')
+#     benchmark:
+#         join(OUT_DIR, 'LCS', '{sample}', 'lcs_benchmark.tsv')
+#     message:
+#         """--- Running LCS for sample "{wildcards.sample}". """
+#     conda:
+#         "envs/lcs_env.yml"
+#     shell:
+#         'cp -r {params.lcs_dir} {wildcards.sample}_LCS &&'
+#         ' cd {wildcards.sample}_LCS &&'
+#         ' mkdir -p outputs/variants_table &&'
+#         ' zcat data/pre-generated-marker-tables/pango-designation-markers-v1.2.124.tsv.gz > outputs/variants_table/pango-markers-table.tsv &&'
+#         ' mkdir data/fastq &&'
+#         ' cp {input.fastq} data/fastq/resorted.fastq.gz &&'
+#         ' echo "resorted" > data/tags_pool_lcs &&'
+#         ' snakemake --config markers=pango dataset=lcs --cores 2 &&'
+#         ' sed -i "s/resorted/{wildcards.sample}/g" outputs/decompose/lcs.out &&'
+#         ' cp -r outputs ' + join(OUT_DIR, 'LCS', '{wildcards.sample}') + '/'
+#         ' && rm -rf ' + join(HOME_DIR, '{wildcards.sample}_LCS')
+
+##--------------------------------------------------------------------------------------##
+##--------------------------------------------------------------------------------------##
+
+rule Freyja_update:
     output:
-        join(OUT_DIR, 'LDVC', '{sample}', 'linearDeconvolution_abundance.csv')
+        done = join(OUT_DIR, 'Freyja', 'Update', 'update.ok')
     log:
-        join(OUT_DIR, 'LDVC', '{sample}', 'ldvc.log')
+        join(OUT_DIR, 'Freyja', 'Update', 'update.log')
     benchmark:
-        join(OUT_DIR, 'LDVC', '{sample}', 'ldvc_benchmark.tsv')
+        join(OUT_DIR, 'Freyja', 'Update', 'update_benchmark.tsv')
+    threads:
+        8
+    resources:
+        mem_mb=16000
     message:
-        """--- Running LDVC for sample "{wildcards.sample}".  """
+        """--- Updating Freyja database. """
     run:
-        shell(script_dir + '/deconvolveVariants.py'
-                ' {input.countsSt}'
-                ' ' + join(OUT_DIR, 'LDVC', '{wildcards.sample}') +
-                ' {params.var_def}'
-                ' > {log} 2>&1')
-
-##--------------------------------------------------------------------------------------##
-##--------------------------------------------------------------------------------------##
-
-rule Kallisto_variants:
-    input:
-        fastq = join(OUT_DIR, 'FastQs', '{sample}', '{sample}.fq.gz')
-    params:
-        kalidx = KalIdx
-    output:
-        join(OUT_DIR, 'Kallisto', '{sample}', 'abundance.tsv')
-    log:
-        join(OUT_DIR, 'Kallisto', '{sample}', 'kallisto.log')
-    benchmark:
-        join(OUT_DIR, 'Kallisto', '{sample}', 'kallisto_benchmark.tsv')
-    message:
-        """--- Running Kallisto for sample "{wildcards.sample}".  """
-    conda:
-        "envs/kallisto_env.yml"
-    shell:
-        'kallisto quant'
-        ' --index {params.kalidx}'
-        ' --output-dir ' + join(OUT_DIR, 'Kallisto', '{wildcards.sample}') +
-        ' --plaintext -t 2'
-        ' --single'
-        ' -l 300'
-        ' -s 50'
-        ' {input.fastq}'
-        ' > {log} 2>&1'
-
-##--------------------------------------------------------------------------------------##
-##--------------------------------------------------------------------------------------##
-
-rule LCS_variants:
-    input:
-        fastq = join(OUT_DIR, 'FastQs', '{sample}', '{sample}.fq.gz')
-    params:
-        lcs_dir = LCS_DIR
-    output:
-        join(OUT_DIR, 'LCS', '{sample}', 'outputs', 'decompose', 'lcs.out')
-    log:
-        join(OUT_DIR, 'LCS', '{sample}', 'lcs.log')
-    benchmark:
-        join(OUT_DIR, 'LCS', '{sample}', 'lcs_benchmark.tsv')
-    message:
-        """--- Running LCS for sample "{wildcards.sample}". """
-    conda:
-        "envs/lcs_env.yml"
-    shell:
-        'cp -r {params.lcs_dir} {wildcards.sample}_LCS &&'
-        ' cd {wildcards.sample}_LCS &&'
-        ' mkdir -p outputs/variants_table &&'
-        ' zcat data/pre-generated-marker-tables/pango-designation-markers-v1.2.124.tsv.gz > outputs/variants_table/pango-markers-table.tsv &&'
-        ' mkdir data/fastq &&'
-        ' cp {input.fastq} data/fastq/resorted.fastq.gz &&'
-        ' echo "resorted" > data/tags_pool_lcs &&'
-        ' snakemake --config markers=pango dataset=lcs --cores 2 &&'
-        ' cp -r outputs ' + join(OUT_DIR, 'LCS', '{wildcards.sample}') + '/'
-        ' && rm -rf ' + join(HOME_DIR, '{wildcards.sample}_LCS')
+        shell('freyja update')
+        shell('touch {output.done}')
 
 ##--------------------------------------------------------------------------------------##
 ##--------------------------------------------------------------------------------------##
 
 rule Freyja_variants:
     input:
+        done = join(OUT_DIR, 'Freyja', 'Update', 'update.ok'),
         bt2_bam = join(OUT_DIR, 'FastQs', '{sample}', '{sample}.bam')
     params:
         dna = DNA
@@ -615,70 +657,70 @@ rule QualiMap_BAM:
 ##--------------------------------------------------------------------------------------##
 ##--------------------------------------------------------------------------------------##
 
-rule QualiMap_Genexus:
-    input:
-        gen_bam = join(OUT_DIR, 'FastQs', '{sample}', '{sample}.bam')
-    output:
-        join(OUT_DIR, 'Genexus_BAM', '{sample}', '{sample}.qualimap', 'qualimapReport.html')
-    log:
-        join(OUT_DIR, 'Genexus_BAM', '{sample}', 'qualmap.log')
-    benchmark:
-        join(OUT_DIR, 'Genexus_BAM', '{sample}', 'qualmap_benchmark.tsv')
-    threads:
-        8
-    resources:
-        mem_mb=32000
-    message:
-        """--- Evaluating Genexus BAM with QualiMap for sample "{wildcards.sample}"."""
-    run:
-        shell('qualimap bamqc'
-                ' -bam {input.bam}'
-                ' -nt 12'
-                ' --java-mem-size=32G'
-                ' -outdir ' + join(OUT_DIR, 'Genexus_BAM', '{wildcards.sample}', '{wildcards.sample}.qualimap') +
-                ' > {log} 2>&1')
+# rule QualiMap_Genexus:
+#     input:
+#         gen_bam = join(OUT_DIR, 'FastQs', '{sample}', '{sample}.bam')
+#     output:
+#         join(OUT_DIR, 'Genexus_BAM', '{sample}', '{sample}.qualimap', 'qualimapReport.html')
+#     log:
+#         join(OUT_DIR, 'Genexus_BAM', '{sample}', 'qualmap.log')
+#     benchmark:
+#         join(OUT_DIR, 'Genexus_BAM', '{sample}', 'qualmap_benchmark.tsv')
+#     threads:
+#         8
+#     resources:
+#         mem_mb=32000
+#     message:
+#         """--- Evaluating Genexus BAM with QualiMap for sample "{wildcards.sample}"."""
+#     run:
+#         shell('qualimap bamqc'
+#                 ' -bam {input.bam}'
+#                 ' -nt 12'
+#                 ' --java-mem-size=32G'
+#                 ' -outdir ' + join(OUT_DIR, 'Genexus_BAM', '{wildcards.sample}', '{wildcards.sample}.qualimap') +
+#                 ' > {log} 2>&1')
 
 ##--------------------------------------------------------------------------------------##
 ##--------------------------------------------------------------------------------------##
 
-rule PieChart_summaries:
-    input:
-        ldvc = join(OUT_DIR, 'LDVC', '{sample}', 'linearDeconvolution_abundance.csv'),
-        kallisto = join(OUT_DIR, 'Kallisto', '{sample}', 'abundance.tsv'),
-        allCovid_bracken = join(OUT_DIR, 'Kraken', '{sample}', '{sample}.k2_allCovid_bracken_phylums.out'),
-        majCovid_bracken = join(OUT_DIR, 'Kraken', '{sample}', '{sample}.k2_majCovid_bracken_classes.out'),
-        bt2_demix = join(OUT_DIR, 'Freyja', 'Demix', 'Results', '{sample}_freyja.demix'),
-        lcs = join(OUT_DIR, 'LCS', '{sample}', 'outputs', 'decompose', 'lcs.out')
-    params:
-        var_def = VAR_DEF
-    output:
-        join(OUT_DIR, 'SummaryPie', '{sample}', 'kallisto.out'),
-        join(OUT_DIR, 'SummaryPie', '{sample}', 'pieChart_deconvolution.png'),
-        join(OUT_DIR, 'SummaryPie', '{sample}', 'pieChart_freyja.png'),
-        join(OUT_DIR, 'SummaryPie', '{sample}', 'pieChart_k2_allCovid.png'),
-        join(OUT_DIR, 'SummaryPie', '{sample}', 'pieChart_k2_majorCovid.png'),
-        join(OUT_DIR, 'SummaryPie', '{sample}', 'pieChart_kallisto.png'),
-        join(OUT_DIR, 'SummaryPie', '{sample}', 'pieChart_lcs.png')
-    log:
-        join(OUT_DIR, 'SummaryPie', '{sample}', 'qualmap.log')
-    benchmark:
-        join(OUT_DIR, 'SummaryPie', '{sample}', 'qualmap_benchmark.tsv')
-    threads:
-        8
-    resources:
-        mem_mb=32000
-    message:
-        """--- Outputting sumamry variant pie charts from all methods for sample "{wildcards.sample}"."""
-    run:
-        shell(script_dir + 'plotPieChartsforAbundance.py ' + join(OUT_DIR, 'SummaryPie', '{wildcards.sample}') +
-                ' {params.var_def}'
-                ' {input.ldvc}'
-                ' {input.kallisto}'
-                ' {input.allCovid_bracken}'
-                ' {input.majCovid_bracken}'
-                ' {input.bt2_demix}'
-                ' {input.lcs}'
-                ' > {log} 2>&1')
+# rule PieChart_summaries:
+#     input:
+#         ldvc = join(OUT_DIR, 'LDVC', '{sample}', 'linearDeconvolution_abundance.csv'),
+#         kallisto = join(OUT_DIR, 'Kallisto', '{sample}', 'abundance.tsv'),
+#         allCovid_bracken = join(OUT_DIR, 'Kraken', '{sample}', '{sample}.k2_allCovid_bracken_phylums.out'),
+#         majCovid_bracken = join(OUT_DIR, 'Kraken', '{sample}', '{sample}.k2_majCovid_bracken_classes.out'),
+#         bt2_demix = join(OUT_DIR, 'Freyja', 'Demix', 'Results', '{sample}_freyja.demix'),
+#         lcs = join(OUT_DIR, 'LCS', '{sample}', 'outputs', 'decompose', 'lcs.out')
+#     params:
+#         var_def = VAR_DEF
+#     output:
+#         join(OUT_DIR, 'SummaryPie', '{sample}', 'kallisto.out'),
+#         join(OUT_DIR, 'SummaryPie', '{sample}', 'pieChart_deconvolution.png'),
+#         join(OUT_DIR, 'SummaryPie', '{sample}', 'pieChart_freyja.png'),
+#         join(OUT_DIR, 'SummaryPie', '{sample}', 'pieChart_k2_allCovid.png'),
+#         join(OUT_DIR, 'SummaryPie', '{sample}', 'pieChart_k2_majorCovid.png'),
+#         join(OUT_DIR, 'SummaryPie', '{sample}', 'pieChart_kallisto.png'),
+#         join(OUT_DIR, 'SummaryPie', '{sample}', 'pieChart_lcs.png')
+#     log:
+#         join(OUT_DIR, 'SummaryPie', '{sample}', 'qualmap.log')
+#     benchmark:
+#         join(OUT_DIR, 'SummaryPie', '{sample}', 'qualmap_benchmark.tsv')
+#     threads:
+#         8
+#     resources:
+#         mem_mb=32000
+#     message:
+#         """--- Outputting sumamry variant pie charts from all methods for sample "{wildcards.sample}"."""
+#     run:
+#         shell(script_dir + 'plotPieChartsforAbundance.py ' + join(OUT_DIR, 'SummaryPie', '{wildcards.sample}') +
+#                 ' {params.var_def}'
+#                 ' {input.ldvc}'
+#                 ' {input.kallisto}'
+#                 ' {input.allCovid_bracken}'
+#                 ' {input.majCovid_bracken}'
+#                 ' {input.bt2_demix}'
+#                 ' {input.lcs}'
+#                 ' > {log} 2>&1')
 
 ##--------------------------------------------------------------------------------------##
 ##--------------------------------------------------------------------------------------##
@@ -687,11 +729,11 @@ rule multiQC:
     input:
         expand(join(OUT_DIR, 'fastQC', '{sample}' + '_fastqc.html'), sample = SAMPLES),
         # expand(join(OUT_DIR, 'iVar_trimming_{sample}.log'), sample = SAMPLES),
-        expand(join(OUT_DIR, 'Kallisto', '{sample}', 'abundance.tsv'), sample = SAMPLES),
+        # expand(join(OUT_DIR, 'Kallisto', '{sample}', 'abundance.tsv'), sample = SAMPLES),
         # expand(join(OUT_DIR, 'Kraken', '{sample}', '{sample}.k2_std.out'), sample = SAMPLES),
         expand(join(OUT_DIR, 'BAM', '{sample}', '{sample}.resorted.stats'), sample = SAMPLES),
         expand(join(OUT_DIR, 'Pangolin', '{sample}', 'lineage_report.csv'), sample = SAMPLES),
-        expand(join(OUT_DIR, 'LDVC', '{sample}', 'linearDeconvolution_abundance.csv'), sample = SAMPLES),
+        # expand(join(OUT_DIR, 'LDVC', '{sample}', 'linearDeconvolution_abundance.csv'), sample = SAMPLES),
         expand(join(OUT_DIR, 'FastQs', '{sample}', '{sample}.bam'), sample = SAMPLES),
         expand(join(OUT_DIR, 'BAM', '{sample}', '{sample}.qualimap', 'qualimapReport.html'), sample = SAMPLES)
     output:
@@ -705,7 +747,7 @@ rule multiQC:
     run:
         shell('ls -1 ' + join(OUT_DIR) + '/fastQC/*fastqc.zip >> ' + join(OUT_DIR, 'MultiQC', 'summary_files.txt'))
         # shell('ls -1 ' + join(OUT_DIR) + '/*log >> ' + join(OUT_DIR, 'MultiQC', 'summary_files.txt'))
-        shell('ls -1 ' + join(OUT_DIR) + '/Kallisto/*/kallisto.log >> ' + join(OUT_DIR, 'MultiQC', 'summary_files.txt'))
+        # shell('ls -1 ' + join(OUT_DIR) + '/Kallisto/*/kallisto.log >> ' + join(OUT_DIR, 'MultiQC', 'summary_files.txt'))
         shell('ls -1 ' + join(OUT_DIR) + '/BAM/*/*sorted.stats >> ' + join(OUT_DIR, 'MultiQC', 'summary_files.txt'))
         shell('ls -1 ' + join(OUT_DIR) + '/*/* | grep ":" | sed "s/://g" >> ' + join(OUT_DIR, 'MultiQC', 'summary_files.txt'))
         # shell('ls -1 ' + join(OUT_DIR) + '/Kraken/* | grep ":" | sed "s/://g" >> ' + join(OUT_DIR, 'MultiQC', 'summary_files.txt'))
