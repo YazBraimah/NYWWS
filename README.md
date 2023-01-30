@@ -1,6 +1,6 @@
 # NYWWS (New York Waste Water Surveillance)
 
-#### Snakemake pipeline to identify and quantify SARS-CoV2 variants in waste water samples from across New York State. The pipline is adapted from C-WAP , a Nextflow workflow developed by the United States Food and Drug Administration, Center for Food Safety and Applied Nutrition.
+#### Snakemake pipeline to identify and quantify SARS-CoV2 variants in waste water samples from across New York State using Freyja. 
 
 #### DAG of pipeline:
 ![alt text](https://github.com/YazBraimah/NYWWS/blob/main/workflow.png?raw=true)
@@ -17,13 +17,13 @@ conda env create -f envs/nywws_env.yml
 2. Create a directory with all the BAM files to be analyzed. BAM files are expected to have the extension `*.ptrim.bam`.
 
 ```
-mkdir ./BAM_DIR/
+mkdir ./BAM_DIR/ALL_BAMS
 ```
 
 3. Run the `scripts/make_bam_json_samples.py` program on the BAM files within the BAM directory (note the escape character before the *):
 
 ```
-scripts/make_bam_json_samples.py /absolute/path/to/BAM_DIR/\*ptrim.bam
+scripts/make_bam_json_samples.py /absolute/path/to/BAM_DIR/ALL_BAMS/\*ptrim.bam
 ```
 This will create a file called `samples_bam.json`. This file path should be specifid in the `config.yml` file under `BAM_SAMPLES_FILE`.
 
@@ -32,6 +32,6 @@ This will create a file called `samples_bam.json`. This file path should be spec
 5. Activate the nywws environment with `conda activate nywws` and run the pipeline with this minimal `snakemake` command:
 
 ```
-snakemake --use-conda -j 10
+snakemake --use-conda -j 50 --cores 4
 ```
-Which will run 10 jobs simultaneously, depending on the computing architecture.
+Which will run up to 50 jobs simultaneously, depending on the computing architecture.
