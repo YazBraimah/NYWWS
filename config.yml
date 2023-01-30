@@ -2,26 +2,16 @@
 DNA: '/home/yahmed/NYWWS/reference/nCov_Wuhan.fasta'
 INDEX: '/home/yahmed/NYWWS/reference/bowtie2_ref/nCov_Wuhan'
 
-GENEXUS_DNA: '/home/yahmed/NYWWS/reference/ion_ampliseq_sars-cov-2-insight.fasta'
-
 # Path to a folder where final files will be written.
-OUT_DIR: '/home/yahmed/NYWWS/RESULTS/03DEC2022/'
+OUT_DIR: '/home/yahmed/NYWWS/Cumulative_Results'
 HOME_DIR: '/home/yahmed/NYWWS/'
 
 covidRefSequences: '/home/yahmed/NYWWS/reference/GCF_009858895.2_ASM985889v3_genomic.gff'
-# K2_STD_DB_PATH: '/home/kraken_database'
-# PRIMER_BED: '/home/primer-schemes/nCoV-2019/V4/SARS-CoV-2.primer.bed'
-SCRIPT_DIR: '/home/C-WAP/'
-VAR_DEF: '/home/C-WAP/covidRefSequences/varDefinitions.pkl'
-KalIdx: '/home/C-WAP/customDBs/variants.kalIdx'
-LCS_DIR: '/home/LCS/'
 SAM_HEADER: '/home/yahmed/NYWWS/bam_process/new_header.sam'
-
-## Covid databases
-ALL_COVID: '/home/C-WAP/customDBs/allCovidDB/'
-MAJOR_COVID: '/home/C-WAP/customDBs/majorCovidDB/'
+SAMPLE_INFO: '/home/yahmed/NYWWS/sampling_locations.csv'
+R_script: '/home/yahmed/NYWWS/scripts/results_summary_outputs.R'
 
 # Path to a JSON file with samples and their corresponding BAM files.
 BAM_SAMPLES_JSON: '/home/yahmed/NYWWS/samples_bam.json'
 
-BAMS_DIR: '/home/yahmed/NYWWS/BAM_DATA/03DEC2022/'
+BAMS_DIR: '/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/'
