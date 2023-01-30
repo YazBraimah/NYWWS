@@ -27,7 +27,7 @@ scripts/make_bam_json_samples.py /absolute/path/to/BAM_DIR/ALL_BAMS/\*ptrim.bam
 ```
 This will create a file called `samples_bam.json`. This file path should be specifid in the `config.yml` file under `BAM_SAMPLES_FILE`.
 
-4. Ensure that the paths to the remaining dependancies (e.g., the C-WAP and LCS directories) are specified in the `config.yml` file.
+4. Ensure that the correct paths to required inputs are specified in the `config.yml` file.
 
 5. Activate the nywws environment with `conda activate nywws` and run the pipeline with this minimal `snakemake` command:
 
