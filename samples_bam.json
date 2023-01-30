@@ -1,282 +1,1507 @@
 {
-    "20221103NY055021610A": {
+    "20221228NY119026689A": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/20221103NY055021610A.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20221228NY119026689A.ptrim.bam"
         ]
     },
-    "20221107NY027026255A": {
+    "20221228NY119026697A": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/20221107NY027026255A.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20221228NY119026697A.ptrim.bam"
         ]
     },
-    "20221107NY055028231A": {
+    "20230101NY119026786A": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/20221107NY055028231A.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230101NY119026786A.ptrim.bam"
         ]
     },
-    "20221107NY055028339A": {
+    "20230101NY119108324A": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/20221107NY055028339A.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230101NY119108324A.ptrim.bam"
         ]
     },
-    "20221107NY087022748A": {
+    "20230102NY019026018A": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/20221107NY087022748A.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230102NY019026018A.ptrim.bam"
         ]
     },
-    "20221107NY103021750A": {
+    "20230102NY067027081A": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/20221107NY103021750A.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230102NY067027081A.ptrim.bam"
         ]
     },
-    "20221107NY103079324A": {
+    "20230102NY067027596A": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/20221107NY103079324A.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230102NY067027596A.ptrim.bam"
         ]
     },
-    "20221107NY103104809A": {
+    "20230102NY067027618A": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/20221107NY103104809A.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230102NY067027618A.ptrim.bam"
         ]
     },
-    "20221107NY109020958A": {
+    "20230102NY067027723A": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/20221107NY109020958A.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230102NY067027723A.ptrim.bam"
         ]
     },
-    "20221108NY007024414B": {
+    "20230102NY067030317A": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/20221108NY007024414B.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230102NY067030317A.ptrim.bam"
         ]
     },
-    "20221108NY051030635A": {
+    "20230102NY067030571A": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/20221108NY051030635A.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230102NY067030571A.ptrim.bam"
         ]
     },
-    "20221108NY059026778A": {
+    "20230102NY119026689A": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/20221108NY059026778A.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230102NY119026689A.ptrim.bam"
         ]
     },
-    "20221108NY069025968A": {
+    "20230102NY119026697A": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/20221108NY069025968A.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230102NY119026697A.ptrim.bam"
         ]
     },
-    "20221108NY087031895A": {
+    "20230102NY119026701A": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/20221108NY087031895A.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230102NY119026701A.ptrim.bam"
         ]
     },
-    "20221108NY117029475A": {
+    "20230102NY119026719A": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/20221108NY117029475A.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230102NY119026719A.ptrim.bam"
         ]
     },
-    "20221108NY121021504A": {
+    "20230102NY119100803A": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/20221108NY121021504A.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230102NY119100803A.ptrim.bam"
         ]
     },
-    "20221109NY007027669A": {
+    "20230103NY007024414B": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/20221109NY007027669A.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230103NY007024414B.ptrim.bam"
         ]
     },
-    "20221109NY015035742A": {
+    "20230103NY007024414C": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/20221109NY015035742A.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230103NY007024414C.ptrim.bam"
         ]
     },
-    "20221109NY059026859A": {
+    "20230103NY011021903A": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/20221109NY059026859A.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230103NY011021903A.ptrim.bam"
         ]
     },
-    "20221109NY079031356A": {
+    "20230103NY019023949A": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/20221109NY079031356A.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230103NY019023949A.ptrim.bam"
         ]
     },
-    "20221109NY103020061A": {
+    "20230103NY021022039A": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/20221109NY103020061A.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230103NY021022039A.ptrim.bam"
         ]
     },
-    "20221109NY103104809A": {
+    "20230103NY023027561A": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/20221109NY103104809A.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230103NY023027561A.ptrim.bam"
         ]
     },
-    "20221109NY107029262A": {
+    "20230103NY027026255A": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/20221109NY107029262A.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230103NY027026255A.ptrim.bam"
         ]
     },
-    "20221109NY109026638A": {
+    "20230103NY027149209A": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/20221109NY109026638A.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230103NY027149209A.ptrim.bam"
         ]
     },
-    "20221109NY119026689A": {
+    "20230103NY033029939A": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/20221109NY119026689A.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230103NY033029939A.ptrim.bam"
         ]
     },
-    "20221109NY123029726A": {
+    "20230103NY035026042A": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/20221109NY123029726A.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230103NY035026042A.ptrim.bam"
         ]
     },
-    "20221110NY097271942A": {
+    "20230103NY043020486A": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/20221110NY097271942A.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230103NY043020486A.ptrim.bam"
         ]
     },
-    "20221110NY101025721A": {
+    "20230103NY045025984A": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/20221110NY101025721A.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230103NY045025984A.ptrim.bam"
         ]
     },
-    "20221110NY103021750A": {
+    "20230103NY045025984B": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/20221110NY103021750A.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230103NY045025984B.ptrim.bam"
         ]
     },
-    "20221110NY103079324A": {
+    "20230103NY051024384A": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/20221110NY103079324A.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230103NY051024384A.ptrim.bam"
         ]
     },
-    "20221110NY103104809A": {
+    "20230103NY051030635A": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/20221110NY103104809A.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230103NY051030635A.ptrim.bam"
         ]
     },
-    "20221110NY111029351A": {
+    "20230103NY053021539A": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/20221110NY111029351A.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230103NY053021539A.ptrim.bam"
         ]
     },
-    "WW-11919": {
+    "20230103NY053028525A": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/WW-11919.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230103NY053028525A.ptrim.bam"
         ]
     },
-    "WW-11921": {
+    "20230103NY053029807A": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/WW-11921.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230103NY053029807A.ptrim.bam"
         ]
     },
-    "WW-11922": {
+    "20230103NY053261742A": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/WW-11922.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230103NY053261742A.ptrim.bam"
         ]
     },
-    "WW-11966": {
+    "20230103NY055021610A": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/WW-11966.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230103NY055021610A.ptrim.bam"
         ]
     },
-    "WW-11972": {
+    "20230103NY065030864A": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/WW-11972.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230103NY065030864A.ptrim.bam"
         ]
     },
-    "WW-11973": {
+    "20230103NY071023680A": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/WW-11973.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230103NY071023680A.ptrim.bam"
         ]
     },
-    "WW-12011": {
+    "20230103NY071024422A": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/WW-12011.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230103NY071024422A.ptrim.bam"
         ]
     },
-    "WW-12016": {
+    "20230103NY071026310B": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/WW-12016.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230103NY071026310B.ptrim.bam"
         ]
     },
-    "WW-12028": {
+    "20230103NY071026328A": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/WW-12028.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230103NY071026328A.ptrim.bam"
         ]
     },
-    "WW-12029": {
+    "20230103NY071031518A": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/WW-12029.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230103NY071031518A.ptrim.bam"
         ]
     },
-    "WW-12032": {
+    "20230103NY087022748A": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/WW-12032.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230103NY087022748A.ptrim.bam"
         ]
     },
-    "WW-12033": {
+    "20230103NY087031895A": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/WW-12033.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230103NY087031895A.ptrim.bam"
         ]
     },
-    "WW-12040": {
+    "20230103NY093020516A": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/WW-12040.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230103NY093020516A.ptrim.bam"
         ]
     },
-    "WW-12045": {
+    "20230103NY101021431A": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/WW-12045.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230103NY101021431A.ptrim.bam"
         ]
     },
-    "WW-12046": {
+    "20230103NY101023906A": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/WW-12046.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230103NY101023906A.ptrim.bam"
         ]
     },
-    "WW-12048": {
+    "20230103NY101025721A": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/WW-12048.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230103NY101025721A.ptrim.bam"
         ]
     },
-    "WW11352": {
+    "20230103NY105030074A": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/WW11352.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230103NY105030074A.ptrim.bam"
         ]
     },
-    "WW11371": {
+    "20230103NY109020958A": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/WW11371.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230103NY109020958A.ptrim.bam"
         ]
     },
-    "WW11372": {
+    "20230103NY111029351A": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/WW11372.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230103NY111029351A.ptrim.bam"
         ]
     },
-    "WW11373": {
+    "20230103NY113029050A": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/WW11373.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230103NY113029050A.ptrim.bam"
         ]
     },
-    "WW11374": {
+    "20230103NY117029475A": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/WW11374.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230103NY117029475A.ptrim.bam"
         ]
     },
-    "WW11375": {
+    "20230103NY119026786A": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/WW11375.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230103NY119026786A.ptrim.bam"
         ]
     },
-    "WW11388": {
+    "20230103NY121021504A": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/WW11388.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230103NY121021504A.ptrim.bam"
         ]
     },
-    "WW11389": {
+    "20230104NY001026867A": {
         "trim": [
-            "/home/yahmed/NYWWS/BAM_DATA/03DEC2022/WW11389.ptrim.bam"
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230104NY001026867A.ptrim.bam"
+        ]
+    },
+    "20230104NY001026875C": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230104NY001026875C.ptrim.bam"
+        ]
+    },
+    "20230104NY007027669A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230104NY007027669A.ptrim.bam"
+        ]
+    },
+    "20230104NY015036986A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230104NY015036986A.ptrim.bam"
+        ]
+    },
+    "20230104NY017021423A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230104NY017021423A.ptrim.bam"
+        ]
+    },
+    "20230104NY027026255A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230104NY027026255A.ptrim.bam"
+        ]
+    },
+    "20230104NY027149209A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230104NY027149209A.ptrim.bam"
+        ]
+    },
+    "20230104NY031022187A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230104NY031022187A.ptrim.bam"
+        ]
+    },
+    "20230104NY033029939A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230104NY033029939A.ptrim.bam"
+        ]
+    },
+    "20230104NY041026484A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230104NY041026484A.ptrim.bam"
+        ]
+    },
+    "20230104NY045025151A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230104NY045025151A.ptrim.bam"
+        ]
+    },
+    "20230104NY049020125A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230104NY049020125A.ptrim.bam"
+        ]
+    },
+    "20230104NY055028231A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230104NY055028231A.ptrim.bam"
+        ]
+    },
+    "20230104NY055028339A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230104NY055028339A.ptrim.bam"
+        ]
+    },
+    "20230104NY057020290A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230104NY057020290A.ptrim.bam"
+        ]
+    },
+    "20230104NY059026859A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230104NY059026859A.ptrim.bam"
+        ]
+    },
+    "20230104NY071026522A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230104NY071026522A.ptrim.bam"
+        ]
+    },
+    "20230104NY079031356A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230104NY079031356A.ptrim.bam"
+        ]
+    },
+    "20230104NY083087971A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230104NY083087971A.ptrim.bam"
+        ]
+    },
+    "20230104NY087028533A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230104NY087028533A.ptrim.bam"
+        ]
+    },
+    "20230104NY087270598A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230104NY087270598A.ptrim.bam"
+        ]
+    },
+    "20230104NY089031194A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230104NY089031194A.ptrim.bam"
+        ]
+    },
+    "20230104NY091028240A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230104NY091028240A.ptrim.bam"
+        ]
+    },
+    "20230104NY095024201A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230104NY095024201A.ptrim.bam"
+        ]
+    },
+    "20230104NY105022454A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230104NY105022454A.ptrim.bam"
+        ]
+    },
+    "20230104NY107029262A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230104NY107029262A.ptrim.bam"
+        ]
+    },
+    "20230104NY109026638A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230104NY109026638A.ptrim.bam"
+        ]
+    },
+    "20230104NY111029351A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230104NY111029351A.ptrim.bam"
+        ]
+    },
+    "20230104NY111030082A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230104NY111030082A.ptrim.bam"
+        ]
+    },
+    "20230104NY119026689A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230104NY119026689A.ptrim.bam"
+        ]
+    },
+    "20230104NY119026697A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230104NY119026697A.ptrim.bam"
+        ]
+    },
+    "20230104NY119026701A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230104NY119026701A.ptrim.bam"
+        ]
+    },
+    "20230104NY119026719A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230104NY119026719A.ptrim.bam"
+        ]
+    },
+    "20230104NY119100803A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230104NY119100803A.ptrim.bam"
+        ]
+    },
+    "20230104NY119108324A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230104NY119108324A.ptrim.bam"
+        ]
+    },
+    "20230104NY123029726A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230104NY123029726A.ptrim.bam"
+        ]
+    },
+    "20230105NY007024414B": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230105NY007024414B.ptrim.bam"
+        ]
+    },
+    "20230105NY025029271A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230105NY025029271A.ptrim.bam"
+        ]
+    },
+    "20230105NY031021733A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230105NY031021733A.ptrim.bam"
+        ]
+    },
+    "20230105NY039020389A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230105NY039020389A.ptrim.bam"
+        ]
+    },
+    "20230105NY053026956A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230105NY053026956A.ptrim.bam"
+        ]
+    },
+    "20230105NY055021610A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230105NY055021610A.ptrim.bam"
+        ]
+    },
+    "20230105NY059026999A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230105NY059026999A.ptrim.bam"
+        ]
+    },
+    "20230105NY065025780B": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230105NY065025780B.ptrim.bam"
+        ]
+    },
+    "20230105NY065025780C": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230105NY065025780C.ptrim.bam"
+        ]
+    },
+    "20230105NY071023680A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230105NY071023680A.ptrim.bam"
+        ]
+    },
+    "20230105NY071026310B": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230105NY071026310B.ptrim.bam"
+        ]
+    },
+    "20230105NY071026328A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230105NY071026328A.ptrim.bam"
+        ]
+    },
+    "20230105NY071026522A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230105NY071026522A.ptrim.bam"
+        ]
+    },
+    "20230105NY071027901A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230105NY071027901A.ptrim.bam"
+        ]
+    },
+    "20230105NY071031518A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230105NY071031518A.ptrim.bam"
+        ]
+    },
+    "20230105NY077031151A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230105NY077031151A.ptrim.bam"
+        ]
+    },
+    "20230105NY093020516A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230105NY093020516A.ptrim.bam"
+        ]
+    },
+    "20230105NY097271942A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230105NY097271942A.ptrim.bam"
+        ]
+    },
+    "20230105NY099033308A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230105NY099033308A.ptrim.bam"
+        ]
+    },
+    "20230105NY101021431A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230105NY101021431A.ptrim.bam"
+        ]
+    },
+    "20230105NY101023906A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230105NY101023906A.ptrim.bam"
+        ]
+    },
+    "20230105NY101025721A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230105NY101025721A.ptrim.bam"
+        ]
+    },
+    "20230105NY105024520A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230105NY105024520A.ptrim.bam"
+        ]
+    },
+    "20230105NY115183695A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230105NY115183695A.ptrim.bam"
+        ]
+    },
+    "20230108NY055028339A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230108NY055028339A.ptrim.bam"
+        ]
+    },
+    "20230108NY059026450A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230108NY059026450A.ptrim.bam"
+        ]
+    },
+    "20230108NY067027081A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230108NY067027081A.ptrim.bam"
+        ]
+    },
+    "20230108NY067027596A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230108NY067027596A.ptrim.bam"
+        ]
+    },
+    "20230108NY067027618A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230108NY067027618A.ptrim.bam"
+        ]
+    },
+    "20230108NY067027723A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230108NY067027723A.ptrim.bam"
+        ]
+    },
+    "20230108NY067030317A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230108NY067030317A.ptrim.bam"
+        ]
+    },
+    "20230108NY067030571A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230108NY067030571A.ptrim.bam"
+        ]
+    },
+    "20230108NY119026689A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230108NY119026689A.ptrim.bam"
+        ]
+    },
+    "20230108NY119026697A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230108NY119026697A.ptrim.bam"
+        ]
+    },
+    "20230108NY119026701A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230108NY119026701A.ptrim.bam"
+        ]
+    },
+    "20230108NY119026719A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230108NY119026719A.ptrim.bam"
+        ]
+    },
+    "20230108NY119026786A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230108NY119026786A.ptrim.bam"
+        ]
+    },
+    "20230108NY119100803A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230108NY119100803A.ptrim.bam"
+        ]
+    },
+    "20230108NY119108324A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230108NY119108324A.ptrim.bam"
+        ]
+    },
+    "20230109NY001026867A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230109NY001026867A.ptrim.bam"
+        ]
+    },
+    "20230109NY001026875C": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230109NY001026875C.ptrim.bam"
+        ]
+    },
+    "20230109NY019026018A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230109NY019026018A.ptrim.bam"
+        ]
+    },
+    "20230109NY027026255A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230109NY027026255A.ptrim.bam"
+        ]
+    },
+    "20230109NY031021733A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230109NY031021733A.ptrim.bam"
+        ]
+    },
+    "20230109NY035026042A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230109NY035026042A.ptrim.bam"
+        ]
+    },
+    "20230109NY043036528A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230109NY043036528A.ptrim.bam"
+        ]
+    },
+    "20230109NY055028231A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230109NY055028231A.ptrim.bam"
+        ]
+    },
+    "20230109NY059026859A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230109NY059026859A.ptrim.bam"
+        ]
+    },
+    "20230109NY059026999A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230109NY059026999A.ptrim.bam"
+        ]
+    },
+    "20230109NY087031895A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230109NY087031895A.ptrim.bam"
+        ]
+    },
+    "20230109NY103021750A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230109NY103021750A.ptrim.bam"
+        ]
+    },
+    "20230109NY113029050A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230109NY113029050A.ptrim.bam"
+        ]
+    },
+    "20230109NY119026701A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230109NY119026701A.ptrim.bam"
+        ]
+    },
+    "20230110NY007024414B": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230110NY007024414B.ptrim.bam"
+        ]
+    },
+    "20230110NY007024414C": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230110NY007024414C.ptrim.bam"
+        ]
+    },
+    "20230110NY011021903A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230110NY011021903A.ptrim.bam"
+        ]
+    },
+    "20230110NY019023949A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230110NY019023949A.ptrim.bam"
+        ]
+    },
+    "20230110NY021022039A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230110NY021022039A.ptrim.bam"
+        ]
+    },
+    "20230110NY023027561A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230110NY023027561A.ptrim.bam"
+        ]
+    },
+    "20230110NY031022187A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230110NY031022187A.ptrim.bam"
+        ]
+    },
+    "20230110NY033029939A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230110NY033029939A.ptrim.bam"
+        ]
+    },
+    "20230110NY033030376A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230110NY033030376A.ptrim.bam"
+        ]
+    },
+    "20230110NY045025984A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230110NY045025984A.ptrim.bam"
+        ]
+    },
+    "20230110NY045025984B": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230110NY045025984B.ptrim.bam"
+        ]
+    },
+    "20230110NY051024384A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230110NY051024384A.ptrim.bam"
+        ]
+    },
+    "20230110NY051030635A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230110NY051030635A.ptrim.bam"
+        ]
+    },
+    "20230110NY053021539A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230110NY053021539A.ptrim.bam"
+        ]
+    },
+    "20230110NY053029807A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230110NY053029807A.ptrim.bam"
+        ]
+    },
+    "20230110NY055021610A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230110NY055021610A.ptrim.bam"
+        ]
+    },
+    "20230110NY055028339A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230110NY055028339A.ptrim.bam"
+        ]
+    },
+    "20230110NY059026778A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230110NY059026778A.ptrim.bam"
+        ]
+    },
+    "20230110NY065030864A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230110NY065030864A.ptrim.bam"
+        ]
+    },
+    "20230110NY069025968A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230110NY069025968A.ptrim.bam"
+        ]
+    },
+    "20230110NY071023680A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230110NY071023680A.ptrim.bam"
+        ]
+    },
+    "20230110NY071024422A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230110NY071024422A.ptrim.bam"
+        ]
+    },
+    "20230110NY071026310B": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230110NY071026310B.ptrim.bam"
+        ]
+    },
+    "20230110NY071026328A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230110NY071026328A.ptrim.bam"
+        ]
+    },
+    "20230110NY071027901A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230110NY071027901A.ptrim.bam"
+        ]
+    },
+    "20230110NY101021431A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230110NY101021431A.ptrim.bam"
+        ]
+    },
+    "20230110NY101023906A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230110NY101023906A.ptrim.bam"
+        ]
+    },
+    "20230110NY101025721A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230110NY101025721A.ptrim.bam"
+        ]
+    },
+    "20230110NY105030074A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230110NY105030074A.ptrim.bam"
+        ]
+    },
+    "20230110NY117029475A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230110NY117029475A.ptrim.bam"
+        ]
+    },
+    "20230110NY121021504A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230110NY121021504A.ptrim.bam"
+        ]
+    },
+    "20230111NY007027669A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230111NY007027669A.ptrim.bam"
+        ]
+    },
+    "20230111NY015035742A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230111NY015035742A.ptrim.bam"
+        ]
+    },
+    "20230111NY015036986A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230111NY015036986A.ptrim.bam"
+        ]
+    },
+    "20230111NY017021423A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230111NY017021423A.ptrim.bam"
+        ]
+    },
+    "20230111NY025029271A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230111NY025029271A.ptrim.bam"
+        ]
+    },
+    "20230111NY027026255A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230111NY027026255A.ptrim.bam"
+        ]
+    },
+    "20230111NY027026271A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230111NY027026271A.ptrim.bam"
+        ]
+    },
+    "20230111NY027149209A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230111NY027149209A.ptrim.bam"
+        ]
+    },
+    "20230111NY031021733A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230111NY031021733A.ptrim.bam"
+        ]
+    },
+    "20230111NY033029939A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230111NY033029939A.ptrim.bam"
+        ]
+    },
+    "20230111NY041026484A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230111NY041026484A.ptrim.bam"
+        ]
+    },
+    "20230111NY045025151A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230111NY045025151A.ptrim.bam"
+        ]
+    },
+    "20230111NY049020125A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230111NY049020125A.ptrim.bam"
+        ]
+    },
+    "20230111NY055028231A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230111NY055028231A.ptrim.bam"
+        ]
+    },
+    "20230111NY057020290A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230111NY057020290A.ptrim.bam"
+        ]
+    },
+    "20230111NY059023523A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230111NY059023523A.ptrim.bam"
+        ]
+    },
+    "20230111NY059026450A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230111NY059026450A.ptrim.bam"
+        ]
+    },
+    "20230111NY059026859A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230111NY059026859A.ptrim.bam"
+        ]
+    },
+    "20230111NY071026310B": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230111NY071026310B.ptrim.bam"
+        ]
+    },
+    "20230111NY071026522A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230111NY071026522A.ptrim.bam"
+        ]
+    },
+    "20230111NY071030490A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230111NY071030490A.ptrim.bam"
+        ]
+    },
+    "20230111NY071031518A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230111NY071031518A.ptrim.bam"
+        ]
+    },
+    "20230111NY075029106A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230111NY075029106A.ptrim.bam"
+        ]
+    },
+    "20230111NY079031356A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230111NY079031356A.ptrim.bam"
+        ]
+    },
+    "20230111NY083087971A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230111NY083087971A.ptrim.bam"
+        ]
+    },
+    "20230111NY087028533A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230111NY087028533A.ptrim.bam"
+        ]
+    },
+    "20230111NY091028240A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230111NY091028240A.ptrim.bam"
+        ]
+    },
+    "20230111NY093020516A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230111NY093020516A.ptrim.bam"
+        ]
+    },
+    "20230111NY095024201A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230111NY095024201A.ptrim.bam"
+        ]
+    },
+    "20230111NY103020061A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230111NY103020061A.ptrim.bam"
+        ]
+    },
+    "20230111NY105022454A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230111NY105022454A.ptrim.bam"
+        ]
+    },
+    "20230111NY105024520A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230111NY105024520A.ptrim.bam"
+        ]
+    },
+    "20230111NY107029262A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230111NY107029262A.ptrim.bam"
+        ]
+    },
+    "20230111NY109026638A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230111NY109026638A.ptrim.bam"
+        ]
+    },
+    "20230111NY111029351A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230111NY111029351A.ptrim.bam"
+        ]
+    },
+    "20230111NY111030082A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230111NY111030082A.ptrim.bam"
+        ]
+    },
+    "20230111NY119026689A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230111NY119026689A.ptrim.bam"
+        ]
+    },
+    "20230111NY119026697A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230111NY119026697A.ptrim.bam"
+        ]
+    },
+    "20230111NY119026701A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230111NY119026701A.ptrim.bam"
+        ]
+    },
+    "20230111NY119026719A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230111NY119026719A.ptrim.bam"
+        ]
+    },
+    "20230111NY119026786A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230111NY119026786A.ptrim.bam"
+        ]
+    },
+    "20230111NY119100803A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230111NY119100803A.ptrim.bam"
+        ]
+    },
+    "20230111NY119108324A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230111NY119108324A.ptrim.bam"
+        ]
+    },
+    "20230111NY123029726A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230111NY123029726A.ptrim.bam"
+        ]
+    },
+    "20230112NY007024414B": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230112NY007024414B.ptrim.bam"
+        ]
+    },
+    "20230112NY007024414C": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230112NY007024414C.ptrim.bam"
+        ]
+    },
+    "20230112NY027025976A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230112NY027025976A.ptrim.bam"
+        ]
+    },
+    "20230112NY039020389A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230112NY039020389A.ptrim.bam"
+        ]
+    },
+    "20230112NY053026956A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230112NY053026956A.ptrim.bam"
+        ]
+    },
+    "20230112NY059026999A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230112NY059026999A.ptrim.bam"
+        ]
+    },
+    "20230112NY065025780B": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230112NY065025780B.ptrim.bam"
+        ]
+    },
+    "20230112NY065025780C": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230112NY065025780C.ptrim.bam"
+        ]
+    },
+    "20230112NY071023680A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230112NY071023680A.ptrim.bam"
+        ]
+    },
+    "20230112NY071026522A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230112NY071026522A.ptrim.bam"
+        ]
+    },
+    "20230112NY071027901A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230112NY071027901A.ptrim.bam"
+        ]
+    },
+    "20230112NY071031518A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230112NY071031518A.ptrim.bam"
+        ]
+    },
+    "20230112NY077031151A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230112NY077031151A.ptrim.bam"
+        ]
+    },
+    "20230112NY093020516A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230112NY093020516A.ptrim.bam"
+        ]
+    },
+    "20230112NY099033308A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230112NY099033308A.ptrim.bam"
+        ]
+    },
+    "20230112NY115183695A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230112NY115183695A.ptrim.bam"
+        ]
+    },
+    "20230115NY119026701A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230115NY119026701A.ptrim.bam"
+        ]
+    },
+    "20230115NY119026719A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230115NY119026719A.ptrim.bam"
+        ]
+    },
+    "20230115NY119108324A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230115NY119108324A.ptrim.bam"
+        ]
+    },
+    "20230116NY019026018A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230116NY019026018A.ptrim.bam"
+        ]
+    },
+    "20230116NY059026859A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230116NY059026859A.ptrim.bam"
+        ]
+    },
+    "20230116NY067027081A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230116NY067027081A.ptrim.bam"
+        ]
+    },
+    "20230116NY067027596A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230116NY067027596A.ptrim.bam"
+        ]
+    },
+    "20230116NY067027618A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230116NY067027618A.ptrim.bam"
+        ]
+    },
+    "20230116NY067027723A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230116NY067027723A.ptrim.bam"
+        ]
+    },
+    "20230116NY067030317A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230116NY067030317A.ptrim.bam"
+        ]
+    },
+    "20230116NY067030571A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230116NY067030571A.ptrim.bam"
+        ]
+    },
+    "20230116NY119026697A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230116NY119026697A.ptrim.bam"
+        ]
+    },
+    "20230116NY119100803A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230116NY119100803A.ptrim.bam"
+        ]
+    },
+    "20230117NY001026867A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230117NY001026867A.ptrim.bam"
+        ]
+    },
+    "20230117NY001026875C": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230117NY001026875C.ptrim.bam"
+        ]
+    },
+    "20230117NY007024414C": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230117NY007024414C.ptrim.bam"
+        ]
+    },
+    "20230117NY011021903A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230117NY011021903A.ptrim.bam"
+        ]
+    },
+    "20230117NY021022039A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230117NY021022039A.ptrim.bam"
+        ]
+    },
+    "20230117NY023027561A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230117NY023027561A.ptrim.bam"
+        ]
+    },
+    "20230117NY031021733A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230117NY031021733A.ptrim.bam"
+        ]
+    },
+    "20230117NY033030376A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230117NY033030376A.ptrim.bam"
+        ]
+    },
+    "20230117NY035026042A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230117NY035026042A.ptrim.bam"
+        ]
+    },
+    "20230117NY045025984A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230117NY045025984A.ptrim.bam"
+        ]
+    },
+    "20230117NY045025984B": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230117NY045025984B.ptrim.bam"
+        ]
+    },
+    "20230117NY053021539A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230117NY053021539A.ptrim.bam"
+        ]
+    },
+    "20230117NY053028525A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230117NY053028525A.ptrim.bam"
+        ]
+    },
+    "20230117NY053029807A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230117NY053029807A.ptrim.bam"
+        ]
+    },
+    "20230117NY053261742A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230117NY053261742A.ptrim.bam"
+        ]
+    },
+    "20230117NY059023523A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230117NY059023523A.ptrim.bam"
+        ]
+    },
+    "20230117NY059026450A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230117NY059026450A.ptrim.bam"
+        ]
+    },
+    "20230117NY059026999A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230117NY059026999A.ptrim.bam"
+        ]
+    },
+    "20230117NY065030864A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230117NY065030864A.ptrim.bam"
+        ]
+    },
+    "20230117NY087022748A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230117NY087022748A.ptrim.bam"
+        ]
+    },
+    "20230117NY089020818A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230117NY089020818A.ptrim.bam"
+        ]
+    },
+    "20230117NY103079324A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230117NY103079324A.ptrim.bam"
+        ]
+    },
+    "20230117NY109020958A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230117NY109020958A.ptrim.bam"
+        ]
+    },
+    "20230118NY015035742A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230118NY015035742A.ptrim.bam"
+        ]
+    },
+    "20230118NY015036986A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230118NY015036986A.ptrim.bam"
+        ]
+    },
+    "20230118NY027026255A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230118NY027026255A.ptrim.bam"
+        ]
+    },
+    "20230118NY027026271A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230118NY027026271A.ptrim.bam"
+        ]
+    },
+    "20230118NY027149209A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230118NY027149209A.ptrim.bam"
+        ]
+    },
+    "20230118NY031021733A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230118NY031021733A.ptrim.bam"
+        ]
+    },
+    "20230118NY049020125A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230118NY049020125A.ptrim.bam"
+        ]
+    },
+    "20230118NY057020290A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230118NY057020290A.ptrim.bam"
+        ]
+    },
+    "20230118NY059026859A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230118NY059026859A.ptrim.bam"
+        ]
+    },
+    "20230118NY079031356A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230118NY079031356A.ptrim.bam"
+        ]
+    },
+    "20230118NY087026051A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230118NY087026051A.ptrim.bam"
+        ]
+    },
+    "20230118NY087028533A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230118NY087028533A.ptrim.bam"
+        ]
+    },
+    "20230118NY089031194A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230118NY089031194A.ptrim.bam"
+        ]
+    },
+    "20230118NY095024201A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230118NY095024201A.ptrim.bam"
+        ]
+    },
+    "20230118NY103020061A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230118NY103020061A.ptrim.bam"
+        ]
+    },
+    "20230118NY103104809A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230118NY103104809A.ptrim.bam"
+        ]
+    },
+    "20230118NY105022454A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230118NY105022454A.ptrim.bam"
+        ]
+    },
+    "20230118NY107029262A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230118NY107029262A.ptrim.bam"
+        ]
+    },
+    "20230118NY111029351A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230118NY111029351A.ptrim.bam"
+        ]
+    },
+    "20230118NY119026701A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230118NY119026701A.ptrim.bam"
+        ]
+    },
+    "20230119NY025029271A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230119NY025029271A.ptrim.bam"
+        ]
+    },
+    "20230119NY027025976A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230119NY027025976A.ptrim.bam"
+        ]
+    },
+    "20230119NY071023680A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230119NY071023680A.ptrim.bam"
+        ]
+    },
+    "20230119NY071026328A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230119NY071026328A.ptrim.bam"
+        ]
+    },
+    "20230119NY087031895A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230119NY087031895A.ptrim.bam"
+        ]
+    },
+    "20230119NY089020818A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230119NY089020818A.ptrim.bam"
+        ]
+    },
+    "20230119NY103021750A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230119NY103021750A.ptrim.bam"
+        ]
+    },
+    "20230119NY103079324A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230119NY103079324A.ptrim.bam"
+        ]
+    },
+    "20230119NY103104809A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230119NY103104809A.ptrim.bam"
+        ]
+    },
+    "20230119NY105024520A": {
+        "trim": [
+            "/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/20230119NY105024520A.ptrim.bam"
         ]
     }
 }

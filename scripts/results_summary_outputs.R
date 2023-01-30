@@ -11,9 +11,9 @@ varFreqBarPlotsMin20X <- args[7]
 
 
 ### Load packages:
-library(tidyverse)
+library("tidyverse")
 # library(gtsummary)
-library(gt)
+library("gt")
 
 ### create a custom colour pallette:
 my_20_cols <- c("#ffb7af",

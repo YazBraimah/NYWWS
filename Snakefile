@@ -58,7 +58,6 @@ rule all:
     input:
         join(OUT_DIR, 'MultiQC', 'multiqc_report.html'),
         join(OUT_DIR, 'Freyja', 'Aggregate', 'freyja_parse.csv'),
-        join(OUT_DIR, 'Coverage', 'coverageReport.txt'),
         expand(join(OUT_DIR, 'iVar', '{sample}.rawVarCalls.tsv'), sample = SAMPLES),
         join(OUT_DIR, 'Summary', 'variant_tables', 'varTables_ok')
 
@@ -500,9 +499,9 @@ rule report_summary:
     message:
         """--- Outputting summary tables and plots."""
     conda:
-        'envs/r_env.yml'
+        'envs/tidyverse_env.yml'
     shell:
-        'Rscript {params.r_script} {input.parse} {input.cov} {params.samInfo} {output.coveragePointPlot} {output.coverageCovClass} {output.varFreqBarPlotsAll} {output.varFreqBarPlotsMin20X} && '
+        '~/miniconda3/envs/tidyverse/bin/Rscript {params.r_script} {input.parse} {input.cov} {params.samInfo} {output.coveragePointPlot} {output.coverageCovClass} {output.varFreqBarPlotsAll} {output.varFreqBarPlotsMin20X} && '
         'mv *_County_variant_table.pdf ' + join(OUT_DIR, 'Summary', 'variant_tables') +
         ' && touch {output.varTables}'
 
