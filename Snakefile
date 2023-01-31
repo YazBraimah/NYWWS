@@ -57,7 +57,6 @@ if not os.path.exists(OUT_DIR):
 rule all:
     input:
         join(OUT_DIR, 'MultiQC', 'multiqc_report.html'),
-        join(OUT_DIR, 'Freyja', 'Aggregate', 'freyja_parse.csv'),
         expand(join(OUT_DIR, 'iVar', '{sample}.rawVarCalls.tsv'), sample = SAMPLES),
         join(OUT_DIR, 'Summary', 'variant_tables', 'varTables_ok')
 
