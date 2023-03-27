@@ -82,7 +82,7 @@ dependencies:
   - future=0.18.2=py310hff52083_5
   - gdk-pixbuf=2.42.8=hff1cb4f_0
   - gettext=0.19.8.1=h73d1719_1008
-  - ghostscript=9.18=1
+  - ghostscript
   - giflib=5.2.1=h36c2ea0_2
   - gitdb=4.0.9=pyhd8ed1ab_0
   - gitpython=3.1.27=pyhd8ed1ab_0
@@ -303,4 +303,3 @@ dependencies:
   - zstd=1.5.2=h8a70e8d_2
   - pip:
     - lineages==2020-05-19
-prefix: /home/yahmed/miniconda3/envs/nywws

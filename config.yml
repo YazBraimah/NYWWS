@@ -1,17 +1,17 @@
 # Path to reference genome and indices.
-DNA: '/home/yahmed/NYWWS/reference/nCov_Wuhan.fasta'
-INDEX: '/home/yahmed/NYWWS/reference/bowtie2_ref/nCov_Wuhan'
+DNA: 'reference/nCov_Wuhan.fasta'
+INDEX: 'reference/bowtie2_ref/nCov_Wuhan'
 
 # Path to a folder where final files will be written.
-OUT_DIR: '/home/yahmed/NYWWS/Cumulative_Results'
-HOME_DIR: '/home/yahmed/NYWWS/'
+OUT_DIR: 'Cumulative_Results'
+HOME_DIR: './'
 
-covidRefSequences: '/home/yahmed/NYWWS/reference/GCF_009858895.2_ASM985889v3_genomic.gff'
-SAM_HEADER: '/home/yahmed/NYWWS/bam_process/new_header.sam'
-SAMPLE_INFO: '/home/yahmed/NYWWS/sampling_locations.csv'
-R_script: '/home/yahmed/NYWWS/scripts/results_summary_outputs.R'
+covidRefSequences: 'reference/GCF_009858895.2_ASM985889v3_genomic.gff'
+SAM_HEADER: 'bam_process/new_header.sam'
+SAMPLE_INFO: 'sampling_locations.csv'
+R_script: 'scripts/results_summary_outputs.R'
 
 # Path to a JSON file with samples and their corresponding BAM files.
-BAM_SAMPLES_JSON: '/home/yahmed/NYWWS/samples_bam.json'
+BAM_SAMPLES_JSON: 'samples_bam.json'
 
-BAMS_DIR: '/home/yahmed/NYWWS/BAM_DATA/ALL_BAMS/'
+BAMS_DIR: 'BAM_DATA/ALL_BAMS/'

@@ -1,0 +1,6 @@
+
+.snakemake
+BAM_DATA
+auto-backup
+
+*.swp

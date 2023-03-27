@@ -6,7 +6,13 @@
 ![alt text](https://github.com/YazBraimah/NYWWS/blob/main/workflow.png?raw=true)
 
 
-### Setup and execution
+## Setup and execution
+
+### Access remote BAM files with rclone
+
+First, set up rclone to access the files in the Google Cloud bucket. Follow the instructions in the rclone website to set it up.
+
+### Clone repo and run pipeline
 
 1. After cloning the repository to your local machine, first set up the base conda environment, which is in the `envs/nywws_env.yml`:
 
