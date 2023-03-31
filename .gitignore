@@ -1,6 +1,8 @@
 
-.snakemake
 BAM_DATA
-auto-backup
+results
 
+.snakemake
+.ipynb_checkpoints
 *.swp
+._*

@@ -1,0 +1,8 @@
+
+channels:
+  - conda-forge
+  - bioconda
+
+dependencies:
+  - snakemake>=7
+  - jupyterlab

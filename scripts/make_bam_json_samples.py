@@ -1,37 +1,18 @@
-#!/usr/bin/env python3
-'''
-Make a samples.json file with sample names and file names.
-'''
-def msg(name=None):
-    return ''' make_bam_samples.py <samples_files>
-
-        '''
-
+from pathlib import Path
 import json
-from glob import glob
-from sys import argv
-import sys
-import argparse
-import glob
-parser = argparse.ArgumentParser(description='Make a samples.json file with sample names and file names.', usage=msg())
 
+infolder = snakemake.input[0]
+outfile = snakemake.output[0]
 
-fqFiles = argv[1:]
-bams = []
-for fq in fqFiles:
-    bams.extend(glob.glob(fq))
+def path_to_sampleid(path):
+    return path.stem.split(".")[0]
 
-bamFILES = {}
+bam_files = Path(infolder).glob("**/*.ptrim.bam")
 
-# Change this line to extract a sample name from each filename.
-SAMPLES = [bam.split('/')[-1].split('.')[0] for bam in bams]
+manifesto = {
+    path_to_sampleid(path): {"trim": str(path.resolve())}
+    for path in bam_files
+}
 
-for sample in SAMPLES:
-    mate1 = lambda bam: sample in bam and 'trim' in bam
-    bamFILES[sample] = {}
-    bamFILES[sample]['trim'] = sorted(filter(mate1, bams))
-
-
-
-js_bam = json.dumps(bamFILES, indent = 4, sort_keys=True)
-open('samples_bam.json', 'w').writelines(js_bam)
+with open(outfile, "w") as f:
+    json.dump(manifesto, f, indent=2)

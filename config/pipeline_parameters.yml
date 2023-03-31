@@ -1,0 +1,16 @@
+
+# Path to the folder of BAM samples
+bam_folder: "BAM_DATA"
+
+# Path to reference genome and indices.
+# DNA: 'reference/nCov_Wuhan.fasta'
+# INDEX: 'reference/bowtie2_ref/nCov_Wuhan'
+# 
+# # Path to a folder where final files will be written.
+# OUT_DIR: 'Cumulative_Results'
+# HOME_DIR: './'
+# 
+# covidRefSequences: 'reference/GCF_009858895.2_ASM985889v3_genomic.gff'
+# SAM_HEADER: 'bam_process/new_header.sam'
+# SAMPLE_INFO: 'sampling_locations.csv'
+# R_script: 'scripts/results_summary_outputs.R'
