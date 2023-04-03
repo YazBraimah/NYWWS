@@ -1,7 +1,7 @@
 from pathlib import Path
 
-bam_folder = Path(config["bam_folder"])
-sample_metadata = Path(config["sample_metadata"])
+BAM_FOLDER = Path(config["bam_folder"])
+SAMPLE_METADATA = Path(config["sample_metadata"])
 
 
 rule all:
@@ -10,13 +10,18 @@ rule all:
 
 rule check_file_existence:
     input:
-        manifesto = "output/sample_info/samples_bam.json",
-        metadata = sample_metadata
+        bam_folder = "output/samples",
+        metadata = SAMPLE_METADATA
     output: "output/sample_info/file_existence.tsv"
+    message: "Matching downloaded BAMs with known sample IDs."
     script: "scripts/check_file_existence.py"
 
 
-rule make_samples_list:
-    input: bam_folder
-    output: "output/sample_info/samples_bam.json"
-    script: "scripts/make_bam_json_samples.py"
+def get_raw_bams(wildcards):
+    return list(BAM_FOLDER.glob("**/*.ptrim.bam"))
+
+rule symlink_raw_bams:
+    input: get_raw_bams
+    output: directory("output/samples")
+    message: "Creating symbolic links to raw BAM files."
+    script: "scripts/symlink_raw_bams.py"
