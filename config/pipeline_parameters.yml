@@ -5,6 +5,9 @@ bam_folder: "data/raw_bam"
 # Path to a table of sample metadata
 sample_metadata: "data/sample_metadata/nys-wws-sars2-concentration.csv"
 
+# Path to a header to add to output BAM
+bam_header: "data/new_header.sam"
+
 # Path to reference genome and indices.
 # DNA: 'reference/nCov_Wuhan.fasta'
 # INDEX: 'reference/bowtie2_ref/nCov_Wuhan'

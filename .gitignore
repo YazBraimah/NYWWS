@@ -4,6 +4,7 @@ test.sh
 data/raw_bam
 data/sample_metadata
 output
+results
 
 .snakemake
 .ipynb_checkpoints
