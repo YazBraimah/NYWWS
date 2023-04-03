@@ -11,7 +11,7 @@ RCLONE_BUCKET_NAME="gcs:su_nywws_test_bucket"
 GCS_DIRS_FILE="config/remote_dirs.txt"
 
 # Folder to download BAM files to
-BAM_FOLDER="BAM_DATA"
+BAM_FOLDER="data/raw_bam"
 
 # Name of main conda environment of the pipeline
 CONDA_ENV="nywws"

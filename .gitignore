@@ -1,6 +1,7 @@
 
-BAM_DATA
-results
+data/raw_bam
+data/sample_metadata
+output
 
 .snakemake
 .ipynb_checkpoints

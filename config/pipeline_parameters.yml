@@ -1,6 +1,9 @@
 
 # Path to the folder of BAM samples
-bam_folder: "BAM_DATA"
+bam_folder: "data/raw_bam"
+
+# Path to a table of sample metadata
+sample_metadata: "data/sample_metadata/nys-wws-sars2-concentration.csv"
 
 # Path to reference genome and indices.
 # DNA: 'reference/nCov_Wuhan.fasta'

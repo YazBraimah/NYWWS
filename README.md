@@ -28,21 +28,14 @@ Create a directory with all the BAM files to be analyzed. BAM files are expected
 mkdir ./BAM_DIR/ALL_BAMS
 ```
 
+Download the samples CSV file from GitHub.
+
 ### Run pipeline
 
-Run the `scripts/make_bam_json_samples.py` program on the BAM files within the BAM directory (note the escape character before the *):
+Edit `config/pipeline_parameters.yml` with the correct pipeline parameters and file paths. Then, run the pipeline with this command (assuming the conda environment is called `nywws`):
 
 ```
-scripts/make_bam_json_samples.py /absolute/path/to/BAM_DIR/ALL_BAMS/\*ptrim.bam
-```
-This will create a file called `samples_bam.json`. This file path should be specifid in the `config.yml` file under `BAM_SAMPLES_FILE`.
-
-Ensure that the correct paths to required inputs are specified in the `config.yml` file.
-
-Activate the nywws environment with `conda activate nywws` and run the pipeline with this minimal `snakemake` command:
-
-```
-snakemake --use-conda -j 50 --cores 4
+conda run -n nywws snakemake --use-conda -j 50 --cores 4
 ```
 
 Which will run up to 50 jobs simultaneously, depending on the computing architecture.
@@ -50,4 +43,8 @@ Which will run up to 50 jobs simultaneously, depending on the computing architec
 
 ## Running the pipeline automatically
 
-- Make sure to set the parameters in the run script properly.
+For automatically downloading and pushing files from GitHub, you will need to have the [GitHub command-line interface](https://github.com/cli/cli) installed. After doing so, you will need to create a [Personal Access Token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token). Once your token is created, store it in the environment variable `GH_TOKEN`. Note that storing credentials in a variable makes them vulnerable if the computer is compromised.
+
+Set the parameters in the run script properly, then run it: `bash run...`.
+
+Set up a cron job to run the script.
