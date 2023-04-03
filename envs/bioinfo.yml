@@ -4,4 +4,6 @@ channels:
   - bioconda
 
 dependencies:
+  - fastqc
+  - qualimap
   - samtools

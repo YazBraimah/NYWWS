@@ -8,6 +8,9 @@ sample_metadata: "data/sample_metadata/nys-wws-sars2-concentration.csv"
 # Path to a header to add to output BAM
 bam_header: "data/new_header.sam"
 
+# Path to genomic annotation
+covid_refseq: 'data/reference_genome/GCF_009858895.2_ASM985889v3_genomic.gff'
+
 # Path to reference genome and indices.
 # DNA: 'reference/nCov_Wuhan.fasta'
 # INDEX: 'reference/bowtie2_ref/nCov_Wuhan'
@@ -16,7 +19,6 @@ bam_header: "data/new_header.sam"
 # OUT_DIR: 'Cumulative_Results'
 # HOME_DIR: './'
 # 
-# covidRefSequences: 'reference/GCF_009858895.2_ASM985889v3_genomic.gff'
 # SAM_HEADER: 'bam_process/new_header.sam'
 # SAMPLE_INFO: 'sampling_locations.csv'
 # R_script: 'scripts/results_summary_outputs.R'
