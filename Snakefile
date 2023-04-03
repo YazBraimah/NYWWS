@@ -18,14 +18,14 @@ def samples_with_matching_ids(wildcards):
     existence_df = pd.read_table(existence_path)
     present_samples = existence_df.sample_id[existence_df.sample_present == "ok"]
     return [
-        f"results/fastQC/{sample}_fastqc.html"
+        f"results/BAM/{sample}/{sample}.qualimap/qualimapReport.html"
         for sample in present_samples
     ]
 
 rule all_filter_covid_reads:
     input: samples_with_matching_ids
     output: "output/done"
-    message: "Done running fastqc on all samples."
+    message: "Done with all samples."
     shell: "touch {output}"
 
 
@@ -38,26 +38,28 @@ rule qualimap:
     threads: 8
     resources:
         mem_mb=32000
+    conda: "envs/bioinfo.yml"
     message: "{wildcards.sample}: Evaluating BAM mapping quality with QualiMap."
-    run:
-        shell('qualimap bamqc'
-                ' -bam {input.bam}'
-                ' --java-mem-size=32G'
-                # ' -gff {input.gtf}'
-                ' -outdir ' + join(OUT_DIR, 'BAM', '{wildcards.sample}', '{wildcards.sample}.qualimap') +
-                ' > {log} 2>&1')
+    shell:
+        "qualimap bamqc "
+        "  -bam {input.bam} "
+        # "  -gff {input.gtf} "
+        "  --java-mem-size=32G "
+        "  -nt {threads} "
+        "  -outdir results/BAM/{wildcards.sample}/{wildcards.sample}.qualimap"
+        "  > {log} 2>&1"
 
 
 rule fastqc:
     input: "results/FastQs/{sample}/{sample}.fq.gz"
     output: "results/fastQC/{sample}_fastqc.html"
     log: "results/fastQC/{sample}.fastQC_se.log"
-    conda: "envs/fastqc_env.yml"
+    conda: "envs/bioinfo.yml"
     message: "{wildcards.sample}: Checking read quality with fastqc."
     shell: "fastqc -o results/fastQC {input} > {log} 2>&1"
 
 
-rule bam_to_fastq:
+rule sam_to_fastq:
     input: "results/FastQs/{sample}/{sample}.sam"
     output: "results/FastQs/{sample}/{sample}.fq.gz"
     message: "{wildcards.sample}: Converting SAM to FastQ."
