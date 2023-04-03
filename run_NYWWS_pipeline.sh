@@ -19,6 +19,9 @@ CONDA_ENV="nywws"
 # File with the pipeline parameters
 PIPELINE_CONFIG="config/pipeline_parameters.yml"
 
+# How many jobs to run in the pipeline at once?
+PIPELINE_JOBS=100
+
 # Upload files after running the pipeline?
 # UPLOAD_FILES=yes or no
 
@@ -45,7 +48,7 @@ done
 
 # Run the pipeline with the conda environment
 conda run -n ${CONDA_ENV} snakemake \
-      -j 50 \
+      -j ${PIPELINE_JOBS} \
       --use-conda \
       --configfile ${PIPELINE_CONFIG}
 

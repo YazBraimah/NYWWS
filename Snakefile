@@ -17,15 +17,22 @@ def samples_with_matching_ids(wildcards):
     existence_df = pd.read_table(existence_path)
     present_samples = existence_df.sample_id[existence_df.sample_present == "ok"]
     return [
-        f"results/FastQs/{sample}/{sample}.bam"
+        f"results/FastQs/{sample}/{sample}.fq.gz"
         for sample in present_samples
     ]
 
 rule all_filter_covid_reads:
     input: samples_with_matching_ids
     output: "output/get_covid_reads"
-    message: "Done filtering non-COVID reads out of BAMs."
+    message: "Done creating fastq from samples."
     shell: "touch {output}"
+
+
+rule bam_to_fastq:
+    input: "results/FastQs/{sample}/{sample}.sam"
+    output: "results/FastQs/{sample}/{sample}.fq.gz"
+    message: "{wildcards.sample}: Converting SAM to FastQ."
+    script: "scripts/sam2fastq.py"
 
 
 rule filter_covid_reads:
