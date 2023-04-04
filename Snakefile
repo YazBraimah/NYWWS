@@ -9,7 +9,21 @@ BAM_HEADER = Path(config["bam_header"])
 
 
 rule all:
-    input: "results/Coverage/coverageReport.tsv"
+    input:
+        "results/Coverage/coverageReport.tsv",
+        "results/Freyja/Update/update.ok"
+
+
+rule Freyja_update:
+    output: "results/Freyja/Update/update.ok"
+    log: "results/Freyja/Update/update.log"
+    threads: 8
+    resources:
+        mem_mb=16000
+    conda: "envs/freyja.yml"
+    message: "Updating Freyja database."
+    shell:
+        "freyja update ; touch {output}"
 
 
 def qualimap_of_valid_samples(wildcards):
