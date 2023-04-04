@@ -8,8 +8,14 @@ sample_metadata: "data/sample_metadata/nys-wws-sars2-concentration.csv"
 # Path to a header to add to output BAM
 bam_header: "data/new_header.sam"
 
+# For a sample to have enough coverage, it must have:
+# minimum_fraction of its genome covered at at least minimum_coverage x
+minimum_fraction: 0.5
+minimum_coverage: 20
+
+# NOT USED SO FAR
 # Path to genomic annotation
-covid_refseq: 'data/reference_genome/GCF_009858895.2_ASM985889v3_genomic.gff'
+# covid_refseq: 'data/reference_genome/GCF_009858895.2_ASM985889v3_genomic.gff'
 
 # Path to reference genome and indices.
 # DNA: 'reference/nCov_Wuhan.fasta'

@@ -6,34 +6,42 @@ import pandas as pd
 BAM_FOLDER = Path(config["bam_folder"])
 SAMPLE_METADATA = Path(config["sample_metadata"])
 BAM_HEADER = Path(config["bam_header"])
-COVID_REFSEQ = Path(config["covid_refseq"])
 
 
 rule all:
-    input: "output/done"
+    input: "results/Coverage/coverageReport.tsv"
 
 
-def samples_with_matching_ids(wildcards):
+def qualimap_of_valid_samples(wildcards):
     existence_path = checkpoints.check_file_existence.get(**wildcards).output[0]
     existence_df = pd.read_table(existence_path)
     present_samples = existence_df.sample_id[existence_df.sample_present == "ok"]
-    return [
-        f"results/BAM/{sample}/{sample}.qualimap/qualimapReport.html"
-        for sample in present_samples
-    ]
+    return {
+        "cov_across_ref": [
+            f"results/BAM/{sample}/{sample}.qualimap/raw_data_qualimapReport/coverage_across_reference.txt"
+            for sample in present_samples
+        ],
+        "genome_fraction_cov": [
+            f"results/BAM/{sample}/{sample}.qualimap/raw_data_qualimapReport/genome_fraction_coverage.txt"
+            for sample in present_samples
+        ]
+    }
 
-rule all_filter_covid_reads:
-    input: samples_with_matching_ids
-    output: "output/done"
-    message: "Done with all samples."
-    shell: "touch {output}"
+rule coverage_summary:
+    input: unpack(qualimap_of_valid_samples)
+    output:
+        long_form_report = "results/Coverage/coverageReport.tsv",
+        cov_per_sample = "results/Coverage/sample_coverage_status.tsv"
+    message: "Generating coverage report of samples."
+    script: "scripts/coverage_summary.py"
 
 
 rule qualimap:
     input:
-        bam = "results/FastQs/{sample}/{sample}.bam",
-        gtf = COVID_REFSEQ
-    output: "results/BAM/{sample}/{sample}.qualimap/qualimapReport.html"
+        bam = "results/FastQs/{sample}/{sample}.bam"
+    output:
+        cov_across_ref = "results/BAM/{sample}/{sample}.qualimap/raw_data_qualimapReport/coverage_across_reference.txt",
+        genome_fraction_cov = "results/BAM/{sample}/{sample}.qualimap/raw_data_qualimapReport/genome_fraction_coverage.txt"
     log: "results/BAM/{sample}/qualimap.log"
     threads: 8
     resources:
@@ -43,7 +51,6 @@ rule qualimap:
     shell:
         "qualimap bamqc "
         "  -bam {input.bam} "
-        # "  -gff {input.gtf} "
         "  --java-mem-size=32G "
         "  -nt {threads} "
         "  -outdir results/BAM/{wildcards.sample}/{wildcards.sample}.qualimap"
