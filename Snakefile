@@ -6,17 +6,133 @@ import pandas as pd
 BAM_FOLDER = Path(config["bam_folder"])
 SAMPLE_METADATA = Path(config["sample_metadata"])
 BAM_HEADER = Path(config["bam_header"])
+FASTA_REFERENCE = Path(config["fasta_ref"])
 
 
 rule all:
     input:
-        "results/Coverage/coverageReport.tsv",
-        "results/Freyja/Update/update.ok"
+        "results/Summary/sample_info.tsv",
+        "results/Summary/coveragePointPlot_by_date.pdf"
+
+
+rule report_summary:
+    input:
+        cov = "results/Coverage/coverageReport.tsv",
+        freyja = "results/Freyja/Aggregate/freyja_parse.csv",
+        sample_info = SAMPLE_METADATA
+    output:
+        coveragePointPlot = "results/Summary/coveragePointPlot_by_date.pdf"
+        # coverageCovClass = join(OUT_DIR, 'Summary', 'coveragePointPlot_by_covClass.pdf'),
+        # varTables = join(OUT_DIR, 'Summary', 'variant_tables', 'varTables_ok'),
+        # varFreqBarPlotsAll = join(OUT_DIR, 'Summary', 'Variant_frequency_barplots_by_county_all_samples.pdf'),
+        # varFreqBarPlotsMin20X = join(OUT_DIR, 'Summary', 'Variant_frequency_barplots_by_county_min_20X.pdf')
+    threads: 8
+    resources:
+        mem_mb=32000
+    message: "Outputting summary tables and plots."
+    # conda: 'envs/tidyverse_env.yml'
+    shell:
+        "touch {output.coveragePointPlot}"
+    #     '~/miniconda3/envs/tidyverse/bin/Rscript {params.r_script} {input.parse} {input.cov} {params.samInfo} {output.coveragePointPlot} {output.coverageCovClass} {output.varFreqBarPlotsAll} {output.varFreqBarPlotsMin20X} && '
+    #     'mv *_County_variant_table.pdf ' + join(OUT_DIR, 'Summary', 'variant_tables') +
+    #     ' && touch {output.varTables}'
+
+
+rule samples_report:
+    input:
+        existence = "output/sample_info/file_existence.tsv",
+        coverage = "results/Coverage/sample_coverage_status.tsv",
+        freyja = "output/sample_info/freyja_quality.tsv"
+    output: "results/Summary/sample_info.tsv"
+    script: "scripts/sample_status.py"
+
+
+rule freyja_quality:
+    input: "results/Freyja/Aggregate/freyja_parse.csv"
+    output: "output/sample_info/freyja_quality.tsv"
+    script: "scripts/assess_freyja_results.py"
+
+
+rule Freyja_parse:
+    input: "results/Freyja/Aggregate/aggregated_results.tsv"
+    output: "results/Freyja/Aggregate/freyja_parse.csv"
+    threads: 2
+    resources:
+        mem_mb=4000
+    message: "Parsing Freyija output."
+    script: "scripts/parse_freyja_demix.py"
+
+
+def freyja_demix_samples(wildcards):
+    coverage_path = checkpoints.coverage_summary.get(**wildcards).output["cov_per_sample"]
+    coverage_df = pd.read_table(coverage_path)
+    samples_with_coverage = coverage_df.sample_id[coverage_df.enough_coverage == "yes"]
+    return expand(
+        "results/Freyja/Demix/Results/{sample}_freyja.demix",
+        sample=samples_with_coverage
+    )
+
+rule Freyja_aggregate:
+    input: freyja_demix_samples
+    output:
+        bt2_agg = "results/Freyja/Aggregate/aggregated_results.tsv",
+        bt2_png = "results/Freyja/Aggregate/freyja_stacked_barplots.png"
+    threads: 8
+    resources:
+        mem_mb=32000
+    conda: "envs/freyja.yml"
+    message: "Running Freyja Aggregate and outputting barplots."
+    shell:
+        "freyja aggregate"
+        "  --output {output.bt2_agg}"
+        "  results/Freyja/Demix/Results/"
+        " ; "
+        "freyja plot"
+        "  {output.bt2_agg}"
+        "  --output {output.bt2_png}"
+
+
+rule Freyja_demix:
+    input:
+        bt2_variants = "results/Freyja/Variants/Results/{sample}.freyja.variants.tsv",
+        bt2_depths = "results/Freyja/Variants/Results/{sample}.freyja.depths.tsv"
+    output: "results/Freyja/Demix/Results/{sample}_freyja.demix"
+    threads: 8
+    resources:
+        mem_mb=32000
+    conda: "envs/freyja.yml"
+    message: "{wildcards.sample}: Running Freyja Demix."
+    shell:
+        "freyja demix"
+        "  {input.bt2_variants}"
+        "  {input.bt2_depths}"
+        "  --output {output}"
+        # "  --confirmedonly"
+
+
+rule Freyja_variants:
+    input:
+        updated = "results/Freyja/Update/update.ok",
+        bt2_bam = "results/FastQs/{sample}/{sample}.bam",
+        dna = FASTA_REFERENCE
+    output:
+        bt2_variants = "results/Freyja/Variants/Results/{sample}.freyja.variants.tsv",
+        bt2_depths = "results/Freyja/Variants/Results/{sample}.freyja.depths.tsv"
+    threads: 8
+    resources:
+        mem_mb=32000
+    conda: "envs/freyja.yml"
+    message: "{wildcards.sample}: Running Freyja Variants."
+    shell:
+        "freyja variants"
+        "  {input.bt2_bam}"
+        "  --variants {output.bt2_variants}"
+        "  --depths {output.bt2_depths}"
+        "  --ref {input.dna}"
 
 
 rule Freyja_update:
     output: "results/Freyja/Update/update.ok"
-    log: "results/Freyja/Update/update.log"
     threads: 8
     resources:
         mem_mb=16000
@@ -41,7 +157,7 @@ def qualimap_of_valid_samples(wildcards):
         ]
     }
 
-rule coverage_summary:
+checkpoint coverage_summary:
     input: unpack(qualimap_of_valid_samples)
     output:
         long_form_report = "results/Coverage/coverageReport.tsv",

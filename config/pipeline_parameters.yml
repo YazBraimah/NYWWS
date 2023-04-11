@@ -1,4 +1,7 @@
 
+# Path to reference genome in FASTA format
+fasta_ref: "data/reference_genome/nCov_Wuhan.fasta"
+
 # Path to the folder of BAM samples
 bam_folder: "data/raw_bam"
 
@@ -18,7 +21,6 @@ minimum_coverage: 20
 # covid_refseq: 'data/reference_genome/GCF_009858895.2_ASM985889v3_genomic.gff'
 
 # Path to reference genome and indices.
-# DNA: 'reference/nCov_Wuhan.fasta'
 # INDEX: 'reference/bowtie2_ref/nCov_Wuhan'
 # 
 # # Path to a folder where final files will be written.
