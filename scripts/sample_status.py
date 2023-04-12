@@ -8,11 +8,11 @@ outfile = snakemake.output[0]
 
 def get_sample_status(row):
     if row.sample_present != "ok":
-        return "PROBLEM:id_mismatch"
+        return row.sample_present
     elif row.enough_coverage != "yes":
-        return "PROBLEM:low_coverage"
+        return "low_coverage"
     elif (row.freyja_num_variants > 1) and (row.freyja_num_unique_freqs == 1):
-        return "PROBLEM:freyja_no_freqs"
+        return "freyja_only_one_freq"
     else:
         return "ok"
 

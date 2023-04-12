@@ -11,34 +11,10 @@ FASTA_REFERENCE = Path(config["fasta_ref"])
 
 rule all:
     input:
-        "results/Summary/sample_info.tsv",
-        "results/Summary/coveragePointPlot_by_date.pdf"
+        "results/Summary/sample_info.tsv"
 
 
-rule report_summary:
-    input:
-        cov = "results/Coverage/coverageReport.tsv",
-        freyja = "results/Freyja/Aggregate/freyja_parse.csv",
-        sample_info = SAMPLE_METADATA
-    output:
-        coveragePointPlot = "results/Summary/coveragePointPlot_by_date.pdf"
-        # coverageCovClass = join(OUT_DIR, 'Summary', 'coveragePointPlot_by_covClass.pdf'),
-        # varTables = join(OUT_DIR, 'Summary', 'variant_tables', 'varTables_ok'),
-        # varFreqBarPlotsAll = join(OUT_DIR, 'Summary', 'Variant_frequency_barplots_by_county_all_samples.pdf'),
-        # varFreqBarPlotsMin20X = join(OUT_DIR, 'Summary', 'Variant_frequency_barplots_by_county_min_20X.pdf')
-    threads: 8
-    resources:
-        mem_mb=32000
-    message: "Outputting summary tables and plots."
-    # conda: 'envs/tidyverse_env.yml'
-    shell:
-        "touch {output.coveragePointPlot}"
-    #     '~/miniconda3/envs/tidyverse/bin/Rscript {params.r_script} {input.parse} {input.cov} {params.samInfo} {output.coveragePointPlot} {output.coverageCovClass} {output.varFreqBarPlotsAll} {output.varFreqBarPlotsMin20X} && '
-    #     'mv *_County_variant_table.pdf ' + join(OUT_DIR, 'Summary', 'variant_tables') +
-    #     ' && touch {output.varTables}'
-
-
-rule samples_report:
+rule sample_info_report:
     input:
         existence = "output/sample_info/file_existence.tsv",
         coverage = "results/Coverage/sample_coverage_status.tsv",
@@ -47,15 +23,11 @@ rule samples_report:
     script: "scripts/sample_status.py"
 
 
-rule freyja_quality:
-    input: "results/Freyja/Aggregate/freyja_parse.csv"
-    output: "output/sample_info/freyja_quality.tsv"
-    script: "scripts/assess_freyja_results.py"
-
-
 rule Freyja_parse:
     input: "results/Freyja/Aggregate/aggregated_results.tsv"
-    output: "results/Freyja/Aggregate/freyja_parse.csv"
+    output:
+        longform = "results/Freyja/Aggregate/freyja_parse.csv",
+        report = "output/sample_info/freyja_quality.tsv"
     threads: 2
     resources:
         mem_mb=4000
