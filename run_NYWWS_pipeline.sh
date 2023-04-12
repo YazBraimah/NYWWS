@@ -22,8 +22,11 @@ PIPELINE_CONFIG="config/pipeline_parameters.yml"
 # How many jobs to run in the pipeline at once?
 PIPELINE_JOBS=100
 
-# Upload files after running the pipeline?
-# UPLOAD_FILES=yes or no
+# Upload results after running the pipeline?
+UPLOAD_RESULTS=true
+
+# Name of results folder on Google Bucket
+RESULTS_FOLDER=$(date +"%d-%m-%Y")
 
 
 # Download BAM files
@@ -55,15 +58,9 @@ conda run -n ${CONDA_ENV} snakemake \
 
 # Upload results
 # --------------
-# 
-# mkdir /home/yahmed/GCS/su_nywws_test_bucket/SU_Results/Cumulative_Results/"$(date +"%d-%m-%Y")"
-# cp -r /home/yahmed/NYWWS/Cumulative_Results/BAM/ \
-# /home/yahmed/NYWWS/Cumulative_Results/Coverage/ \
-# /home/yahmed/NYWWS/Cumulative_Results/fastQC/ \
-# /home/yahmed/NYWWS/Cumulative_Results/Freyja/ \
-# /home/yahmed/NYWWS/Cumulative_Results/iVar/ \
-# /home/yahmed/NYWWS/Cumulative_Results/MultiQC/ \
-# /home/yahmed/NYWWS/Cumulative_Results/Pangolin/ \
-# /home/yahmed/NYWWS/Cumulative_Results/Sequences/ \
-# /home/yahmed/NYWWS/Cumulative_Results/Summary/ \
-# ~/GCS/su_nywws_test_bucket/SU_Results/Cumulative_Results/"$(date +"%d-%m-%Y")"
+
+if [ ${UPLOAD_RESULTS} = true ] ; then
+    SOURCE=results
+    DEST=${RCLONE_BUCKET_NAME}/SU_Results/Cumulative_Results/${RESULTS_FOLDER}
+    rclone --progress --gcs-bucket-policy-only copy ${SOURCE} ${DEST}
+fi
