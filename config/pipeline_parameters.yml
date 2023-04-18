@@ -1,6 +1,6 @@
 
 # Path to reference genome in FASTA format
-fasta_ref: "data/reference_genome/nCov_Wuhan.fasta"
+fasta_ref: "data/reference_genome/2019-nCoV.fasta"
 
 # Path to the folder of BAM samples
 bam_folder: "data/raw_bam"

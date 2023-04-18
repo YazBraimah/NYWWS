@@ -11,7 +11,49 @@ FASTA_REFERENCE = Path(config["fasta_ref"])
 
 rule all:
     input:
-        "results/Summary/sample_info.tsv"
+        "results/Summary/sample_info.tsv",
+        "results/Summary/SRA_table.csv",
+        "results/Summary/coveragePointPlot_by_date.pdf",
+
+
+rule summary_plots:
+    input:
+        cov = "results/Coverage/coverageReport.tsv",
+        parse = "results/Freyja/Aggregate/freyja_parse.csv",
+        samInfo = "results/Summary/sample_info.tsv"
+    output:
+        coveragePointPlot = "results/Summary/coveragePointPlot_by_date.pdf",
+        varFreqBarPlotsMin20X = "results/Summary/Variant_frequency_barplots_by_county_min_20X.pdf",
+        compResultsTable = "results/Summary/comprehensive_results_table.txt"
+    params:
+        samLoc = "data/sample_metadata/sampling_locations.csv",
+        linInfo = "data/sample_metadata/lineage_info.csv",
+        r_script = "scripts/results_summary_outputs.R"
+    threads: 8
+    resources:
+        mem_mb=32000
+    message: "Outputting summary tables and plots."
+    conda: "envs/tidyverse.yml"
+    shell: "Rscript {params.r_script} {input.parse} {input.cov} {params.samLoc} {input.samInfo} {params.linInfo} {output.coveragePointPlot} {output.varFreqBarPlotsMin20X} {output.compResultsTable}"
+
+
+def processed_bam_links(wildcards):
+    existence_path = checkpoints.check_file_existence.get(**wildcards).output[0]
+    existence_df = pd.read_table(existence_path)
+    present_samples = existence_df.sample_id[existence_df.sample_present == "ok"]
+    return expand("output/BAM_processed/{sample}.bam", sample=present_samples)
+
+rule SRA_table:
+    input: processed_bam_links
+    output: "results/Summary/SRA_table.csv"
+    script: "scripts/make_sra_table.py"
+
+
+rule symlink_processed_bam:
+    input: "results/FastQs/{sample}/{sample}.bam"
+    output: "output/BAM_processed/{sample}.bam"
+    message: "{wildcards.sample}: Creating symbolic link to processed BAM file."
+    shell: "ln -s $(pwd)/{input} {output}"
 
 
 rule sample_info_report:
@@ -79,7 +121,7 @@ rule Freyja_demix:
         "  {input.bt2_variants}"
         "  {input.bt2_depths}"
         "  --output {output}"
-        # "  --confirmedonly"
+        "  --confirmedonly"
 
 
 rule Freyja_variants:
