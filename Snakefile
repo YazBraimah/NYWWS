@@ -12,8 +12,9 @@ FASTA_REFERENCE = Path(config["fasta_ref"])
 rule all:
     input:
         "results/Summary/sample_info.tsv",
+        "results/Summary/comprehensive_results_table.txt",
         "results/Summary/SRA_table.csv",
-        "results/Summary/coveragePointPlot_by_date.pdf",
+        "results/Freyja/Aggregate/freyja_parse_barcode.csv"
 
 
 rule summary_plots:
@@ -63,6 +64,17 @@ rule sample_info_report:
         freyja = "output/sample_info/freyja_quality.tsv"
     output: "results/Summary/sample_info.tsv"
     script: "scripts/sample_status.py"
+
+
+rule Freyja_parse_barcode:
+    input: "results/Freyja/Aggregate/freyja_parse.csv"
+    output:
+        barcode = "results/Freyja/Aggregate/barcode.txt",
+        csv = "results/Freyja/Aggregate/freyja_parse_barcode.csv"
+    conda: "envs/freyja.yml"
+    shell:
+        "echo \"#freyja_barcode_version\" $(freyja demix --version | sed '2q;d') > {output.barcode} ; "
+        "cat {output.barcode} {input} > {output.csv}"
 
 
 rule Freyja_parse:

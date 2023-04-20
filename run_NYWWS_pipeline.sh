@@ -76,12 +76,14 @@ if [ ${UPLOAD_RESULTS} = true ] ; then
     # Upload to GitHub
     cd ../NYS-WWS-Data
     git pull
-    DEST=SU_results/$(date +"%Y%m%d")
+    DEST=genetic-sequencing-history/$(date +"%Y%m%d")
     mkdir -p ${DEST}
     cp ../NYWWS/results/Summary/sample_info.tsv ${DEST}
-    cp ../NYWWS/results/Freyja/Aggregate/freyja_parse.csv ${DEST}
-    git add ${DEST}
-    git commit -m "SU results for $(date +"%d %B %Y")"
+    cp ../NYWWS/results/Freyja/Aggregate/freyja_parse_barcode.csv ${DEST}
+    cp ../NYWWS/results/Summary/comprehensive_results_table.txt ${DEST}
+    cp ../NYWWS/results/Freyja/Aggregate/freyja_parse_barcode.csv ./nys-wws-sars2-genetic-sequencing.csv
+    git add .
+    git commit -m "Genetic sequencing update for $(date +"%d %B %Y")"
     git push
     cd ../NYWWS
 
