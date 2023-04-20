@@ -100,14 +100,11 @@ rule Freyja_aggregate:
         "freyja aggregate"
         "  --output {output.bt2_agg}"
         "  results/Freyja/Demix/Results/"
-        " ; "
-        "freyja plot"
-        "  {output.bt2_agg}"
-        "  --output {output.bt2_png}"
 
 
 rule Freyja_demix:
     input:
+        updated = "results/Freyja/Update/update.ok",
         bt2_variants = "results/Freyja/Variants/Results/{sample}.freyja.variants.tsv",
         bt2_depths = "results/Freyja/Variants/Results/{sample}.freyja.depths.tsv"
     output: "results/Freyja/Demix/Results/{sample}_freyja.demix"
@@ -126,7 +123,6 @@ rule Freyja_demix:
 
 rule Freyja_variants:
     input:
-        updated = "results/Freyja/Update/update.ok",
         bt2_bam = "results/FastQs/{sample}/{sample}.bam",
         dna = FASTA_REFERENCE
     output:
@@ -147,9 +143,6 @@ rule Freyja_variants:
 
 rule Freyja_update:
     output: "results/Freyja/Update/update.ok"
-    threads: 8
-    resources:
-        mem_mb=16000
     conda: "envs/freyja.yml"
     message: "Updating Freyja database."
     shell:

@@ -63,6 +63,7 @@ cd ../NYWWS
 
 # Run the pipeline with the conda environment
 conda run -n ${CONDA_ENV} snakemake \
+      --forcerun Freyja_update \
       -j ${PIPELINE_JOBS} \
       --use-conda \
       --configfile ${PIPELINE_CONFIG}
