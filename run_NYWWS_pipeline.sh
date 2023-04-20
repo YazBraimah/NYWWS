@@ -6,7 +6,8 @@
 
 # Name of the rclone remotes
 RCLONE_BUCKET_NAME="gcs:su_nywws_test_bucket"
-# Hardcoded below because I can't figure out how to deal with spaces in the dir name.
+# The name of the OneDrive remote in rclone is hardcoded below,
+# because I can't figure out how to deal with spaces in the dir name.
 #RCLONE_ONEDRIVE_NAME="onedrive:CDC wastewater data"
 
 # This file lists the directories in the GCS to download BAM files from
@@ -87,9 +88,4 @@ if [ ${UPLOAD_RESULTS} = true ] ; then
     SOURCE=output/BAM_processed
     rclone --progress --copy-links sync ${SOURCE} onedrive:'CDC wastewater data'/BAM-Files
     rclone --progress copyto results/Summary/SRA_table.csv onedrive:'CDC wastewater data'/BAM-Files/SRA_table.csv
-
-    # Upload to GCS Bucket
-    SOURCE=results
-    DEST=${RCLONE_BUCKET_NAME}/SU_Results/Cumulative_Results/${RESULTS_FOLDER}
-    rclone --progress --gcs-bucket-policy-only copy ${SOURCE} ${DEST}
 fi
