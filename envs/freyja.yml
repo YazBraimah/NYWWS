@@ -4,4 +4,4 @@ channels:
   - conda-forge
 
 dependencies:
-  - freyja
+  - freyja>=1.4
