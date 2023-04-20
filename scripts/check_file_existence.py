@@ -12,12 +12,15 @@ infolder = Path(snakemake.input["bam_folder"])
 sample_metadata_path = snakemake.input["metadata"]
 outfile = snakemake.output[0]
 
+bam_paths = list(infolder.glob("**/*.ptrim.bam"))
+sample_ids = [bam.stem.split(".")[0] for bam in bam_paths]
+
 sample_metadata = (
     pd.read_csv(sample_metadata_path)
     .assign(sample_collect_date = lambda df: pd.to_datetime(df.sample_collect_date))
 )
 
-downloaded_sample_ids = set([bam.stem for bam in infolder.glob("*.bam")])
+downloaded_sample_ids = set(sample_ids)
 post2023_sampleids = set(sample_metadata.sample_id[sample_metadata.sample_collect_date >= pd.Timestamp(2022, 12, 28)])
 
 status = {
@@ -31,5 +34,27 @@ status_df = pd.concat([
     for status_str, sample_ids in status.items()
 ])
 status_df.index.name = "sample_id"
+
+# Get sequencing sites from the folders
+
+SEQSITE_IDS = {
+    "buffalo": "suny_buffalo",
+    "wadsworth": "wadsworth",
+    "suny_upstate": "suny_upstate",
+    "rochester": "u_of_rochester",
+    "nymc": "nymc",
+}
+
+def get_seqsite_id(folder):
+    return SEQSITE_IDS[folder]
+
+seq_sites = pd.DataFrame({
+    "sample_id": sample_ids,
+    "seq_lab_id": [get_seqsite_id(bam.parts[3]) for bam in bam_paths]
+}).set_index("sample_id")
+
+status_df = pd.concat([status_df, seq_sites], axis="columns")
+
+# Save results
 
 status_df.to_csv(outfile, sep="\t")

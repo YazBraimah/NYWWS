@@ -246,7 +246,7 @@ rule filter_covid_reads:
 
 checkpoint check_file_existence:
     input:
-        bam_folder = "output/samples",
+        bam_folder = BAM_FOLDER,
         metadata = SAMPLE_METADATA
     output: "output/sample_info/file_existence.tsv"
     message: "Matching downloaded BAMs with known sample IDs."
