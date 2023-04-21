@@ -26,7 +26,7 @@ PIPELINE_CONFIG="config/pipeline_parameters.yml"
 PIPELINE_JOBS=100
 
 # Upload results after running the pipeline?
-UPLOAD_RESULTS=true
+UPLOAD_RESULTS=false
 
 # Name of results folder on Google Bucket
 RESULTS_FOLDER=$(date +"%d-%m-%Y")
@@ -81,7 +81,7 @@ if [ ${UPLOAD_RESULTS} = true ] ; then
     cp ../NYWWS/results/Summary/sample_info.tsv ${DEST}
     cp ../NYWWS/results/Freyja/Aggregate/freyja_parse_barcode.csv ${DEST}
     cp ../NYWWS/results/Summary/comprehensive_results_table.txt ${DEST}
-    cp ../NYWWS/results/Freyja/Aggregate/freyja_parse_barcode.csv ./nys-wws-sars2-genetic-sequencing.csv
+    cp ../NYWWS/results/Freyja/Aggregate/freyja_parse.csv ./nys-wws-sars2-genetic-sequencing.csv
     git add .
     git commit -m "Genetic sequencing update for $(date +"%d %B %Y")"
     git push
