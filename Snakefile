@@ -85,7 +85,7 @@ rule Freyja_parse:
     threads: 2
     resources:
         mem_mb=4000
-    message: "Parsing Freyija output."
+    message: "Parsing Freyja output."
     script: "scripts/parse_freyja_demix.py"
 
 
@@ -102,12 +102,11 @@ rule Freyja_aggregate:
     input: freyja_demix_samples
     output:
         bt2_agg = "results/Freyja/Aggregate/aggregated_results.tsv",
-        bt2_png = "results/Freyja/Aggregate/freyja_stacked_barplots.png"
     threads: 8
     resources:
         mem_mb=32000
     conda: "envs/freyja.yml"
-    message: "Running Freyja Aggregate and outputting barplots."
+    message: "Running Freyja Aggregate."
     shell:
         "freyja aggregate"
         "  --output {output.bt2_agg}"
@@ -222,9 +221,15 @@ rule sam_to_fastq:
     script: "scripts/sam2fastq.py"
 
 
+def find_raw_bam(wildcards):
+    sample = wildcards.sample
+    search = list(BAM_FOLDER.glob(f"**/{sample}.ptrim.bam"))
+    assert len(search) == 1
+    return str(search[0])
+
 rule filter_covid_reads:
     input:
-        bam = "output/samples/{sample}.bam",
+        bam = find_raw_bam,
         header = BAM_HEADER
     output:
         bam = "results/FastQs/{sample}/{sample}.bam",
@@ -236,7 +241,7 @@ rule filter_covid_reads:
     message: "Filtering {wildcards.sample} to only COVID reads."
     shell:
         "samtools index {input.bam} ; "
-        "samtools view -b --threads {threads} {input} 2019-nCoV "
+        "samtools view -b --threads {threads} {input.bam} 2019-nCoV "
         "| samtools reheader {input.header} - "
         "| samtools sort -o {output.bam} -@ {threads} ; " 
         "samtools view {output.bam} -o {output.sam} ; "
@@ -251,13 +256,3 @@ checkpoint check_file_existence:
     output: "output/sample_info/file_existence.tsv"
     message: "Matching downloaded BAMs with known sample IDs."
     script: "scripts/check_file_existence.py"
-
-
-def get_raw_bams(wildcards):
-    return list(BAM_FOLDER.glob("**/*.ptrim.bam"))
-
-rule symlink_raw_bams:
-    input: get_raw_bams
-    output: directory("output/samples")
-    message: "Creating symbolic links to raw BAM files."
-    script: "scripts/symlink_raw_bams.py"

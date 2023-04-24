@@ -50,7 +50,7 @@ def get_seqsite_id(folder):
 
 seq_sites = pd.DataFrame({
     "sample_id": sample_ids,
-    "seq_lab_id": [get_seqsite_id(bam.parts[3]) for bam in bam_paths]
+    "seq_lab_id": [get_seqsite_id(bam.parts[2]) for bam in bam_paths]
 }).set_index("sample_id")
 
 status_df = pd.concat([status_df, seq_sites], axis="columns")

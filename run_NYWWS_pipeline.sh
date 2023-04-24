@@ -26,7 +26,7 @@ PIPELINE_CONFIG="config/pipeline_parameters.yml"
 PIPELINE_JOBS=100
 
 # Upload results after running the pipeline?
-UPLOAD_RESULTS=false
+UPLOAD_RESULTS=true
 
 # Name of results folder on Google Bucket
 RESULTS_FOLDER=$(date +"%d-%m-%Y")
@@ -54,19 +54,25 @@ done
 
 cd ../NYS-WWS-Data
 git pull
-cp nys-wws-sars2-concentration.csv ../NYWWS/data/sample_metadata
+cp sars2-concentration.csv ../NYWWS/data/sample_metadata/nys-wws-sars2-concentration.csv
 cd ../NYWWS
 
 
 # Run the pipeline
 # ----------------
+# Unclear to me why it needs to run twice. It updates some files the first
+# time, and then re-runs all the Freyja results the second time.
 
-# Run the pipeline with the conda environment
 conda run -n ${CONDA_ENV} snakemake \
-      --forcerun Freyja_update \
       -j ${PIPELINE_JOBS} \
       --use-conda \
       --configfile ${PIPELINE_CONFIG}
+
+conda run -n ${CONDA_ENV} snakemake \
+      -j ${PIPELINE_JOBS} \
+      --use-conda \
+      --configfile ${PIPELINE_CONFIG} \
+      --forcerun Freyja_update
 
 
 # Upload results
@@ -81,7 +87,7 @@ if [ ${UPLOAD_RESULTS} = true ] ; then
     cp ../NYWWS/results/Summary/sample_info.tsv ${DEST}
     cp ../NYWWS/results/Freyja/Aggregate/freyja_parse_barcode.csv ${DEST}
     cp ../NYWWS/results/Summary/comprehensive_results_table.txt ${DEST}
-    cp ../NYWWS/results/Freyja/Aggregate/freyja_parse.csv ./nys-wws-sars2-genetic-sequencing.csv
+    cp ../NYWWS/results/Freyja/Aggregate/freyja_parse.csv ./sars2-genetic-sequencing.csv
     git add .
     git commit -m "Genetic sequencing update for $(date +"%d %B %Y")"
     git push
