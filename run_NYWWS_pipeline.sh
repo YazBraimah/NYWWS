@@ -35,14 +35,12 @@ RESULTS_FOLDER=$(date +"%d-%m-%Y")
 # Download BAM files
 # ------------------
 
-# Change "rclone copy" to "rclone sync" to also delete local BAMs
-# that are deleted in the bucket.
 cat ${GCS_DIRS_FILE} | while read -r DIR
 do
     SOURCE="${RCLONE_BUCKET_NAME}/${DIR}"
     DEST="${BAM_FOLDER}/${DIR}"
     mkdir -p ${DEST}
-    rclone copy \
+    rclone sync \
 	   --progress \
 	   ${SOURCE} ${DEST} \
 	   --include "/202*.ptrim.bam"
