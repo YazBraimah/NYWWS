@@ -53,6 +53,7 @@ done
 cd ../NYS-WWS-Data
 git pull
 cp sars2-concentration.csv ../NYWWS/data/sample_metadata/nys-wws-sars2-concentration.csv
+cp metadata/lineage-map.csv ../NYWWS/data/sample_metadata/lineage_info.csv
 cd ../NYWWS
 
 
