@@ -14,7 +14,20 @@ rule all:
         "results/Summary/sample_info.tsv",
         "results/Summary/comprehensive_results_table.txt",
         "results/Summary/SRA_table.csv",
-        "results/Freyja/Aggregate/freyja_parse_barcode.csv"
+        "results/Freyja/Aggregate/freyja_parse_barcode.csv",
+        "results/Summary/var.data_summary.rds"
+
+
+rule prep_freyja_results:
+    input:
+        sewershed = "data/sample_metadata/sewershed_metadata.csv",
+        variants_of_concern = "data/sample_metadata/variants_of_concern.csv",
+        lineage_map = "data/sample_metadata/lineage_info.csv",
+        freyja = "results/Freyja/Aggregate/freyja_parse.csv"
+    output:
+        rds_data = "results/Summary/var.data_summary.rds"
+    conda: "envs/tidyverse.yml"
+    script: "scripts/genetic-sequencing-data-prep.R"
 
 
 rule summary_plots:

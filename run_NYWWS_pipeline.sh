@@ -54,6 +54,8 @@ cd ../NYS-WWS-Data
 git pull
 cp sars2-concentration.csv ../NYWWS/data/sample_metadata/nys-wws-sars2-concentration.csv
 cp metadata/lineage-map.csv ../NYWWS/data/sample_metadata/lineage_info.csv
+cp metadata/variants-of-concern.csv ../NYWWS/data/sample_metadata/variants_of_concern.csv
+cp nys-wws-sewersheds.csv ../NYWWS/data/sample_metadata/sewershed_metadata.csv
 cd ../NYWWS
 
 
@@ -96,4 +98,7 @@ if [ ${UPLOAD_RESULTS} = true ] ; then
     SOURCE=output/BAM_processed
     rclone --progress --copy-links sync ${SOURCE} onedrive:'CDC wastewater data'/BAM-Files
     rclone --progress copyto results/Summary/SRA_table.csv onedrive:'CDC wastewater data'/BAM-Files/SRA_table.csv
+
+    # Upload to Amazon S3
+    rclone --progress copyto results/Summary/var.data_summary.rds s3:nystatewws/var.data_summary.rds
 fi
