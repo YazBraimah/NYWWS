@@ -53,6 +53,9 @@ seq_sites = pd.DataFrame({
     "seq_lab_id": [get_seqsite_id(bam.parts[2]) for bam in bam_paths]
 }).set_index("sample_id")
 
+# Temporary fix to remove duplicate uploads
+seq_sites = seq_sites.loc[~seq_sites.index.duplicated()]
+
 status_df = pd.concat([status_df, seq_sites], axis="columns")
 
 # Save results
