@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+set -e
 
 # Parameters
 # ----------
@@ -23,7 +24,7 @@ CONDA_ENV="nywws"
 PIPELINE_CONFIG="config/pipeline_parameters.yml"
 
 # How many jobs to run in the pipeline at once?
-PIPELINE_JOBS=100
+PIPELINE_JOBS=104
 
 # Upload results after running the pipeline?
 UPLOAD_RESULTS=true

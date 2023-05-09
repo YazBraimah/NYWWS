@@ -70,11 +70,21 @@ rule symlink_processed_bam:
     shell: "ln -s $(pwd)/{input} {output}"
 
 
+def freyja_demix_samples(wildcards):
+    coverage_path = checkpoints.coverage_summary.get(**wildcards).output["cov_per_sample"]
+    coverage_df = pd.read_table(coverage_path)
+    samples_with_coverage = coverage_df.sample_id[coverage_df.enough_coverage == "yes"]
+    return expand(
+        "results/Freyja/Demix/Results/{sample}.freyja_result",
+        sample=samples_with_coverage
+    )
+
 rule sample_info_report:
     input:
         existence = "output/sample_info/file_existence.tsv",
         coverage = "results/Coverage/sample_coverage_status.tsv",
-        freyja = "output/sample_info/freyja_quality.tsv"
+        freyja = "output/sample_info/freyja_quality.tsv",
+        freyja_status = freyja_demix_samples
     output: "results/Summary/sample_info.tsv"
     script: "scripts/sample_status.py"
 
@@ -102,15 +112,6 @@ rule Freyja_parse:
     script: "scripts/parse_freyja_demix.py"
 
 
-def freyja_demix_samples(wildcards):
-    coverage_path = checkpoints.coverage_summary.get(**wildcards).output["cov_per_sample"]
-    coverage_df = pd.read_table(coverage_path)
-    samples_with_coverage = coverage_df.sample_id[coverage_df.enough_coverage == "yes"]
-    return expand(
-        "results/Freyja/Demix/Results/{sample}_freyja.demix",
-        sample=samples_with_coverage
-    )
-
 rule Freyja_aggregate:
     input: freyja_demix_samples
     output:
@@ -131,18 +132,29 @@ rule Freyja_demix:
         updated = "results/Freyja/Update/update.ok",
         bt2_variants = "results/Freyja/Variants/Results/{sample}.freyja.variants.tsv",
         bt2_depths = "results/Freyja/Variants/Results/{sample}.freyja.depths.tsv"
-    output: "results/Freyja/Demix/Results/{sample}_freyja.demix"
+    output: "results/Freyja/Demix/Results/{sample}.freyja_result"
+    params:
+        demix_file = "results/Freyja/Demix/Results/{wildcards.sample}_freyja.demix"
     threads: 8
     resources:
         mem_mb=32000
+    log: "results/Freyja/Demix/Results/{sample}.log"
     conda: "envs/freyja.yml"
     message: "{wildcards.sample}: Running Freyja Demix."
     shell:
+        "set +e ; "
         "freyja demix"
         "  {input.bt2_variants}"
         "  {input.bt2_depths}"
-        "  --output {output}"
+        "  --output {params.demix_file}"
         "  --confirmedonly"
+        "&> {log} ; "
+        "RESULT=$? ; "
+        "if [ $RESULT -eq 0 ]; then "
+        "  echo ok > {output} ; "
+        "else "
+        "  echo error > {output} ;"
+        "fi"
 
 
 rule Freyja_variants:
@@ -203,6 +215,9 @@ rule qualimap:
     output:
         cov_across_ref = "results/BAM/{sample}/{sample}.qualimap/raw_data_qualimapReport/coverage_across_reference.txt",
         genome_fraction_cov = "results/BAM/{sample}/{sample}.qualimap/raw_data_qualimapReport/genome_fraction_coverage.txt"
+    params:
+        empty_across = "data/qualimap_empty_results/coverage_across_reference.txt",
+        empty_fraction = "data/qualimap_empty_results/genome_fraction_coverage.txt",
     log: "results/BAM/{sample}/qualimap.log"
     threads: 8
     resources:
@@ -210,12 +225,20 @@ rule qualimap:
     conda: "envs/bioinfo.yml"
     message: "{wildcards.sample}: Evaluating BAM mapping quality with QualiMap."
     shell:
+        "set +e ; "
         "qualimap bamqc "
         "  -bam {input.bam} "
         "  --java-mem-size=32G "
         "  -nt {threads} "
         "  -outdir results/BAM/{wildcards.sample}/{wildcards.sample}.qualimap"
-        "  > {log} 2>&1"
+        "  > {log} 2>&1 ; "
+        # If qualiMap failed, copy its log to the output files.
+        # It can fail because the BAM file is empty.
+        "RESULT=$? ; "
+        "if [ $RESULT -ne 0 ]; then "
+        "  cp {params.empty_across} {output.cov_across_ref} ; "
+        "  cp {params.empty_fraction} {output.genome_fraction_cov} ; "
+        "fi"
 
 
 rule fastqc:

@@ -30,7 +30,11 @@ across_ref_summary.to_csv(outfile_across_ref_summary, sep="\t", index=False)
 records = []
 for f in genome_fraction_cov:
     sample_id = Path(f).parts[-4]
-    fraction = pd.read_table(f).set_index("#Coverage (X)").loc[minimum_cov].Coverage/100
+    fraction_covs = pd.read_table(f).set_index("#Coverage (X)")
+    try:
+        fraction = fraction_covs.loc[minimum_cov].Coverage/100
+    except:
+        fraction = 0
     if fraction >= minimum_fraction:
         enough_cov = "yes"
     else:

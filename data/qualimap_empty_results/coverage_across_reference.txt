@@ -1,0 +1,2 @@
+#Position (bp)	Coverage	Std
+0	0	0
