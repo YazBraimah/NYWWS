@@ -27,7 +27,7 @@ def qualimap_of_bams_with_valid_ids(wildcards):
 rule coverage_summary:
     input: unpack(qualimap_of_bams_with_valid_ids)
     output:
-        long_form_report = "output/qc/coverage/coverageReport.tsv",
+        long_form_report = "output/qc/coverage/coverage_report.tsv",
         cov_per_sample = "output/qc/coverage/sample_coverage_status.tsv"
     message: "Generating coverage report of samples."
     script: "scripts/coverage_summary.py"

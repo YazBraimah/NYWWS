@@ -79,6 +79,13 @@ snakemake \
     --snakefile 02_quality-control.smk \
     -c20 \
     --use-conda \
+    --configfile ${PIPELINE_CONFIG}
+
+snakemake \
+    --snakefile 03_freyja.smk \
+    --forcerun freyja_update \
+    -c20 \
+    --use-conda \
     --dry-run \
     --configfile ${PIPELINE_CONFIG}
 

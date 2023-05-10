@@ -18,7 +18,7 @@ minimum_fraction = snakemake.config["minimum_fraction"]
 
 across_ref_summary = (
     pd.concat({
-        Path(f).parts[-4]: pd.read_table(f)
+        Path(f).parts[-3]: pd.read_table(f)
         for f in cov_across_ref
     })
     .reset_index(level=0, names="sample_id")
@@ -29,7 +29,7 @@ across_ref_summary.to_csv(outfile_across_ref_summary, sep="\t", index=False)
 
 records = []
 for f in genome_fraction_cov:
-    sample_id = Path(f).parts[-4]
+    sample_id = Path(f).parts[-3]
     fraction_covs = pd.read_table(f).set_index("#Coverage (X)")
     try:
         fraction = fraction_covs.loc[minimum_cov].Coverage/100
