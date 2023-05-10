@@ -179,5 +179,13 @@ var.data_summary = var.data_sewershed |>
   left_join(var.data_region, by = c('year_week', 'region', 'lineage')) |> 
   left_join(var.data_wwtp, by = c('year_week', 'county', 'region', 'epaid', 'lineage'))
 
+# add hex codes
+
+# remove duplicate lineages
+lineage.map_brief <- lineage.map %>% select(lineage, hex) %>% distinct()
+
+# merge lineage map to get hex codes
+var.data_summary <- left_join(var.data_summary, lineage.map_brief, by = c("lineage"))
+
 # save to RDS format
 saveRDS(var.data_summary, file = output_file)

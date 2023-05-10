@@ -69,11 +69,15 @@ cd ../NYWWS
 source /home/iavascon/miniconda3/bin/activate
 conda activate nywws
 
+echo "\nBAM check\n=========\n"
+
 snakemake \
     --snakefile 01_bam-check.smk \
     -c1 \
     --use-conda \
     --configfile ${PIPELINE_CONFIG}
+
+echo "\nQuality control\n===============\n"
 
 snakemake \
     --snakefile 02_quality-control.smk \
@@ -81,38 +85,48 @@ snakemake \
     --use-conda \
     --configfile ${PIPELINE_CONFIG}
 
+echo "\nFreyja\n======\n"
+
 snakemake \
     --snakefile 03_freyja.smk \
     --forcerun freyja_update \
     -c20 \
     --use-conda \
-    --dry-run \
     --configfile ${PIPELINE_CONFIG}
+
+echo "\nAggregate results\n=================\n"
+
+# snakemake \
+#     --snakefile 04_aggregate.smk \
+#     -c20 \
+#     --use-conda \
+#     --configfile ${PIPELINE_CONFIG}
 
 
 # Upload results
 # --------------
 
 if [ ${UPLOAD_RESULTS} = true ] ; then
+
     # Upload to GitHub
     cd ../NYS-WWS-Data
     git pull
     DEST=genetic-sequencing-history/$(date +"%Y%m%d")
     mkdir -p ${DEST}
-    cp ../NYWWS/results/Summary/sample_info.tsv ${DEST}
-    cp ../NYWWS/results/Freyja/Aggregate/freyja_parse_barcode.csv ${DEST}
-    cp ../NYWWS/results/Summary/comprehensive_results_table.txt ${DEST}
-    cp ../NYWWS/results/Freyja/Aggregate/freyja_parse.csv ./sars2-genetic-sequencing.csv
+    cp ../NYWWS/output/results/sample_info.tsv ${DEST}
+    cp ../NYWWS/output/results/freyja_parse_barcode.csv ${DEST}
+    cp ../NYWWS/output/results/comprehensive_results_table.txt ${DEST}
+    cp ../NYWWS/output/results/freyja_parse.csv ./sars2-genetic-sequencing.csv
     git add .
     git commit -m "Genetic sequencing update for $(date +"%d %B %Y")"
     git push
     cd ../NYWWS
 
     # Upload to OneDrive
-    SOURCE=output/BAM_processed
+    SOURCE=output/covid-filtered-BAMs
     rclone --progress --copy-links sync ${SOURCE} onedrive:'CDC wastewater data'/BAM-Files
-    rclone --progress copyto results/Summary/SRA_table.csv onedrive:'CDC wastewater data'/BAM-Files/SRA_table.csv
+    rclone --progress copyto output/results/SRA_table.csv onedrive:'CDC wastewater data'/BAM-Files/SRA_table.csv
 
     # Upload to Amazon S3
-    rclone --progress copyto results/Summary/var.data_summary.rds s3:nystatewws/var.data_summary.rds
+    rclone --progress copyto output/results/var.data_summary.rds s3:nystatewws/var.data_summary.rds
 fi

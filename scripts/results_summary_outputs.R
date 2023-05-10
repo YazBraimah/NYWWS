@@ -1,18 +1,14 @@
-#!/usr/bin/env Rscript
-args = commandArgs(trailingOnly=TRUE)
 
-freyja_parse <- args[1]
-coverageReport <- args[2]
-sampling_locations <- args[3]
-sample_Info <- args[4]
-Lineages_Info <- args[5]
-coveragePointPlotDate <- args[6]
-varFreqBarPlotsMin20X <- args[7]
-comprehensive_results_table <- args[8]
-
-
-### Load packages:
 library("tidyverse")
+
+freyja_parse <- snakemake@input[["parse"]]
+coverageReport <- snakemake@input[["cov"]]
+sampling_locations <- snakemake@input[["samLoc"]]
+sample_Info <- snakemake@input[["samInfo"]]
+Lineages_Info <- snakemake@input[["linInfo"]]
+coveragePointPlotDate <- snakemake@output[["coveragePointPlot"]]
+varFreqBarPlotsMin20X <- snakemake@output[["varFreqBarPlotsMin20X"]]
+comprehensive_results_table <- snakemake@output[["compResultsTable"]]
 
 
 ### Load data files:

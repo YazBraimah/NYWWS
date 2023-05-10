@@ -14,7 +14,7 @@ report_file = snakemake.output["report"]
 freyja_raw = (
     pd.read_table(freyja_output)
     .rename({"Unnamed: 0": "sample_id"}, axis="columns")
-    .assign(sample_id=lambda df: df.sample_id.str.strip(".freyja.variants.tsv"))
+    .assign(sample_id=lambda df: df.sample_id.str.strip("_variants.tsv"))
     [["sample_id", "lineages", "abundances"]]
 )
 records = []
