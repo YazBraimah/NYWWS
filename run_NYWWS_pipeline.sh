@@ -27,7 +27,7 @@ PIPELINE_CONFIG="config/pipeline_parameters.yml"
 PIPELINE_JOBS=104
 
 # Upload results after running the pipeline?
-UPLOAD_RESULTS=true
+UPLOAD_RESULTS=false
 
 # Name of results folder on Google Bucket
 RESULTS_FOLDER=$(date +"%d-%m-%Y")
@@ -65,16 +65,22 @@ cd ../NYWWS
 # Unclear to me why it needs to run twice. It updates some files the first
 # time, and then re-runs all the Freyja results the second time.
 
-conda run -n ${CONDA_ENV} snakemake \
-      -j ${PIPELINE_JOBS} \
-      --use-conda \
-      --configfile ${PIPELINE_CONFIG}
+# Allows activating conda env
+source /home/iavascon/miniconda3/bin/activate
+conda activate nywws
 
-conda run -n ${CONDA_ENV} snakemake \
-      -j ${PIPELINE_JOBS} \
-      --use-conda \
-      --configfile ${PIPELINE_CONFIG} \
-      --forcerun Freyja_update
+snakemake \
+    --snakefile 01_bam-check.smk \
+    -c1 \
+    --use-conda \
+    --configfile ${PIPELINE_CONFIG}
+
+snakemake \
+    --snakefile 02_quality-control.smk \
+    -c20 \
+    --use-conda \
+    --dry-run \
+    --configfile ${PIPELINE_CONFIG}
 
 
 # Upload results
