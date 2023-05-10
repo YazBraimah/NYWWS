@@ -2,6 +2,7 @@
 import pandas as pd
 
 SAMPLE_EXISTENCE = Path("output/sample_info/file_existence.tsv")
+FREYJA_DEMIX_REPORT = Path("output/freyja/demix_report.tsv")
 
 
 rule all:
@@ -97,12 +98,21 @@ rule freyja_parse:
     script: "scripts/parse_freyja_demix.py"
 
 
+def freyja_demixed_samples(wildcards):
+    valid_samples = (
+        pd.read_table(FREYJA_DEMIX_REPORT)
+        .query("freyja_demix_status != 'solver_error'")
+        .sample_id
+    )
+    return expand(
+        "output/freyja/demix/{sample}.demix",
+        sample=valid_samples
+    )
+
+
 rule freyja_aggregate:
     input: freyja_demixed_samples
     output: "output/freyja/aggregated_results.tsv",
-    threads: 8
-    resources:
-        mem_mb=32000
     conda: "envs/freyja.yml"
     message: "Running Freyja aggregate."
     shell:

@@ -1,4 +1,5 @@
 
+from pathlib import Path
 import pandas as pd
 
 freyja_logs = snakemake.input["logs"]
@@ -7,7 +8,7 @@ outfile = snakemake.output[0]
 records = []
 
 for log in freyja_logs:
-    sample_id = log.stem
+    sample_id = Path(log).stem
     status = None
     with open(log) as f:
         for line in f:

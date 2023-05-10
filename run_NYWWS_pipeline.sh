@@ -5,6 +5,9 @@ set -e
 # Parameters
 # ----------
 
+# Upload results after running the pipeline?
+UPLOAD_RESULTS=true
+
 # Name of the rclone remotes
 RCLONE_BUCKET_NAME="gcs:su_nywws_test_bucket"
 # The name of the OneDrive remote in rclone is hardcoded below,
@@ -22,16 +25,6 @@ CONDA_ENV="nywws"
 
 # File with the pipeline parameters
 PIPELINE_CONFIG="config/pipeline_parameters.yml"
-
-# How many jobs to run in the pipeline at once?
-PIPELINE_JOBS=104
-
-# Upload results after running the pipeline?
-UPLOAD_RESULTS=false
-
-# Name of results folder on Google Bucket
-RESULTS_FOLDER=$(date +"%d-%m-%Y")
-
 
 # Download BAM files
 # ------------------
@@ -69,7 +62,9 @@ cd ../NYWWS
 source /home/iavascon/miniconda3/bin/activate
 conda activate nywws
 
-echo "\nBAM check\n=========\n"
+echo ""
+echo "BAM check"
+echo ""
 
 snakemake \
     --snakefile 01_bam-check.smk \
@@ -77,7 +72,9 @@ snakemake \
     --use-conda \
     --configfile ${PIPELINE_CONFIG}
 
-echo "\nQuality control\n===============\n"
+echo ""
+echo "Quality control"
+echo ""
 
 snakemake \
     --snakefile 02_quality-control.smk \
@@ -85,7 +82,9 @@ snakemake \
     --use-conda \
     --configfile ${PIPELINE_CONFIG}
 
-echo "\nFreyja\n======\n"
+echo ""
+echo "Freyja"
+echo ""
 
 snakemake \
     --snakefile 03_freyja.smk \
@@ -94,13 +93,15 @@ snakemake \
     --use-conda \
     --configfile ${PIPELINE_CONFIG}
 
-echo "\nAggregate results\n=================\n"
+echo ""
+echo "Aggregate results"
+echo ""
 
-# snakemake \
-#     --snakefile 04_aggregate.smk \
-#     -c20 \
-#     --use-conda \
-#     --configfile ${PIPELINE_CONFIG}
+snakemake \
+    --snakefile 04_aggregate.smk \
+    -c20 \
+    --use-conda \
+    --configfile ${PIPELINE_CONFIG}
 
 
 # Upload results
