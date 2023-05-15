@@ -67,9 +67,9 @@ var.data = var.data |>
 # for each week, we need sewer, county, region prevalence of each variant/lineage detected
 var.data = var.data |>
   # average the prevalence across lineages for each week
-  group_by(year_week, cdc_id, lineage) |>
-  mutate(mean_variant_pct_sewershed = mean(variant_pct_sewershed,
-                                           na.rm = TRUE)) |>
+  group_by(year_week, cdc_id, sw_id, county, lineage, region, epaid,wwtp_name, population_served, monitored) |>
+  summarize(mean_variant_pct_sewershed = mean(variant_pct_sewershed,
+                                              na.rm = TRUE)) |>
   ungroup()
 
 # sewer shed percentages
