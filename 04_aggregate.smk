@@ -13,6 +13,17 @@ rule all:
         sra_table = "output/results/SRA_table.csv",
         comprehensive_table = "output/results/comprehensive_results_table.txt",
         dashboard_data = "output/results/var.data_summary.rds"
+        # id_tracking = "output/results/sample-id-report.tsv"
+
+
+# rule id_tracking_report:
+#     input:
+#         sample_info = "output/results/sample_info.tsv",
+#         concentration = "data/sample_metadata/nys-wws-sars2-concentration.csv",
+#         sample_tracking = "data/sample_metadata/sars2-sequencing-manifest.csv"
+#     output: "output/results/sample-id-report.tsv"
+#     message: "Creating sample ID report."
+#     script: "scripts/sample-id-report.py"
 
 
 rule dashboard_results:
@@ -86,7 +97,7 @@ rule freyja_parse_barcode:
     output: "output/results/freyja_parse_barcode.csv"
     shell:
         "echo \"#freyja_barcode_version\" $(cat {input.barcode_timestamp}) > $TMPDIR/freyja_barcode_header ; "
-        "cat $TMPDIR/freyja_barcode_header {input} > {output}"
+        "cat $TMPDIR/freyja_barcode_header {input.report} > {output}"
 
 
 rule freyja_parse:
