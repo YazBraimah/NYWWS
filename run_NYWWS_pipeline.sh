@@ -132,5 +132,5 @@ if [ ${UPLOAD_RESULTS} = true ] ; then
 
     # Upload to Amazon S3
     rclone --progress copyto output/results/var.data_summary.rds s3:nystatewws/var.data_summary.rds
-    # rclone --progress copyto output/results/sample-id-report.tsv s3:nystatewws/covid-sample-id-report.tsv
+    rclone --progress copyto output/results/sample-id-report.tsv s3:nystatewws/covid-sample-id-report.tsv
 fi
