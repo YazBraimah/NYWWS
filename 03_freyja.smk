@@ -30,9 +30,9 @@ rule freyja_demix:
         barcodes = "output/freyja/barcodes/usher_barcodes.csv",
         bt2_variants = "output/freyja/variants/{sample}_variants.tsv",
         bt2_depths = "output/freyja/variants/{sample}_depths.tsv"
-    output:
+    params:
         demix = "output/freyja/demix/{sample}.demix",
-        log = "output/freyja/demix/{sample}.log"
+    log: "output/freyja/demix/{sample}.log"
     threads: 8
     resources:
         mem_mb=32000
@@ -44,9 +44,10 @@ rule freyja_demix:
         "  {input.bt2_variants}"
         "  {input.bt2_depths}"
         "  --barcodes {input.barcodes}"
-        "  --output {output.demix}"
+        "  --output {params.demix}"
         "  --confirmedonly"
-        "&> {output.log}"
+        "&> {log} ; "
+        "RESULT=$?"
 
 
 rule freyja_variants:

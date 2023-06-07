@@ -12,7 +12,7 @@ rule all:
         sample_info = "output/results/sample_info.tsv",
         sra_table = "output/results/SRA_table.csv",
         comprehensive_table = "output/results/comprehensive_results_table.txt",
-        dashboard_data = "output/results/var.data_summary.rds"
+        dashboard_data = "output/results/var.data_summary.rds",
         id_tracking = "output/results/sample-id-report.tsv"
 
 
