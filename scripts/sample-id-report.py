@@ -19,21 +19,21 @@ def make_id_status(series):
     }
     return [key[s] for s in series]
 
+# We remove duplicated sample IDs from these tables.
+# This prevents the pipeline breaking when there is a mistake
+# somewhere and duplicated IDs appear at all. They shouldn't.
 
 sample_info = (
     pd.read_table(sample_info_path)
     .assign(
         id_status = lambda df: make_id_status(df.sample_present)
     )
+    .loc[lambda df: ~df.sample_id.duplicated()] 
     [["sample_id", "id_status", "seq_lab_id"]]
     .set_index("sample_id", verify_integrity=True)
     .rename({"seq_lab_id": "seq_lab"}, axis="columns")
 )
 
-# TEMPORARILY, we remove duplicated sample IDs from this one.
-# As of June 5, 2023, the following IDs are replicated after
-# Dec. 28, 2022 (start of project):
-# '20221229NY071026522A', '20221229NY071026310A', '20221229NY071031518A'
 pcr_lab = (
     pd.read_csv(concentration_path)
     .assign(
@@ -50,6 +50,7 @@ date = (
     .assign(
         sample_id = lambda df: [s.split(".")[0] for s in df.filename]
     )
+    .loc[lambda df: ~df.sample_id.duplicated()] 
     [["sample_id", "created_date"]]
     .set_index("sample_id", verify_integrity=True)
     .rename({"created_date": "bam_upload_date"}, axis="columns")

@@ -103,7 +103,7 @@ var.data_wwtp = var.data |>
            county,
            region,
            wwtp_name,
-           population_served,
+           # population_served,
            lineage,
            mean_variant_pct_wwtp)
 
@@ -186,6 +186,39 @@ lineage.map_brief <- lineage.map %>% select(lineage, hex) %>% distinct()
 
 # merge lineage map to get hex codes
 var.data_summary <- left_join(var.data_summary, lineage.map_brief, by = c("lineage"))
+
+# add character string of detected voc's
+# isolate the recent data week range
+max_week <- max(var.data_summary$year_week)
+
+# 40 day window for most recent data, otherwise grey for no data
+# what about historical spatial data? slider will need data at regular intervals, will need to maybe pick weekly or monthly or two week rolling windows
+
+date_window <- floor_date(as.Date(max_week), unit='week')-40
+
+# filter for the current date range
+gs_data_recent <- var.data_summary |>
+  # remove any variants that do not have a max prev of at least 5%
+  filter(percent_sewershed >= 0.05) %>%
+  filter(year_week >= date_window) |>
+  group_by(cdc_id) |>
+  filter(year_week == max(year_week, na.rm = TRUE)) %>%
+  ungroup()
+
+# LIST THE VOC'S IN THE SEWERSHED
+var_sewer.voc <- gs_data_recent %>%
+  filter(!is.na(lineage)) %>%
+  group_by(sw_id) %>%
+  filter(monitored != "Not monitored") %>%
+  filter(!duplicated(lineage)) %>%
+  ungroup()
+
+# paste together the variants if they have multiple
+var_sewer.voc <- aggregate(lineage ~ sw_id, unique(var_sewer.voc), paste, collapse = ", ")
+colnames(var_sewer.voc) <- c("sw_id", "vocs_detected")
+
+# merge to sewer list
+var.data_summary <- left_join(var.data_summary, var_sewer.voc, by = c("sw_id"))
 
 # save to RDS format
 saveRDS(var.data_summary, file = output_file)
