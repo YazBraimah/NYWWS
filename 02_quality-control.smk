@@ -107,3 +107,4 @@ rule filter_covid_reads:
         "samtools view {output.bam} -o {output.sam} ; "
         "samtools stats {input.bam} | grep ^SN | cut -f 2- > {output.stats_original} ; "
         "samtools stats {output.bam} | grep ^SN | cut -f 2- > {output.stats_filtered} ; "
+        "samtools index {output.bam}"
