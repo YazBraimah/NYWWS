@@ -31,7 +31,8 @@ rule dashboard_results:
         sewershed = "data/sample_metadata/sewershed_metadata.csv",
         variants_of_concern = "data/sample_metadata/variants_of_concern.csv",
         lineage_map = "data/sample_metadata/lineage_info.csv",
-        freyja = "output/results/freyja_parse.csv"
+        freyja = "output/results/freyja_parse.csv",
+        concentration = "data/sample_metadata/nys-wws-sars2-concentration.csv"
     output:
         rds_data = "output/results/var.data_summary.rds"
     message: "Creating results table for the dashboard."

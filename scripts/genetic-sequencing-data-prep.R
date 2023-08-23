@@ -4,6 +4,7 @@ sewershed_metadata <- snakemake@input[["sewershed"]]
 voc_metadata <- snakemake@input[["variants_of_concern"]]
 lineages_metadata <- snakemake@input[["lineage_map"]]
 freyja_output <- snakemake@input[["freyja"]]
+concentration_data <- snakemake@input[["concentration"]]
 output_file <- snakemake@output[["rds_data"]]
 
 import.data = function(file.name) {
@@ -184,8 +185,72 @@ var.data_summary = var.data_sewershed |>
 # remove duplicate lineages
 lineage.map_brief <- lineage.map %>% select(lineage, hex) %>% distinct()
 
+# add hex codes for the three new categories
+na <- as.data.frame(cbind(c("lineage","No sequencing data available"), c("hex", "#3B3B3B")))
+colnames(na) <- c("lineage", "hex")
+nocovid <- as.data.frame(cbind(c("lineage","No SARS-CoV-2 detected in sample"), c("hex", "white")))
+colnames(nocovid) <- c("lineage", "hex")
+nosample <- as.data.frame(cbind(c("lineage", "No sample"), c("hex", "#7D7D7D")))
+colnames(nosample) <- c("lineage", "hex")
+na <- tail(na,1)
+nocovid <- tail(nocovid,1)
+nosample <- tail(nosample, 1)
+lineage.map_brief <- bind_rows(lineage.map_brief, nocovid, na, nosample)
+
+# -------------------------------------------------------------------------------------------------
+
+# LINK WITH QUANTIFICATION DATA
+
+# load quantification data to identify the categories of : no sample, no sars-cov-2 detected, and no seq data available
+quant.data = import.data(concentration_data) |> 
+  separate(sample_id, into = c('date', 'cdc_id'), sep = 8) |> 
+  mutate(date = ymd(date))
+
+# Calculating copies of SARS2 RNA #
+quant.data$copies <- 3.5
+quant.data$copies <- ifelse(!is.na(quant.data$sars2_copies_ml), as.numeric(as.character(quant.data$sars2_copies_ml)), quant.data$copies)
+quant.data$copies <- ifelse(quant.data$sars_pos==0, 1, quant.data$copies)
+quant.data$copies <- ifelse(is.na(quant.data$copies), as.numeric(as.character(quant.data$sars2_copies_ml)), quant.data$copies)
+quant.data$copies <- ifelse(is.na(quant.data$copies), 1, quant.data$copies)
+quant.data$copies[quant.data$sars2_copies_ml == 0] <- 1
+quant.data$copies <- ifelse(quant.data$copies == 0, 1, quant.data$copies)
+quant.data$copies[quant.data$copies < 1] <- 1
+
+# summarize sars data to the weekly level picking highest copies value
+quant.data_weekly <- quant.data %>%
+  group_by(year_week = floor_date(date, 'weeks'), cdc_id)%>%
+  slice(which.max(copies)
+        )%>%
+  ungroup()%>%
+  select(year_week, cdc_id, copies)
+
+# merge quant data and var.data
+# add max date
+max_week <- max(var.data_summary$year_week, na.rm = TRUE)
+var.data_summary$max_week <- max(var.data_summary$year_week, na.rm = TRUE)
+var.data_summary <- full_join(var.data_summary, quant.data_weekly, by = c("year_week", "cdc_id"))
+var.data_summary$max_week <- ifelse(is.na(var.data_summary$max_week), max_week, var.data_summary$max_week)
+var.data_summary$max_week <- as.Date(var.data_summary$max_week, origin = "1970-01-01")
+
+# remove data before seq data started and after the max gen seq date
+var.data_summary <- var.data_summary %>%
+  filter(year_week >= "2022-12-28") %>%
+  filter(year_week <= max_week)
+
+# add no sample, no sars-cov-2 detected, or no seq data available for those sites
+var.data_summary$lineage <- ifelse(var.data_summary$copies == 1 & is.na(var.data_summary$lineage), "No SARS-CoV-2 detected in sample", var.data_summary$lineage)
+var.data_summary$lineage <- ifelse(is.na(var.data_summary$lineage) & !is.na(var.data_summary$copies) , "No sequencing data available", var.data_summary$lineage)
+var.data_summary$lineage <- ifelse(is.na(var.data_summary$copies)& is.na(var.data_summary$lineage), "No sample", var.data_summary$lineage)
+# 
+# # set the value of the percentages to 1 for all these categories
+# missing_cat <- c("No SARS-CoV-2 detected in sample", "No sequencing data available", "No sample")
+# var.data_summary$variant_pct_sewershed <- ifelse(var.data_summary$lineage %in% missing_cat, 1, var.data_summary$variant_pct_sewershed)
+# var.data_summary$monitored <- ifelse(var.data_summary$lineage %in% missing_cat, "Not monitored", var.data_summary$monitored)
+
 # merge lineage map to get hex codes
 var.data_summary <- left_join(var.data_summary, lineage.map_brief, by = c("lineage"))
+
+# -------------------------------------------------------------------------------------------------
 
 # add character string of detected voc's
 # isolate the recent data week range
