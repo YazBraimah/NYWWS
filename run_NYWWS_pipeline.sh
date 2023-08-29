@@ -130,7 +130,8 @@ if [ ${UPLOAD_RESULTS} = true ] ; then
     cp ../20230403_freyja-pipeline/output/results/freyja_parse_barcode.csv ${DEST}
     cp ../20230403_freyja-pipeline/output/results/comprehensive_results_table.txt ${DEST}
     cp ../20230403_freyja-pipeline/output/results/freyja_parse.csv ./sars2-genetic-sequencing.csv
-    cp -r ../20230403_freyja-pipeline/output/results/BA.2.86-report ${DEST}
+    # Do not put BA.2.86 report on the data GitHub for now
+    # cp -r ../20230403_freyja-pipeline/output/results/BA.2.86-report ${DEST}
     git add .
     git commit -m "Genetic sequencing update for $(date +"%d %B %Y")"
     git push
