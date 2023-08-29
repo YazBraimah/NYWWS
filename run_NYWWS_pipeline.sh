@@ -105,6 +105,16 @@ snakemake \
     --use-conda \
     --configfile ${PIPELINE_CONFIG}
 
+echo ""
+echo "Track BA.2.86 lineage"
+echo ""
+
+snakemake \
+    --snakefile 05_track-BA286.smk \
+    -c20 \
+    --use-conda \
+    --configfile ${PIPELINE_CONFIG}
+
 
 # Upload results
 # --------------
@@ -120,6 +130,7 @@ if [ ${UPLOAD_RESULTS} = true ] ; then
     cp ../20230403_freyja-pipeline/output/results/freyja_parse_barcode.csv ${DEST}
     cp ../20230403_freyja-pipeline/output/results/comprehensive_results_table.txt ${DEST}
     cp ../20230403_freyja-pipeline/output/results/freyja_parse.csv ./sars2-genetic-sequencing.csv
+    cp -r ../20230403_freyja-pipeline/output/results/BA.2.86-report ${DEST}
     git add .
     git commit -m "Genetic sequencing update for $(date +"%d %B %Y")"
     git push

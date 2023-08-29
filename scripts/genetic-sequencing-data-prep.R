@@ -222,13 +222,16 @@ quant.data_weekly <- quant.data %>%
   slice(which.max(copies)
         )%>%
   ungroup()%>%
-  select(year_week, cdc_id, copies)
+  select(year_week, cdc_id, sw_id, copies)
+
+quant.data_weekly <- left_join(quant.data_weekly, meta, by = c("sw_id", "cdc_id")) %>%
+  select(year_week, cdc_id, sw_id, county, region, epaid, population_served, copies)
 
 # merge quant data and var.data
 # add max date
 max_week <- max(var.data_summary$year_week, na.rm = TRUE)
 var.data_summary$max_week <- max(var.data_summary$year_week, na.rm = TRUE)
-var.data_summary <- full_join(var.data_summary, quant.data_weekly, by = c("year_week", "cdc_id"))
+var.data_summary <- full_join(var.data_summary, quant.data_weekly, by = c("year_week", "cdc_id", "sw_id", "epaid", "county", "population_served", "region"))
 var.data_summary$max_week <- ifelse(is.na(var.data_summary$max_week), max_week, var.data_summary$max_week)
 var.data_summary$max_week <- as.Date(var.data_summary$max_week, origin = "1970-01-01")
 
