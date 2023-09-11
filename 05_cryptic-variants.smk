@@ -5,22 +5,27 @@ import pandas as pd
 
 COVERAGE_STATUS = "output/qc/coverage/sample_coverage_status.tsv"
 MUT_GROUP_FOLDER = Path(config["mutation_group_folder"])
+CRYPTIC_VARIANTS = config["cryptic_variants"]
 
 
 rule all:
     input:
-        "output/results/BA.2.86-report/mutation-group-key.txt",
-        "output/results/BA.2.86-report/BA.2.86-report.tsv"
+        expand(
+            "output/results/cryptic-variant-reports/{variant}/{result}",
+            variant=CRYPTIC_VARIANTS,
+            result=["report.tsv", "mutation-group-key.txt"]
+        )
 
 
 def mutation_group_files(wildcards):
-    files = list(MUT_GROUP_FOLDER.glob("*.csv"))
+    folder = MUT_GROUP_FOLDER / wildcards.variant
+    files = list(folder.glob("*.csv"))
     return files
 
 
 rule mutation_group_key:
     input: mutation_group_files
-    output: "output/results/BA.2.86-report/mutation-group-key.txt"
+    output: "output/results/cryptic-variant-reports/{variant}/mutation-group-key.txt"
     run:
         with open(output[0], "w") as f:
             for input_file in input:
@@ -38,11 +43,15 @@ def read_counts(wildcards):
     )
     input_files = dict()
     mutation_groups = [f.stem for f in mutation_group_files(wildcards)]
-    for group in mutation_groups + ["total"]:
+    for group in mutation_groups:
         input_files["counts:" + group] = expand(
-            f"output/BA.2.86-read-counts/counts/{group}/{{sample}}.txt",
+            f"output/cryptic-variant-read-counts/counts_{wildcards.variant}/{group}/{{sample}}.txt",
             sample=valid_samples
         )
+    input_files["counts:total"] = expand(
+        "output/cryptic-variant-read-counts/counts_total/{sample}.txt",
+        sample=valid_samples
+    )
     return input_files
 
 
@@ -53,23 +62,24 @@ rule lineage_report:
         sewershed = "data/sample_metadata/sewershed_metadata.csv",
         freyja = "output/results/freyja_parse.csv",
         coverage = "output/qc/coverage/coverage_report.tsv"
-    output: "output/results/BA.2.86-report/BA.2.86-report.tsv"
+    output: "output/results/cryptic-variant-reports/{variant}/report.tsv"
     params:
         min_reads = 5,
-        variant = "BA.2.86"
+        variant = lambda wildcards: wildcards.variant
     script: "scripts/cryptic-lineage-report.py"
 
 
-def bam_for_counting_reads(wildcards):
-    if wildcards.group == "total":
-        return f"output/covid-filtered/{wildcards.sample}/{wildcards.sample}.bam"
-    else:
-        return f"output/BA.2.86-read-counts/freyja-extract/{wildcards.group}/{wildcards.sample}.bam"
+rule count_reads_total:
+    input: "output/covid-filtered/{sample}/{sample}.bam"
+    output: "output/cryptic-variant-read-counts/counts_total/{sample}.txt"
+    conda: "envs/freyja.yml"
+    shell:
+        "samtools view {input} | wc -l > {output}"
 
 
 rule count_reads:
-    input: bam_for_counting_reads
-    output: "output/BA.2.86-read-counts/counts/{group}/{sample}.txt"
+    input: "output/cryptic-variant-read-counts/freyja-extract_{variant}/{group}/{sample}.bam"
+    output: "output/cryptic-variant-read-counts/counts_{variant}/{group}/{sample}.txt"
     conda: "envs/freyja.yml"
     shell:
         "samtools view {input} | wc -l > {output}"
@@ -78,8 +88,8 @@ rule count_reads:
 rule freyja_extract:
     input:
         bam = "output/covid-filtered/{sample}/{sample}.bam",
-        mutations = str(MUT_GROUP_FOLDER / "{group}.csv")
-    output: "output/BA.2.86-read-counts/freyja-extract/{group}/{sample}.bam"
+        mutations = str(MUT_GROUP_FOLDER / "{variant}" / "{group}.csv")
+    output: "output/cryptic-variant-read-counts/freyja-extract_{variant}/{group}/{sample}.bam"
     conda: "envs/freyja.yml"
     shell:
         "freyja extract --refname 2019-nCoV {input.mutations} {input.bam} --output {output} --same_read"
