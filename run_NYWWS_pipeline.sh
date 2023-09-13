@@ -106,11 +106,11 @@ snakemake \
     --configfile ${PIPELINE_CONFIG}
 
 echo ""
-echo "Track cryptic variants"
+echo "Track variants of interest"
 echo ""
 
 snakemake \
-    --snakefile 05_cryptic-variants.smk \
+    --snakefile 05_track-variants.smk \
     -c20 \
     --use-conda \
     --configfile ${PIPELINE_CONFIG}

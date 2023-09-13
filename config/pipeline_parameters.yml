@@ -20,15 +20,16 @@ minimum_fraction: 0.5
 minimum_coverage: 20
 
 
-# Cryptic variant tracking
-# ========================
+# Variant tracking
+# ================
 
-cryptic_variants:
+variants_to_track:
   - "BA.2.86"
   - "B.1.2"
+  - "B.1.1.7"
 
 # What folder to find the groups of mutations we'll track
-mutation_group_folder: "data/cryptic-lineage-mutations"
+mutation_group_folder: "data/variant-mutations"
 
 # Minimum reads a mutation group should have in a sample to be reported
-min_cryptic_reads: 6
+min_variant_reads: 6
