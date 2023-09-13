@@ -64,7 +64,7 @@ rule lineage_report:
         coverage = "output/qc/coverage/coverage_report.tsv"
     output: "output/results/variant-tracking-reports/{variant}/report.tsv"
     params:
-        min_reads = 5,
+        min_reads = config["min_variant_reads"],
         variant = lambda wildcards: wildcards.variant
     script: "scripts/variant-tracking-report.py"
 
