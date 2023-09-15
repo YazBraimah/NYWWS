@@ -1,5 +1,6 @@
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 
 
@@ -12,6 +13,8 @@ VARIANT = snakemake.params["variant"]
 MIN_READS = snakemake.params["min_reads"]
 
 OUTFILE = snakemake.output[0]
+
+EVIDENCE_NAME = "logsum"
 
 
 def get_record(read_count_file):
@@ -38,6 +41,12 @@ def get_read_counts(file_list, read_count_col, min_counts=None):
     return df
 
 
+def measure_evidence(df):
+    counts = df[[col for col in df.columns if col.startswith("reads_")]]
+    evidence = np.log1p(counts).sum(axis=1)
+    return evidence
+
+
 def get_read_counts_df():
     mut_groups = [
         s
@@ -51,11 +60,13 @@ def get_read_counts_df():
                 "reads_" + group.split(":")[1],
                 min_counts=MIN_READS
             )
-            for group in mut_groups
+            for group in sorted(mut_groups)
         ],
         axis="columns",
         join="outer"
     )
+    evidence_metric = measure_evidence(df)
+    df[EVIDENCE_NAME] = evidence_metric
     total_counts = get_read_counts(snakemake.input["counts:total"], "reads_total")
     df = df.join(total_counts, how="left")
     return df
@@ -78,10 +89,14 @@ if __name__ == "__main__":
     freyja_results = (
         pd.read_csv(FREYJA_DATA)
         .set_index("sample_id")
-        .query(f'variant == "{VARIANT}"')[["variant_pct"]]
-        .rename({"variant_pct": f"freyja_{VARIANT}"}, axis="columns")
     )
-
+    freyja_results = (
+        freyja_results.loc[
+            (freyja_results.variant == VARIANT) | (freyja_results.variant.str.startswith(VARIANT + ".")),
+            ["variant", "variant_pct"]
+        ]
+        .rename({"variant": "freyja_variant", "variant_pct": f"freyja_abundance"}, axis="columns")
+    )
 
     df = (
         get_read_counts_df()
@@ -89,6 +104,7 @@ if __name__ == "__main__":
         .join(freyja_results, how="left")
         .join(concentration, how="left")
         .join(sewersheds, on="sw_id", how="left")
+        .sort_values(by=EVIDENCE_NAME, ascending=False)
     )
 
     df.to_csv(OUTFILE, sep="\t", index=True)
