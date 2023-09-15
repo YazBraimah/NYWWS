@@ -30,9 +30,13 @@ rule mutation_group_key:
         with open(output[0], "w") as f:
             for input_file in input:
                 group_name = Path(input_file).stem
+                if group_name.endswith("_any"):
+                    desc = "(Count of reads with ANY mutations)"
+                else:
+                    desc = "(Count of reads with ALL mutations)"
                 with open(input_file) as g:
                     contents = g.read()
-                f.write(f"=> {group_name}\n{contents}\n")
+                f.write(f"=> {group_name}\n{desc}\n{contents}\n")
     
 
 def read_counts(wildcards):
@@ -85,11 +89,19 @@ rule count_reads:
         "samtools view {input} | wc -l > {output}"
 
 
+def detect_same_read(wildcards):
+    if wildcards.group.endswith("_any"):
+        return ""
+    else:
+        return "--same_read"
+
 rule freyja_extract:
     input:
         bam = "output/covid-filtered/{sample}/{sample}.bam",
         mutations = str(MUT_GROUP_FOLDER / "{variant}" / "{group}.csv")
     output: "output/variant-read-counts/freyja-extract_{variant}/{group}/{sample}.bam"
     conda: "envs/freyja.yml"
+    params:
+        same_read = detect_same_read
     shell:
-        "freyja extract --refname 2019-nCoV {input.mutations} {input.bam} --output {output} --same_read"
+        "freyja extract --refname 2019-nCoV {input.mutations} {input.bam} --output {output} {params.same_read}"
