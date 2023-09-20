@@ -61,6 +61,15 @@ var.data = var.data |>
            monitored,
            variant_pct_sewershed)
 
+# # if variant pct < 5%, set to other, then resummarize again
+var.data$lineage <- ifelse(var.data$variant_pct_sewershed < 0.05, "Other", var.data$lineage)
+var.data$monitored <- ifelse(var.data$lineage == "Other", "Not monitored", var.data$monitored)
+var.data = var.data |>
+  # calculate total prevalence of each lineage (lineage) per day
+  group_by(date, cdc_id, lineage) |>
+  mutate(variant_pct_sewershed = sum(variant_pct_sewershed, na.rm = TRUE)) |>
+  ungroup()
+
 # add the week to the data
 var.data = var.data |>
   mutate(year_week = floor_date(date, 'weeks'))
