@@ -40,7 +40,6 @@ do
 	   --include "/202*.ptrim.bam"
 done
 
-
 # Update data repository
 # ----------------------
 
@@ -114,6 +113,14 @@ snakemake \
     -c20 \
     --use-conda \
     --configfile ${PIPELINE_CONFIG}
+
+# Report BA.2.86 appearances in Freyja
+grep "BA.2.86" output/results/comprehensive_results_table.txt \
+    | sort -k 2 -u | sort -r -k 5 | cut -f1,2,4,5,6,7,8,26 > temp_table
+echo -e "variant\tsample_id\tsample_date\tvariant_pct\tcounty\tsewershed\tsequencing_lab\tcallout_group" > temp_header
+cat temp_header temp_table > output/results/variant-tracking-reports/BA.2.86/$(date +"%Y%m%d")_BA.2.86_freyja.tsv
+rm temp_header
+rm temp_table
 
 
 # Upload results
