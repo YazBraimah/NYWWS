@@ -10,6 +10,7 @@ import pandas as pd
 
 infolder = Path(snakemake.input["bam_folder"])
 sample_metadata_path = snakemake.input["metadata"]
+corrupt_files_path = Path(snakemake.input["corrupt_files"])
 outfile = snakemake.output[0]
 
 bam_paths = list(infolder.glob("**/*.ptrim.bam"))
@@ -20,12 +21,16 @@ sample_metadata = (
     .assign(sample_collect_date = lambda df: pd.to_datetime(df.sample_collect_date))
 )
 
-downloaded_sample_ids = set(sample_ids)
+with open(corrupt_files_path, "r") as f:
+    corrupt_files = set([Path(line.strip()).stem.split(".")[0] for line in f])
+
+downloaded_sample_ids = set(sample_ids) - corrupt_files
 post2023_sampleids = set(sample_metadata.sample_id[sample_metadata.sample_collect_date >= pd.Timestamp(2022, 12, 28)])
 
 status = {
     "no_metadata": downloaded_sample_ids - post2023_sampleids,
     "no_file": post2023_sampleids - downloaded_sample_ids,
+    "corrupt_bam": corrupt_files,
     "ok": downloaded_sample_ids.intersection(post2023_sampleids)
 }
 
@@ -46,7 +51,7 @@ SEQSITE_IDS = {
 }
 
 def get_seqsite_id(folder):
-    return SEQSITE_IDS[folder]
+    return SEQSITE_IDS.get(folder, folder)
 
 seq_sites = pd.DataFrame({
     "sample_id": sample_ids,

@@ -56,8 +56,6 @@ cp ../20230504_sample-tracking/output/sars2-sequencing-manifest.csv data/sample_
 
 # Run the pipeline
 # ----------------
-# Unclear to me why it needs to run twice. It updates some files the first
-# time, and then re-runs all the Freyja results the second time.
 
 # Allows activating conda env
 source /home/iavascon/miniconda3/bin/activate
@@ -69,6 +67,7 @@ echo ""
 
 snakemake \
     --snakefile 01_bam-check.smk \
+    --forcerun check_corrupt_files \
     -c1 \
     --use-conda \
     --configfile ${PIPELINE_CONFIG}
@@ -104,20 +103,22 @@ snakemake \
     --use-conda \
     --configfile ${PIPELINE_CONFIG}
 
-echo ""
-echo "Track variants of interest"
-echo ""
+# Variant tracking doesn't need to happen with every run of the pipeline!
+# echo ""
+# echo "Track variants of interest"
+# echo ""
 
-snakemake \
-    --snakefile 05_track-variants.smk \
-    -c20 \
-    --use-conda \
-    --configfile ${PIPELINE_CONFIG}
+# snakemake \
+#     --snakefile 05_track-variants.smk \
+#     -c20 \
+#     --use-conda \
+#     --configfile ${PIPELINE_CONFIG}
 
-# Report BA.2.86 appearances in Freyja
+# Report Freyja appearances of BA.2.86 variants and callout group
 grep "BA.2.86" output/results/comprehensive_results_table.txt \
     | sort -k 2 -u | sort -r -k 5 | cut -f1,2,4,5,6,7,8,26 > temp_table
 echo -e "variant\tsample_id\tsample_date\tvariant_pct\tcounty\tsewershed\tsequencing_lab\tcallout_group" > temp_header
+mkdir -p output/results/variant-tracking-reports/BA.2.86
 cat temp_header temp_table > output/results/variant-tracking-reports/BA.2.86/$(date +"%Y%m%d")_BA.2.86_freyja.tsv
 rm temp_header
 rm temp_table

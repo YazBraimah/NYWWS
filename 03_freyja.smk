@@ -47,7 +47,7 @@ rule freyja_demix:
         "  --output {params.demix}"
         "  --confirmedonly"
         "&> {log} ; "
-        "RESULT=$?"
+        "RESULT=$?" # last command must return non-0 exit code
 
 
 rule freyja_variants:

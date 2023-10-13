@@ -199,12 +199,9 @@ na <- as.data.frame(cbind(c("lineage","No sequencing data available"), c("hex", 
 colnames(na) <- c("lineage", "hex")
 nocovid <- as.data.frame(cbind(c("lineage","No SARS-CoV-2 detected in sample"), c("hex", "white")))
 colnames(nocovid) <- c("lineage", "hex")
-nosample <- as.data.frame(cbind(c("lineage", "No sample"), c("hex", "#7D7D7D")))
-colnames(nosample) <- c("lineage", "hex")
 na <- tail(na,1)
 nocovid <- tail(nocovid,1)
-nosample <- tail(nosample, 1)
-lineage.map_brief <- bind_rows(lineage.map_brief, nocovid, na, nosample)
+lineage.map_brief <- bind_rows(lineage.map_brief, nocovid, na)
 
 # -------------------------------------------------------------------------------------------------
 
@@ -252,7 +249,7 @@ var.data_summary <- var.data_summary %>%
 # add no sample, no sars-cov-2 detected, or no seq data available for those sites
 var.data_summary$lineage <- ifelse(var.data_summary$copies == 1 & is.na(var.data_summary$lineage), "No SARS-CoV-2 detected in sample", var.data_summary$lineage)
 var.data_summary$lineage <- ifelse(is.na(var.data_summary$lineage) & !is.na(var.data_summary$copies) , "No sequencing data available", var.data_summary$lineage)
-var.data_summary$lineage <- ifelse(is.na(var.data_summary$copies)& is.na(var.data_summary$lineage), "No sample", var.data_summary$lineage)
+var.data_summary$lineage <- ifelse(is.na(var.data_summary$copies) & is.na(var.data_summary$lineage), "No sequencing data available", var.data_summary$lineage)
 # 
 # # set the value of the percentages to 1 for all these categories
 # missing_cat <- c("No SARS-CoV-2 detected in sample", "No sequencing data available", "No sample")
