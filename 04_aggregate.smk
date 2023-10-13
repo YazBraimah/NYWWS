@@ -11,7 +11,7 @@ rule all:
         freyja_parse_barcode = "output/results/freyja_parse_barcode.csv",
         sample_info = "output/results/sample_info.tsv",
         sra_table = "output/results/SRA_table.csv",
-        comprehensive_table = "output/results/comprehensive_results_table.txt",
+        comprehensive_table = "output/results/comprehensive_results_table.tsv",
         dashboard_data = "output/results/var.data_summary.rds",
         id_tracking = "output/results/sample-id-report.tsv"
 
@@ -40,20 +40,16 @@ rule dashboard_results:
     script: "scripts/genetic-sequencing-data-prep.R"
 
 
-rule summary_plots:
+rule summary_table:
     input:
-        cov = "output/qc/coverage/coverage_report.tsv",
-        parse = "output/results/freyja_parse.csv",
-        samInfo = "output/results/sample_info.tsv",
-        samLoc = "data/sample_metadata/sampling_locations.csv",
-        linInfo = "data/sample_metadata/lineage_info.csv"
+        freyja = "output/results/freyja_parse.csv",
+        lineages = "data/sample_metadata/lineage_info.csv",
+        concentration= "data/sample_metadata/nys-wws-sars2-concentration.csv",
+        sewersheds = "data/sample_metadata/sewershed_metadata.csv",
+        samples = "output/results/sample_info.tsv"
     output:
-        coveragePointPlot = "output/plots/coveragePointPlot_by_date.pdf",
-        varFreqBarPlotsMin20X = "output/plots/Variant_frequency_barplots_by_county_min_20X.pdf",
-        compResultsTable = "output/results/comprehensive_results_table.txt"
-    message: "Outputting summary tables and plots."
-    conda: "envs/tidyverse.yml"
-    script: "scripts/results_summary_outputs.R"
+        table = "output/results/comprehensive_results_table.tsv"
+    script: "scripts/comprehensive-summary-table.py"
 
 
 def bam_links_of_covid_filtered(wildcards):

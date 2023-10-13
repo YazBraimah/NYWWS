@@ -115,9 +115,9 @@ snakemake \
 #     --configfile ${PIPELINE_CONFIG}
 
 # Report Freyja appearances of BA.2.86 variants and callout group
-grep "BA.2.86" output/results/comprehensive_results_table.txt \
-    | sort -k 2 -u | sort -r -k 5 | cut -f1,2,4,5,6,7,8,26 > temp_table
-echo -e "variant\tsample_id\tsample_date\tvariant_pct\tcounty\tsewershed\tsequencing_lab\tcallout_group" > temp_header
+grep "BA.2.86" output/results/comprehensive_results_table.tsv \
+    | sort -k 1 | sort -r -k 5 > temp_table
+head -n 1 output/results/comprehensive_results_table.tsv > temp_header
 mkdir -p output/results/variant-tracking-reports/BA.2.86
 cat temp_header temp_table > output/results/variant-tracking-reports/BA.2.86/$(date +"%Y%m%d")_BA.2.86_freyja.tsv
 rm temp_header
@@ -136,7 +136,7 @@ if [ ${UPLOAD_RESULTS} = true ] ; then
     mkdir -p ${DEST}
     cp ../20230403_freyja-pipeline/output/results/sample_info.tsv ${DEST}
     cp ../20230403_freyja-pipeline/output/results/freyja_parse_barcode.csv ${DEST}
-    cp ../20230403_freyja-pipeline/output/results/comprehensive_results_table.txt ${DEST}
+    cp ../20230403_freyja-pipeline/output/results/comprehensive_results_table.tsv ${DEST}
     cp ../20230403_freyja-pipeline/output/results/freyja_parse.csv ./sars2-genetic-sequencing.csv
     git add .
     git commit -m "Genetic sequencing update for $(date +"%d %B %Y")"
