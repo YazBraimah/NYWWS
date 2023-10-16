@@ -24,14 +24,18 @@ sample_metadata = (
 with open(corrupt_files_path, "r") as f:
     corrupt_files = set([Path(line.strip()).stem.split(".")[0] for line in f])
 
-downloaded_sample_ids = set(sample_ids) - corrupt_files
-post2023_sampleids = set(sample_metadata.sample_id[sample_metadata.sample_collect_date >= pd.Timestamp(2022, 12, 28)])
+downloaded_files = set(sample_ids)
+concentration_sampleid = set(sample_metadata.sample_id[sample_metadata.sample_collect_date >= pd.Timestamp(2022, 12, 28)])
+present_files = downloaded_files.intersection(concentration_sampleid)
+no_metadata = downloaded_files - present_files
+no_file = concentration_sampleid - present_files
+ok_files = present_files - corrupt_files
 
 status = {
-    "no_metadata": downloaded_sample_ids - post2023_sampleids,
-    "no_file": post2023_sampleids - downloaded_sample_ids,
+    "no_metadata": no_metadata,
+    "no_file": no_file,
     "corrupt_bam": corrupt_files,
-    "ok": downloaded_sample_ids.intersection(post2023_sampleids)
+    "ok": ok_files
 }
 
 status_df = pd.concat([
