@@ -15,9 +15,10 @@ def make_id_status(series):
     key = {
         "ok": "BAM and concentration match",
         "no_metadata": "BAM not in concentration",
-        "no_file": "ID in concentration but no BAM"
+        "no_file": "ID in concentration but no BAM",
+        "corrupt_bam": "BAM file is present, but corrupt",
     }
-    return [key[s] for s in series]
+    return [key.get(s, s) for s in series]
 
 # We remove duplicated sample IDs from these tables.
 # This prevents the pipeline breaking when there is a mistake

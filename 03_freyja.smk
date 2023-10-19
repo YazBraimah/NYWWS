@@ -33,7 +33,6 @@ rule freyja_demix:
     params:
         demix = "output/freyja/demix/{sample}.demix",
     log: "output/freyja/demix/{sample}.log"
-    threads: 8
     resources:
         mem_mb=32000
     conda: "envs/freyja.yml"
@@ -57,7 +56,6 @@ rule freyja_variants:
     output:
         bt2_variants = "output/freyja/variants/{sample}_variants.tsv",
         bt2_depths = "output/freyja/variants/{sample}_depths.tsv"
-    threads: 8
     resources:
         mem_mb=32000
     conda: "envs/freyja.yml"
