@@ -1,0 +1,10 @@
+
+set realname = "NYWWS Freyja Pipeline"
+set from = "nywws.freyja.pipeline@gmail.com"
+set sendmail = "msmtp --file=/home/iavascon/projects/20230403_freyja-pipeline/data/email-config/.msmtprc -a pipelinegmail"
+set folder = "~/projects/20230403_freyja-pipeline/output/email-repots/mutt"
+set record = "+sent.txt"
+
+# Suggested by msmtp docs
+set use_from = yes
+set envelope_from = yes

@@ -103,26 +103,6 @@ snakemake \
     --use-conda \
     --configfile ${PIPELINE_CONFIG}
 
-# Variant tracking doesn't need to happen with every run of the pipeline!
-# echo ""
-# echo "Track variants of interest"
-# echo ""
-
-# snakemake \
-#     --snakefile 05_track-variants.smk \
-#     -c20 \
-#     --use-conda \
-#     --configfile ${PIPELINE_CONFIG}
-
-# Report Freyja appearances of BA.2.86 variants and callout group
-grep "BA.2.86" output/results/comprehensive_results_table.tsv \
-    | sort -k 1 | sort -r -k 5 > temp_table
-head -n 1 output/results/comprehensive_results_table.tsv > temp_header
-mkdir -p output/results/variant-tracking-reports/BA.2.86
-cat temp_header temp_table > output/results/variant-tracking-reports/BA.2.86/$(date +"%Y%m%d")_BA.2.86_freyja.tsv
-rm temp_header
-rm temp_table
-
 
 # Upload results
 # --------------
@@ -151,4 +131,13 @@ if [ ${UPLOAD_RESULTS} = true ] ; then
     # Upload to Amazon S3
     rclone --progress copyto output/results/var.data_summary.rds s3:nystatewws/var.data_summary.rds
     rclone --progress copyto output/results/sample-id-report.tsv s3:nystatewws/covid-sample-id-report.tsv
+
+    # Generate e-mail report
+    snakemake \
+	--snakefile 05_report-BA.2.86.smk \
+	-c1 \
+	--use-conda \
+	--configfile ${PIPELINE_CONFIG} \
+	--rerun-triggers mtime \
+	--config date=$(date +"%Y%m%d")
 fi

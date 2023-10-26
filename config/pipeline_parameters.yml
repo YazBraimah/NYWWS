@@ -23,13 +23,23 @@ minimum_coverage: 20
 # Variant tracking
 # ================
 
-variants_to_track:
-  - "BA.2.86"
-  - "B.1.2"
-  - "B.1.1.7"
+BA286_report_threshold: 0.035
 
-# What folder to find the groups of mutations we'll track
-mutation_group_folder: "data/variant-mutations"
+email_to:
+  - iavascon@syr.edu
+email_cc:
+  - ianvcaldas@gmail.com
 
-# Minimum reads a mutation group should have in a sample to be reported
-min_variant_reads: 6
+# Obsolete parameters, since we're not running variant tracking
+# together with the pipeline anymore:
+
+# variants_to_track:
+#   - "BA.2.86"
+#   - "B.1.2"
+#   - "B.1.1.7"
+# 
+# # What folder to find the groups of mutations we'll track
+# mutation_group_folder: "data/variant-mutations"
+# 
+# # Minimum reads a mutation group should have in a sample to be reported
+# min_variant_reads: 6
