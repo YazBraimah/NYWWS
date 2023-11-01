@@ -74,6 +74,8 @@ template = (
     "\n"
     "\n"
     "The complete unfiltered table of variant frequencies is attached."
+    "\n"
+    "\n"
 )
 
 prev_date_str = date.fromisoformat(

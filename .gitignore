@@ -5,6 +5,7 @@ Rplots.pdf
 
 data/raw_bam
 data/sample_metadata
+data/email-config/recipients.yml
 output
 results
 

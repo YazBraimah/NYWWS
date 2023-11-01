@@ -25,11 +25,6 @@ minimum_coverage: 20
 
 BA286_report_threshold: 0.035
 
-email_to:
-  - iavascon@syr.edu
-email_cc:
-  - ianvcaldas@gmail.com
-
 # Obsolete parameters, since we're not running variant tracking
 # together with the pipeline anymore:
 

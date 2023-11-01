@@ -2,11 +2,17 @@
 from datetime import date
 from pathlib import Path
 
+import yaml
+
 
 TODAY = config["date"]
 REPORT_THRESHOLD = config["BA286_report_threshold"]
-CARBON_COPIES = config["email_cc"]
-RECIPIENTS = config["email_to"]
+
+with open("data/email-config/recipients.yml") as f:
+    recipients = yaml.load(f, Loader=yaml.Loader)
+
+CARBON_COPIES = recipients["email_cc"]
+RECIPIENTS = recipients["email_to"]
 
 
 rule all:
