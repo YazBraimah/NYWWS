@@ -43,6 +43,55 @@ var.data$monitored = ifelse(var.data$lineage %in% voc$variant,
                             'Monitored',
                             'Not monitored')
 
+# VOC'S DETECTED
+
+# aggregate by week for every site, every week
+
+# object with each week for the loop
+weeks <- unique(floor_date(var.data$date, unit = 'week'))
+
+# empty list to store df
+voc_data_list <- list()
+
+for(i in unique(weeks)){
+  # create date window for summarizing data
+  date_window <- floor_date(as.Date(i, origin = "1970-01-01"), unit='week')-40
+  
+  # filter for the current date range
+  gs_data_recent <- var.data |>
+    # remove any variants that do not have a max prev of at least 5%
+    filter(variant_pct >= 0.05) %>%
+    mutate(year_week = floor_date(date, 'weeks')) %>%
+    filter(year_week  >= date_window) |>
+    group_by(cdc_id) |>
+    filter(year_week == max(year_week, na.rm = TRUE)) %>%
+    ungroup() 
+  
+  # LIST THE VOC'S IN THE SEWERSHED
+  var_sewer.voc <- gs_data_recent %>%
+    group_by(sw_id) %>%
+    filter(!is.na(variant)) %>%
+    filter(monitored == "Monitored") %>%
+    filter(!duplicated(variant)) %>%
+    ungroup()
+  
+  # paste together the variants if they have multiple
+  var_sewer.voc <- aggregate(variant ~ sw_id, unique(var_sewer.voc), paste, collapse = ", ")
+  colnames(var_sewer.voc) <- c("sw_id", "vocs_detected")
+  var_sewer.voc$year_week <- as.Date(i, origin = "1970-01-01")
+  
+  # store in list
+  voc_data_list[[i]] <- var_sewer.voc
+  
+}
+
+# transform into df
+var_sewer.voc <- do.call(rbind, voc_data_list)
+
+# ----------------------------------------------------------------------------------------------------------------------------------------------
+
+# SUMMARY FILE CREATION # 
+
 # collapse across variants into parent lineages
 var.data = var.data |>
   # calculate total prevalence of each lineage (lineage) per day
@@ -261,38 +310,7 @@ var.data_summary <- left_join(var.data_summary, lineage.map_brief, by = c("linea
 
 # -------------------------------------------------------------------------------------------------
 
-# add character string of detected voc's
-# isolate the recent data week range
-max_week <- max(var.data_summary$year_week)
-
-# 40 day window for most recent data, otherwise grey for no data
-# what about historical spatial data? slider will need data at regular intervals, will need to maybe pick weekly or monthly or two week rolling windows
-
-date_window <- floor_date(as.Date(max_week), unit='week')-40
-
-# filter for the current date range
-gs_data_recent <- var.data_summary |>
-  # remove any variants that do not have a max prev of at least 5%
-  filter(percent_sewershed >= 0.05) %>%
-  filter(year_week >= date_window) |>
-  group_by(cdc_id) |>
-  filter(year_week == max(year_week, na.rm = TRUE)) %>%
-  ungroup()
-
-# LIST THE VOC'S IN THE SEWERSHED
-var_sewer.voc <- gs_data_recent %>%
-  filter(!is.na(lineage)) %>%
-  group_by(sw_id) %>%
-  filter(monitored != "Not monitored") %>%
-  filter(!duplicated(lineage)) %>%
-  ungroup()
-
-# paste together the variants if they have multiple
-var_sewer.voc <- aggregate(lineage ~ sw_id, unique(var_sewer.voc), paste, collapse = ", ")
-colnames(var_sewer.voc) <- c("sw_id", "vocs_detected")
-
-# merge to sewer list
-var.data_summary <- left_join(var.data_summary, var_sewer.voc, by = c("sw_id"))
+var.data_summary <- left_join(var.data_summary, var_sewer.voc, by = c("sw_id", "year_week")) 
 
 # save to RDS format
 saveRDS(var.data_summary, file = output_file)
