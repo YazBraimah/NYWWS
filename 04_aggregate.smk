@@ -13,6 +13,7 @@ rule all:
         sra_table = "output/results/SRA_table.csv",
         comprehensive_table = "output/results/comprehensive_results_table.tsv",
         dashboard_data = "output/results/var.data_summary.rds",
+        dashboard_data_gisaid = "output/results/var.data_summary_gisaid.rds",
         id_tracking = "output/results/sample-id-report.tsv"
 
 
@@ -31,10 +32,12 @@ rule dashboard_results:
         sewershed = "data/sample_metadata/sewershed_metadata.csv",
         variants_of_concern = "data/sample_metadata/variants_of_concern.csv",
         lineage_map = "data/sample_metadata/lineage_info.csv",
+        lineage_map_gisaid = "data/sample_metadata/wastewater-to-gisaid-mapping.csv",
         freyja = "output/results/freyja_parse.csv",
         concentration = "data/sample_metadata/nys-wws-sars2-concentration.csv"
     output:
-        rds_data = "output/results/var.data_summary.rds"
+        rds_data = "output/results/var.data_summary.rds",
+        rds_data_gisaid = "output/results/var.data_summary_gisaid.rds"
     message: "Creating results table for the dashboard."
     conda: "envs/tidyverse.yml"
     script: "scripts/genetic-sequencing-data-prep.R"

@@ -47,6 +47,7 @@ cd ../NYS-WWS-Data
 git pull
 cp sars2-concentration.csv ../20230403_freyja-pipeline/data/sample_metadata/nys-wws-sars2-concentration.csv
 cp metadata/lineage-map.csv ../20230403_freyja-pipeline/data/sample_metadata/lineage_info.csv
+cp metadata/wastewater-to-gisaid-mapping.csv ../20230403_freyja-pipeline/data/sample_metadata/wastewater-to-gisaid-mapping.csv
 cp metadata/variants-of-concern.csv ../20230403_freyja-pipeline/data/sample_metadata/variants_of_concern.csv
 cp nys-wws-sewersheds.csv ../20230403_freyja-pipeline/data/sample_metadata/sewershed_metadata.csv
 cd ../20230403_freyja-pipeline
@@ -130,6 +131,7 @@ if [ ${UPLOAD_RESULTS} = true ] ; then
 
     # Upload to Amazon S3
     rclone --progress copyto output/results/var.data_summary.rds s3:nystatewws/var.data_summary.rds
+    rclone --progress copyto output/results/var.data_summary_gisaid.rds s3:nystatewws/var.data_summary_gisaid.rds
     rclone --progress copyto output/results/sample-id-report.tsv s3:nystatewws/covid-sample-id-report.tsv
 
     # Do not generate e-mail report
