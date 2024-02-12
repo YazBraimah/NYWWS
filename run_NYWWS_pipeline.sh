@@ -133,13 +133,4 @@ if [ ${UPLOAD_RESULTS} = true ] ; then
     rclone --progress copyto output/results/var.data_summary.rds s3:nystatewws/var.data_summary.rds
     rclone --progress copyto output/results/var.data_summary_gisaid.rds s3:nystatewws/var.data_summary_gisaid.rds
     rclone --progress copyto output/results/sample-id-report.tsv s3:nystatewws/covid-sample-id-report.tsv
-
-    # Do not generate e-mail report
-#     snakemake \
-# 	--snakefile 05_report-BA.2.86.smk \
-# 	-c1 \
-# 	--use-conda \
-# 	--configfile ${PIPELINE_CONFIG} \
-# 	--rerun-triggers mtime \
-# 	--config date=$(date +"%Y%m%d")
 fi

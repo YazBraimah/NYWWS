@@ -1,4 +1,14 @@
 
+# This Snakefile would create an e-mail report of BA.2.86 appearances
+
+#     snakemake \
+# 	--snakefile 05_report-BA.2.86.smk \
+# 	-c1 \
+# 	--use-conda \
+# 	--configfile ${PIPELINE_CONFIG} \
+# 	--rerun-triggers mtime \
+# 	--config date=$(date +"%Y%m%d")
+
 from datetime import date
 from pathlib import Path
 
