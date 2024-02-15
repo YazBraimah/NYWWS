@@ -75,4 +75,7 @@ rule freyja_update:
     conda: "envs/freyja.yml"
     message: "Updating Freyja barcodes."
     shell:
-        "freyja update --outdir output/freyja/barcodes"
+        "freyja update --outdir output/freyja/barcodes ; "
+        # Remove previous demix output so that samples that become irrelevant
+        # later on don't keep their demix results around
+        "rm -rf output/freyja/demix/*"
