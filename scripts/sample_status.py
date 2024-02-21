@@ -19,17 +19,32 @@ def get_sample_status(row):
         return "freyja_only_one_freq"
     else:
         return "ok"
+    
+existence = pd.read_table(existence_path).set_index("sample_id")
+duplicates = (
+    existence
+    .loc[existence.index.duplicated(keep=False)]
+    .groupby("sample_id")
+    .agg({
+        "sample_present": lambda s: s[0],
+        "seq_lab_id": lambda s: ",".join(s)
+    })
+)
+dedupped = existence.loc[~existence.index.duplicated(keep=False)]
+existence = pd.concat([dedupped,duplicates])
 
 result = (
     pd.concat(
+        [existence] +
         [
             pd.read_table(path).set_index("sample_id")
-            for path in (existence_path, coverage_path, freyja_demix_path, freyja_quality_path)
+            for path in (coverage_path, freyja_demix_path, freyja_quality_path)
         ],
         axis="columns",
         join="outer"
     )
     .assign(sample_status=lambda df: [get_sample_status(df.loc[ix]) for ix in df.index])
+    .sort_index()
 )
 
 result.to_csv(outfile, sep="\t")
