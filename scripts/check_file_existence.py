@@ -12,6 +12,7 @@ import pandas as pd
 infolder = Path(snakemake.input["bam_folder"])
 sample_metadata_path = snakemake.input["metadata"]
 corrupt_files_path = Path(snakemake.input["corrupt_files"])
+force_freyja_path = Path(snakemake.input["force_freyja"])
 outfile = snakemake.output[0]
 
 bam_paths = list(infolder.glob("**/*.ptrim.bam"))
@@ -20,10 +21,16 @@ sample_metadata = (
     pd.read_csv(sample_metadata_path)
     .assign(sample_collect_date = lambda df: pd.to_datetime(df.sample_collect_date))
 )
-concentration_sampleids = set(sample_metadata.sample_id[sample_metadata.sample_collect_date >= pd.Timestamp(2022, 12, 28)])
+
+# Doing this logical with ~ and < guarantees 
+# we get samples with NaN collection dates as well
+concentration_sampleids = set(sample_metadata.sample_id[~(sample_metadata.sample_collect_date < pd.Timestamp(2022, 12, 28))])
 
 with open(corrupt_files_path, "r") as f:
     corrupt_files = set([Path(line.strip()).stem.split(".")[0] for line in f])
+
+with open(force_freyja_path, "r") as f:
+    force_freyja = set(filename.strip() for filename in f)
 
 SEQSITE_IDS = {
     "buffalo": "suny_buffalo",
@@ -46,7 +53,7 @@ for bam_path in bam_paths:
         status = "unexpected_bam_name"
     elif int(sample_id[:8]) < 20221228:
         status = "old_sample_bam"
-    elif sample_id in concentration_sampleids:
+    elif (sample_id in concentration_sampleids) or (sample_id in force_freyja):
         status = "ok"
     else:
         status = "bam_without_concentration"

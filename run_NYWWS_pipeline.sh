@@ -49,6 +49,7 @@ cp sars2-concentration.csv ../20230403_freyja-pipeline/data/sample_metadata/nys-
 cp metadata/lineage-map.csv ../20230403_freyja-pipeline/data/sample_metadata/lineage_info.csv
 cp metadata/wastewater-to-gisaid-mapping.csv ../20230403_freyja-pipeline/data/sample_metadata/wastewater-to-gisaid-mapping.csv
 cp metadata/variants-of-concern.csv ../20230403_freyja-pipeline/data/sample_metadata/variants_of_concern.csv
+cp metadata/force-freyja.txt ../20230403_freyja-pipeline/data/sample_metadata/force-freyja.txt
 cp nys-wws-sewersheds.csv ../20230403_freyja-pipeline/data/sample_metadata/sewershed_metadata.csv
 cd ../20230403_freyja-pipeline
 
@@ -81,6 +82,7 @@ snakemake \
     --snakefile 02_quality-control.smk \
     -c20 \
     --use-conda \
+    --rerun-incomplete \
     --configfile ${PIPELINE_CONFIG}
 
 echo ""

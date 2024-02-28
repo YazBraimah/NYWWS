@@ -9,7 +9,8 @@ rule check_file_existence:
     input:
         bam_folder = BAM_FOLDER,
         metadata = SAMPLE_METADATA,
-        corrupt_files = "output/sample_info/corrupt-files.txt"
+        corrupt_files = "output/sample_info/corrupt-files.txt",
+        force_freyja = "data/sample_metadata/force-freyja.txt"
     output: "output/sample_info/file_existence.tsv"
     message: "Matching downloaded BAMs with known sample IDs."
     script: "scripts/check_file_existence.py"
