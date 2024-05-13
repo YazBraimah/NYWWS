@@ -4,6 +4,7 @@ test
 Rplots.pdf
 
 data/raw_bam
+data/nycity_before_processing
 data/sample_metadata
 data/email-config/recipients.yml
 output

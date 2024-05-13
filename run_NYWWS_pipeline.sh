@@ -40,6 +40,15 @@ do
 	   --include "/202*.ptrim.bam"
 done
 
+# Download NYC BAM files
+SOURCE="${RCLONE_BUCKET_NAME}/nycity"
+DEST="data/nycity_before_processing"
+mkdir -p ${DEST}
+rclone sync \
+       --progress \
+       ${SOURCE} ${DEST} \
+       --include "**/202*.bam"
+
 # Update data repository
 # ----------------------
 
@@ -62,6 +71,14 @@ cp ../20230504_sample-tracking/output/sars2-sequencing-manifest.csv data/sample_
 # Allows activating conda env
 source /home/iavascon/miniconda3/bin/activate
 conda activate nywws
+
+echo ""
+echo "Process NYC files"
+echo ""
+snakemake \
+    --snakefile extra/process-nycity-bams.smk \
+    -c20 \
+    --use-conda
 
 echo ""
 echo "BAM check"

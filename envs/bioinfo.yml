@@ -6,4 +6,4 @@ channels:
 dependencies:
   - fastqc
   - qualimap
-  - samtools
+  - samtools>=1.20

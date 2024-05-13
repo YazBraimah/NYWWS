@@ -38,6 +38,7 @@ SEQSITE_IDS = {
     "suny_upstate": "suny_upstate",
     "rochester": "u_of_rochester",
     "nymc": "nymc",
+    "nycity": "nycity",
 }
 
 id_format = re.compile(r"202\d[01]\d[0123]\dNY\d\d\d\d\d\d\d\d\d[A-Z]")
