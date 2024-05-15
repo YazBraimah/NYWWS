@@ -83,7 +83,7 @@ rule sam_to_fastq:
 
 def find_raw_bam(wildcards):
     sample = wildcards.sample
-    search = list(BAM_FOLDER.glob(f"**/{sample}.bam"))
+    search = list(BAM_FOLDER.glob(f"**/{sample}.ptrim.bam"))
     assert len(search) == 1
     return str(search[0])
 
