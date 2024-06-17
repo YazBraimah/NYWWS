@@ -10,18 +10,17 @@ UPLOAD_RESULTS=true
 
 # Name of the rclone remotes
 RCLONE_BUCKET_NAME="gcs:su_nywws_test_bucket"
-# The name of the OneDrive remote in rclone is hardcoded below,
-# because I can't figure out how to deal with spaces in the dir name.
-#RCLONE_ONEDRIVE_NAME="onedrive:CDC wastewater data"
+# The name of the other rclone remotes are hardcoded below
 
 # This file lists the directories in the GCS to download BAM files from
+# It doesn't include NYC, which is treated separately below
 GCS_DIRS_FILE="config/remote_dirs.txt"
 
 # Folder to download BAM files to
 BAM_FOLDER="data/raw_bam"
 
-# Name of main conda environment of the pipeline
-CONDA_ENV="nywws"
+# Location of conda environment activation script
+CONDA_ACTIVATE="/home/iavascon/miniconda3/bin/activate"
 
 # File with the pipeline parameters
 PIPELINE_CONFIG="config/pipeline_parameters.yml"
@@ -68,8 +67,8 @@ cp ../20230504_sample-tracking/output/sars2-sequencing-manifest.csv data/sample_
 # Run the pipeline
 # ----------------
 
-# Allows activating conda env
-source /home/iavascon/miniconda3/bin/activate
+# Activation of conda env
+source ${CONDA_ACTIVATE}
 conda activate nywws
 
 echo ""
