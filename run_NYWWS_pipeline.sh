@@ -116,6 +116,11 @@ echo ""
 echo "Aggregate results"
 echo ""
 
+# This line ensures the directory of BAMs to upload to OneDrive is always
+# created from scratch in this next step.
+# This guarantees OneDrive uploads always match the SRA table.
+rm -rf output/covid-filtered-BAMs
+
 snakemake \
     --snakefile 04_aggregate.smk \
     -c20 \
