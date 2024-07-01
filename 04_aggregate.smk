@@ -11,6 +11,7 @@ rule all:
         freyja_parse_barcode = "output/results/freyja_parse_barcode.csv",
         sample_info = "output/results/sample_info.tsv",
         sra_table = "output/results/SRA_table.csv",
+        sra_bams_matched = "output/sample_info/sra-bams-matched-ok",
         comprehensive_table = "output/results/comprehensive_results_table.tsv",
         dashboard_data = "output/results/var.data_summary.rds",
         dashboard_data_gisaid = "output/results/var.data_summary_gisaid.rds",
@@ -53,6 +54,14 @@ rule summary_table:
     output:
         table = "output/results/comprehensive_results_table.tsv"
     script: "scripts/comprehensive-summary-table.py"
+
+
+rule sra_bams_matched:
+    input: "output/results/SRA_table.csv"
+    output: touch("output/sample_info/sra-bams-matched-ok")
+    params:
+        bam_path = "output/covid-filtered-BAMs"
+    script: "scripts/match_sra_bams.py"
 
 
 def bam_links_of_covid_filtered(wildcards):
