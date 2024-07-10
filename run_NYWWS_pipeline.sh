@@ -147,10 +147,14 @@ if [ ${UPLOAD_RESULTS} = true ] ; then
     git push
     cd ../20230403_freyja-pipeline
 
-    # Upload to OneDrive
+    # Upload BAMs (filtered for only SARS-CoV-2 reads) and SRA table
     SOURCE=output/covid-filtered-BAMs
-    rclone --progress --copy-links sync ${SOURCE} onedrive:'CDC wastewater data'/BAM-Files
-    rclone --progress copyto output/results/SRA_table.csv onedrive:'CDC wastewater data'/BAM-Files/SRA_table.csv
+    # Upload to OneDrive - we decided not to do this anymore
+    # rclone --progress --copy-links sync ${SOURCE} onedrive:'CDC wastewater data'/BAM-Files
+    # rclone --progress copyto output/results/SRA_table.csv onedrive:'CDC wastewater data'/BAM-Files/SRA_table.csv
+    # Upload to GCS
+    rclone --progress --copy-links --gcs-bucket-policy-only sync ${SOURCE} ${RCLONE_BUCKET_NAME}/cdc_wastewater_data/bam_files
+    rclone --progress --gcs-bucket-policy-only copyto output/results/SRA_table.csv ${RCLONE_BUCKET_NAME}/cdc_wastewater_data/SRA_table.csv
 
     # Upload to Amazon S3
     rclone --progress copyto output/results/var.data_summary.rds s3:nystatewws/var.data_summary.rds

@@ -35,9 +35,11 @@ Rclone is the software used by the pipeline to interact with external cloud stor
 Software required for the pipeline is managed with conda environments, so you will need conda installed (I recommend either the miniconda or micromamba distributions). Once you have it installed, you can use it to install the main virtual environment, which needs to be named `nywws`. The following will install the environment:
 
 ```bash
-cd 20240403_freyja-pipeline
+cd 20230403_freyja-pipeline
 conda env create -f envs/nywws.yml -n nywws
 ```
+
+The pipeline uses additional software environments, specified in `20230403_freyja-pipeline/envs`. You don't need to install them manually, as Snakemake will take care of it.
 
 ### 5. Google Cloud CLI
 
@@ -70,6 +72,10 @@ These other changes are all optional and require manual editing of various scrip
 **Rclone remote names:** The pipeline, sample tracking, and BAM rename scripts all assume that rclone remotes are named `gcs`, `s3`, and `onedrive`; you can pick different names when setting up rclone, all of those scripts need to be updated.
 
 **Conda environment name:** The pipeline and sample tracking scripts assume that the conda environment used to run the pipeline is called `nywws`. To change that, look for the lines of code that activate the environment (start with `conda activate`).
+
+### Upgrading Freyja beyond v1.4
+
+The current version of the pipeline works with Freyja v1.4, but it breaks when Freyja is updated to a newer version. The reason is that every time the pipeline runs, it will automatically update the Freyja barcodes to the latest version. The format of these downloaded barcodes files changed after version 1.4. To update the Freyja version, you'll need first to update it in `20230403_freyja-pipeline/envs/freyja.yml`. Then, you'll need to check what file formats are produced by `freyja update --outdir /some/directory`, and write new code to read those file formats in the pipeline.
 
 
 ## Execution
